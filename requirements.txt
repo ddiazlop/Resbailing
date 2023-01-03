@@ -9,3 +9,5 @@ pillow==9.3.0
 pygments==2.13.0
 pypiwin32==223
 pywin32==305
+plyer==2.1.0
+PyPDF2==3.0.1
