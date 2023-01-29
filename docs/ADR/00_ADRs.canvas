@@ -1,8 +1,0 @@
-{
-	"nodes":[
-		{"id":"8c94170b4c315c85","x":-904,"y":-190,"width":637,"height":598,"type":"file","file":"TFG/ADR/AD03 - Entorno de Desarrollo.md"},
-		{"id":"57ce1e603415fd82","x":270,"y":-190,"width":400,"height":400,"type":"file","file":"TFG/ADR/AD05 - Apariencia de la Aplicación.md"},
-		{"id":"33183c53307fcb2d","x":-205,"y":-190,"width":400,"height":400,"type":"file","file":"TFG/ADR/AD04 - UI.md"}
-	],
-	"edges":[]
-}

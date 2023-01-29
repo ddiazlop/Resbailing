@@ -1,9 +1,0 @@
-{
-	"nodes":[
-		{"id":"e9f027a129dc7e9e","x":-310,"y":-81,"width":400,"height":400,"type":"file","file":"TFG/Decisiones/UI/Conceptos/Botones/Botón de Inicio.md"},
-		{"id":"1b0200fe8edbc2ed","x":180,"y":-81,"width":400,"height":400,"type":"file","file":"TFG/Diario/Prototipo 1/04_Subir PDF para resumirlo.md"},
-		{"id":"4ef0bbf12bcf463f","x":-330,"y":-1000,"width":930,"height":1339,"type":"group","label":"Interfaz de Usuario"},
-		{"id":"2a8ae0d2f8dc4b8d","x":-310,"y":-950,"width":890,"height":823,"type":"file","file":"TFG/Decisiones/UI/UI.md"}
-	],
-	"edges":[]
-}
