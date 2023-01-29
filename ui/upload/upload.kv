@@ -6,6 +6,7 @@
                 size: self.size
                 source: './images/tobofondo2_estrellas.png'
     Button:
+        id: upload
         text: '[b]Selecciona un archivo PDF[/b]'
         font_size: self.height * 0.18
         markup: True
@@ -14,22 +15,3 @@
         background_normal: './images/upload/boton_noback.png'
         background_down: './images/upload/boton_noback_pressed.png'
         on_release: root.show_load()
-
-<LoadDialog>:
-    BoxLayout:
-        size: root.size
-        pos: root.pos
-        orientation: "vertical"
-        FileChooserListView:
-            id: filechooser
-
-        BoxLayout:
-            size_hint_y: None
-            height: 30
-            Button:
-                text: "Cancel"
-                on_release: root.cancel()
-
-            Button:
-                text: "Load"
-                on_release: root.load(filechooser.path, filechooser.selection)

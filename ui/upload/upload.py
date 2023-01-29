@@ -1,18 +1,22 @@
 import os
+import threading
 from tkinter.ttk import Button
 
+from kivy import Logger
 from kivy.animation import Animation
+from kivy.clock import Clock, mainthread
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
+from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
 from plyer import filechooser
-import PyPDF2
 
-from src.readers.pdf import DocumentData
+from src.readers.pdf import PdfAnalyzer
+
 
 
 class LoadDialog(FloatLayout):
@@ -29,20 +33,34 @@ class UploadScreen(RelativeLayout):
         self._popup.dismiss()
 
     def show_load(self, *args):
-        print('Loading dialog')
+        Logger.debug('Upload: Loading dialog')
+        # There is a bug (?) in filechooser that changes the current working directory
+        # to the directory of the file that is selected. This is a workaround.
+        curr_dir = os.getcwd()
+        Clock.schedule_once(self.loading_view)
         path = filechooser.open_file(title='Selecciona tu documento PDF', filters=[('PDF files', '*.pdf')])
-        print('Reading PDF')
-        data = DocumentData(path[0])
+        os.chdir(curr_dir)
+
+        self.loading_view()
+        Clock.schedule_once(lambda dt: self.read_document(path))
+
         i = 0
-        # self.load = LoadDialog(load=self.load, cancel=self.dismiss_popup)
-        # self._popup = Popup(title="Load file", content=self.load, size_hint=(0.9, 0.9))
-        # self._popup.open()
 
-    def load(self, path, filename):
-        print('Loading file')
-        with open(os.path.join(path, filename[0])) as stream:
-            self.ids.upload.text = stream.read()
+    def read_document(self, path):
+        Logger.debug('Upload: Trying to read PDF')
+        analyzer = PdfAnalyzer(path[0])
+        analyzer.full_analysis()
 
-        self.dismiss_popup()
+
+    def loading_view(self, *args):
+        Logger.debug('Upload: Loading view')
+        self.remove_widget(self.ids.upload)
+        self.add_widget(GridLayout(cols=1))
+
+        self.add_widget(Image(source='ui/images/upload/loading.gif'))
+        self.add_widget(Label(text="Cargando..."))
+
+
+
 
 

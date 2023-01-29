@@ -1,3 +1,6 @@
+import os
+
+from kivy import Logger, LOG_LEVELS
 from kivy.animation import Animation
 from kivy.app import App
 from kivy.lang import Builder
@@ -15,7 +18,7 @@ class MainScreen(FloatLayout):
 
     def pressed_button(self, widget, *args):
         # Define the animation
-        anim = Animation(background_color=(0,1,0,1), duration=1.5)
+        anim = Animation(background_color=(0,1,0,1), duration=0.5)
         # Change the text of the button
         widget.text = '¿Preparado para deslizarte?'
         anim.start(widget)
@@ -23,8 +26,8 @@ class MainScreen(FloatLayout):
         anim.bind(on_complete=self.redirect_to_upload)
 
     def redirect_to_upload(self, *args):
-        print('Changing screen')
-        main_app.screen_manager.transition = SlideTransition(direction='down', duration=2)
+        Logger.debug('Main: Redirecting to upload')
+        main_app.screen_manager.transition = SlideTransition(direction='down', duration=0.5)
         main_app.screen_manager.current = 'Upload'
 
 
@@ -44,7 +47,10 @@ class Main(App):
 
         return self.screen_manager
 
-
+from kivy.config import Config
 if __name__ == '__main__':
+    # If python is running in debug mode, enable kivy's debug mode
+    if __debug__: Config.set('kivy', 'log_level', 'debug')
+
     main_app = Main()
     main_app.run()
