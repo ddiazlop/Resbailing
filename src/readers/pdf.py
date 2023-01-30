@@ -1,4 +1,5 @@
 import datetime
+import re
 
 import pdfplumber
 from kivy import Logger
@@ -77,18 +78,55 @@ class PdfAnalyzer:
         # if len(word_list) > 10:
         #     self.generate_slide(first_page)
 
+        # Get table of contents
+        self.mdFile.new_header(level=1, title='Tabla de contenidos')
+        contents = self.get_table_of_contents()
+
+
         for page in self.pages[1:]:
             self.generate_slide(page)
 
         pass
 
+    def get_table_of_contents(self):
+        titles = {}
+        for page in self.pages[1:]:
+            word_dict = self.get_word_sizes_dict_by_height(page)
+            most_common_height = max(word_dict, key=lambda key: len(word_dict[key]))
+            number_of_words = len(word_dict[most_common_height])
+            if number_of_words < 250: # TODO: Change this to a percentage, not a good idea to use a fixed number
+                # Possible table of contents
+                # Group words at the same position
+                word_dict = self.get_word_sizes_dict(page)
+                word_dict_by_position = {}
+                for word in word_dict:
+                    word_no_special = re.sub("\W", '', word)
+                    word_no_numbers = re.sub('\d', '', word_no_special)
+                    if word_dict[word]['top'] in word_dict_by_position:
+                        word_dict_by_position[word_dict[word]['top']] += word_no_numbers
+                    else:
+                        word_dict_by_position[word_dict[word]['top']] = word_no_numbers
+
+                titles[page.page_number] = word_dict_by_position
+
+        i = 0
+
+
+
+
+
+
+        pass
 
     def generate_slide(self, page):
         Logger.debug('PDF: Generating slide from page ' + str(page.page_number))
         self.mdFile.new_line('---')
-        text = page.extract_text()
+        word = page.extract_words()
+        pattern = re.compile(r'\W')
+        text = ' '.join([word['text'] for word in word if not pattern.match(word['text'])])
+        text = text.replace('.......................................................................................', '')
         summary = self.generate_summary(text)
-
+        #TODO: BUscar otra forma
         i = 0
 
     def generate_summary(self, text):
@@ -138,6 +176,18 @@ class PdfAnalyzer:
                 # Save the height used for that word and its position relative to the top of the page
                 # Also save the word count
                 word_dict[word['text']] = {'height': height, 'top': word['top'], 'word_count': word_count}
+        return word_dict
+
+    @staticmethod
+    def get_word_sizes_dict_by_height(page):
+        word_dict = {}
+        words = page.extract_words(extra_attrs=['height'])
+        for word in words:
+            height = word['height']
+            if height in word_dict:
+                word_dict[height].append(word['text'])
+            else:
+                word_dict[height] = [word['text']]
         return word_dict
 
     ############# PREGUNTAR ################
