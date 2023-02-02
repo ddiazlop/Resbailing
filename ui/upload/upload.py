@@ -16,6 +16,7 @@ from kivy.uix.relativelayout import RelativeLayout
 from plyer import filechooser
 
 from src.readers.pdf import PdfAnalyzer
+from src.readers.markdown import MarkdownSummarizer
 
 
 
@@ -38,17 +39,22 @@ class UploadScreen(RelativeLayout):
         # to the directory of the file that is selected. This is a workaround.
         curr_dir = os.getcwd()
         Clock.schedule_once(self.loading_view)
-        path = filechooser.open_file(title='Selecciona tu documento PDF', filters=[('PDF files', '*.pdf')])
+        path = filechooser.open_file(title='Selecciona tu documento .md', filters=[('markdown files', '*.md')])
         os.chdir(curr_dir)
 
         self.loading_view()
-        Clock.schedule_once(lambda dt: self.read_document(path))
+        Clock.schedule_once(lambda dt: self.summarize(path[0]))
 
         i = 0
 
+    def summarize(self, path):
+        Logger.debug('Upload: Summarizing')
+        summarizer = MarkdownSummarizer(path)
+        summarizer.summarize()
+
     def read_document(self, path):
         Logger.debug('Upload: Trying to read PDF')
-        analyzer = PdfAnalyzer(path[0])
+        analyzer = PdfAnalyzer(path)
         analyzer.full_analysis()
 
 
