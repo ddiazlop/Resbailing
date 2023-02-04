@@ -1,0 +1,26 @@
+<ExportScreen>
+    RelativeLayout:
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: './images/tobofondo2_estrellas.png'
+        GridLayout:
+            cols: 1
+            rows: 2
+            size_hint: 1, 0.8
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            Label:
+                text: '[b]Exportar a Google Slides[/b]'
+                font_size: self.height * 0.18
+                markup: True
+                size_hint: 1, 0.2
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: 0, 0, 0, 1
+            Button:
+                text: 'Exportar'
+                font_size: self.height * 0.18
+                size_hint: 1, 0.2
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                on_press: root.export()
+                color: 0, 0, 0, 1

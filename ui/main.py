@@ -10,7 +10,9 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen, RiseInTransition, FadeTransition, SlideTransition
 
+from ui.export.export import ExportScreen
 from ui.upload.upload import UploadScreen
+import config
 
 class MainScreen(FloatLayout):
     def __init__(self, **kwargs):
@@ -40,9 +42,14 @@ class Main(App):
         screen.add_widget(self.main_screen)
         self.screen_manager.add_widget(screen)
 
-        self.upload_screen = UploadScreen()
+        self.upload_screen = UploadScreen(main_app=self)
         screen = Screen(name='Upload')
         screen.add_widget(self.upload_screen)
+        self.screen_manager.add_widget(screen)
+
+        self.export_screen = ExportScreen()
+        screen = Screen(name='Export')
+        screen.add_widget(self.export_screen)
         self.screen_manager.add_widget(screen)
 
         return self.screen_manager

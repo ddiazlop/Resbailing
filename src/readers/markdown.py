@@ -27,7 +27,7 @@ class MarkdownSummarizer(SummarizerClass):
         for header in paras.keys():
             if len(paras[header]) > 1:
                 for i in range(len(paras[header])):
-                    Logger.debug('Markdown: Summarizing paragraph ' + str(i) + ' of header ' + parse_text(header))
+                    Logger.debug('Markdown: Summarizing paragraph ' + str(i + 1) +'/'+ str(len(paras[header])) +  ' of header ' + parse_text(header))
                     self.mdFile.new_line('---')
                     self.mdFile.new_header(level=2, title=parse_text(header))
                     para = paras[header][i]
@@ -40,6 +40,7 @@ class MarkdownSummarizer(SummarizerClass):
                                 i += 1  # Skip the next paragraph
                     self.mdFile.new_paragraph(self.summarize_text(parse_text(para)))
             else:
+                Logger.debug('Markdown: Summarizing paragraph 1/1 of header ' + parse_text(header))
                 self.mdFile.new_line('---')
                 self.mdFile.new_header(level=2, title=parse_text(header))
                 text = parse_text(paras[header][0])

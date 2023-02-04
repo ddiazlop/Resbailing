@@ -9,6 +9,7 @@ from mdutils import MdUtils
 
 import torch
 from transformers import BertTokenizerFast, EncoderDecoderModel
+import config
 
 
 class PdfAnalyzer:
@@ -16,7 +17,7 @@ class PdfAnalyzer:
         Logger.debug('src/pdf.py: Initializing PDF analyzer')
         # Summarization parameters
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.ckpt = 'mrm8488/bert2bert_shared-spanish-finetuned-summarization'
+        self.ckpt = config.SUMMARIZATION_MODEL
         self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
         Logger.debug('src/pdf.py: Loading summarization model')
         self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)

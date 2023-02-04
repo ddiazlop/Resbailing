@@ -4,14 +4,18 @@ import torch
 from kivy import Logger
 from mdutils import MdUtils
 from transformers import BertTokenizerFast, EncoderDecoderModel
+import config
+
+
+
 
 
 class SummarizerClass:
     def __init__(self, path):
-        Logger.debug('src/markdown.py: Initializing summarizer')
+        Logger.debug('src/superclasses/summarizer.py: Initializing summarizer')
         # Summarization parameters
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.ckpt = 'mrm8488/bert2bert_shared-spanish-finetuned-summarization'
+        self.ckpt = config.get_current_summarization_model()
         self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
         Logger.debug('src/markdown.py: Loading summarization model')
         self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)
@@ -30,3 +34,4 @@ class SummarizerClass:
         attention_mask = inputs.attention_mask.to(self.device)
         output = self.model.generate(input_ids, attention_mask=attention_mask)
         return self.tokenizer.decode(output[0], skip_special_tokens=True)
+

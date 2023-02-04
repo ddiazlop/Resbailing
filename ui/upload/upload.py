@@ -13,11 +13,11 @@ from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.screenmanager import FadeTransition
 from plyer import filechooser
 
 from src.readers.pdf import PdfAnalyzer
 from src.readers.markdown import MarkdownSummarizer
-
 
 
 class LoadDialog(FloatLayout):
@@ -25,7 +25,8 @@ class LoadDialog(FloatLayout):
     cancel = ObjectProperty(None)
 
 class UploadScreen(RelativeLayout):
-    def __init__(self, **kwargs):
+    def __init__(self,main_app, **kwargs):
+        self.main_app = main_app
         Builder.load_file('ui/upload/upload.kv')
         super(UploadScreen, self).__init__(**kwargs)
         self.cols = 1
@@ -34,7 +35,7 @@ class UploadScreen(RelativeLayout):
         self._popup.dismiss()
 
     def show_load(self, *args):
-        Logger.debug('Upload: Loading dialog')
+        Logger.debug('ui/upload/upload.py: Loading dialog')
         # There is a bug (?) in filechooser that changes the current working directory
         # to the directory of the file that is selected. This is a workaround.
         curr_dir = os.getcwd()
@@ -47,19 +48,26 @@ class UploadScreen(RelativeLayout):
 
         i = 0
 
+    def redirect_to_export(self, *args):
+        Logger.debug('ui/upload/upload.py: Redirecting to export')
+        self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
+        self.main_app.screen_manager.current = 'Export'
+
     def summarize(self, path):
-        Logger.debug('Upload: Summarizing')
+        Logger.debug('ui/upload/upload.py: Summarizing')
         summarizer = MarkdownSummarizer(path)
         summarizer.summarize()
+        # Redirect to export screen
+        self.redirect_to_export()
 
     def read_document(self, path):
-        Logger.debug('Upload: Trying to read PDF')
+        Logger.debug('ui/upload/upload.py: Trying to read PDF')
         analyzer = PdfAnalyzer(path)
         analyzer.full_analysis()
 
 
     def loading_view(self, *args):
-        Logger.debug('Upload: Loading view')
+        Logger.debug('ui/upload/upload.py: Loading view')
         self.remove_widget(self.ids.upload)
         self.add_widget(GridLayout(cols=1))
 
