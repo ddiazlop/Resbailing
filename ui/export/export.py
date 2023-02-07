@@ -1,9 +1,10 @@
 import os
 
 from kivy import Logger
+from kivy.core.audio import SoundLoader
 from kivy.lang import Builder
 from kivy.uix.relativelayout import RelativeLayout
-from src.export.google_slides import create_presentation
+from src.export.google_slides import GoogleSlides
 
 class ExportScreen(RelativeLayout):
     def __init__(self, **kwargs):
@@ -13,8 +14,15 @@ class ExportScreen(RelativeLayout):
 
     def export(self, *args):
         Logger.debug('ui/export/export.py: Exporting to Google Slides')
-        # Change curr dir to export dir
-        curr_dir = os.getcwd()
-        os.chdir('src/export')
-        create_presentation("test")
-        os.chdir(curr_dir)
+        # Get last session's markdown file.
+        sessions = os.listdir('sessions')
+        sessions.sort()
+        last_session = sessions[-1]
+
+
+        # Export to Google Slides
+        slides = GoogleSlides(session_path="sessions/" + last_session)
+        slides.export()
+
+
+

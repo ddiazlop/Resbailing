@@ -18,6 +18,7 @@ from plyer import filechooser
 
 from src.readers.pdf import PdfAnalyzer
 from src.readers.markdown import MarkdownSummarizer
+from src.utils import Soundmanager
 
 
 class LoadDialog(FloatLayout):
@@ -50,6 +51,7 @@ class UploadScreen(RelativeLayout):
 
     def redirect_to_export(self, *args):
         Logger.debug('ui/upload/upload.py: Redirecting to export')
+        Soundmanager.play_done_sound()
         self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
         self.main_app.screen_manager.current = 'Export'
 

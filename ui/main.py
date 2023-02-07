@@ -3,6 +3,7 @@ import os
 from kivy import Logger, LOG_LEVELS
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.core.audio import SoundLoader
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
@@ -10,12 +11,14 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen, RiseInTransition, FadeTransition, SlideTransition
 
+from src.utils import Soundmanager
 from ui.export.export import ExportScreen
 from ui.upload.upload import UploadScreen
 import config
 
 class MainScreen(FloatLayout):
     def __init__(self, **kwargs):
+        Soundmanager.play_done_sound()
         super(MainScreen, self).__init__(**kwargs)
 
     def pressed_button(self, widget, *args):
@@ -23,6 +26,7 @@ class MainScreen(FloatLayout):
         anim = Animation(background_color=(0,1,0,1), duration=0.5)
         # Change the text of the button
         widget.text = '¿Preparado para deslizarte?'
+
         anim.start(widget)
 
         anim.bind(on_complete=self.redirect_to_upload)
