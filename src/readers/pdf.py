@@ -9,7 +9,7 @@ from mdutils import MdUtils
 
 import torch
 from transformers import BertTokenizerFast, EncoderDecoderModel
-import config
+import app_config
 
 
 class PdfAnalyzer:

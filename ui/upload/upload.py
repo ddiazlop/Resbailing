@@ -1,35 +1,29 @@
 import os
-import threading
-from tkinter.ttk import Button
 
 from kivy import Logger
-from kivy.animation import Animation
-from kivy.clock import Clock, mainthread
+from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
-from kivy.uix.popup import Popup
-from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.screenmanager import FadeTransition
 from plyer import filechooser
 
 from src.readers.pdf import PdfAnalyzer
 from src.readers.markdown import MarkdownSummarizer
-from src.utils import Soundmanager
+from ui.media.sound.utils import Soundmanager
+from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
 
 class LoadDialog(FloatLayout):
     load = ObjectProperty(None)
     cancel = ObjectProperty(None)
 
-class UploadScreen(RelativeLayout):
+class UploadScreen(RelativeLayoutScreen):
     def __init__(self,main_app, **kwargs):
-        self.main_app = main_app
-        Builder.load_file('ui/upload/upload.kv')
-        super(UploadScreen, self).__init__(**kwargs)
+        super(UploadScreen, self).__init__(main_app,'ui/upload/upload.kv',**kwargs)
         self.cols = 1
 
     def dismiss_popup(self):
@@ -53,7 +47,7 @@ class UploadScreen(RelativeLayout):
         Logger.debug('ui/upload/upload.py: Redirecting to export')
         Soundmanager.play_done_sound()
         self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
-        self.main_app.screen_manager.current = 'Export'
+        self.change_screen('Export')
 
     def summarize(self, path):
         Logger.debug('ui/upload/upload.py: Summarizing')
@@ -73,7 +67,7 @@ class UploadScreen(RelativeLayout):
         self.remove_widget(self.ids.upload)
         self.add_widget(GridLayout(cols=1))
 
-        self.add_widget(Image(source='ui/images/upload/loading.gif'))
+        self.add_widget(Image(source='ui/media/images/upload/loading.gif'))
         self.add_widget(Label(text="Cargando..."))
 
 

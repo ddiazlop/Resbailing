@@ -5,11 +5,12 @@ from kivy.core.audio import SoundLoader
 from kivy.lang import Builder
 from kivy.uix.relativelayout import RelativeLayout
 from src.export.google_slides import GoogleSlides
+from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
-class ExportScreen(RelativeLayout):
-    def __init__(self, **kwargs):
-        Builder.load_file('ui/export/export.kv')
-        super(ExportScreen, self).__init__(**kwargs)
+
+class ExportScreen(RelativeLayoutScreen):
+    def __init__(self, main_app, **kwargs):
+        super(ExportScreen, self).__init__(main_app,'ui/export/export.kv', **kwargs)
 
 
     def export(self, *args):
@@ -23,6 +24,8 @@ class ExportScreen(RelativeLayout):
         # Export to Google Slides
         slides = GoogleSlides(session_path="sessions/" + last_session)
         slides.export()
+        self.change_screen('ExportSuccess')
+
 
 
 

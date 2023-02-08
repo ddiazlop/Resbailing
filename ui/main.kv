@@ -5,7 +5,7 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
-                source: 'images/tobofondo1.png'
+                source: 'media/images/tobofondo1.png'
 
         Button:
             text: 'Crear una presentación'
@@ -15,9 +15,9 @@
             text_size: 0.6 * self.width, 1 * self.height
             valign: 'middle'
             halign: 'center'
-            background_normal: 'images/button1.png'
-            background_down: 'images/button1_pressed.png'
+            background_normal: 'media/images/button1.png'
+            background_down: 'media/images/button1_pressed.png'
             ripple_scale: 0
             # Chamge the button text
-            on_press: self.text = '¡Allá vamos!'
-            on_release: root.pressed_button(self)
+            on_press: root.pressed_button(self)
+            on_release: root.released_button(self)

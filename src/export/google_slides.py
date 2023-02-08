@@ -11,7 +11,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from kivy import Logger
-from config import GOOGLE_SCOPES as SCOPES
+from app_config import GOOGLE_SCOPES as SCOPES
 
 from src.utils.Docmdutils import parse_text
 

@@ -4,7 +4,7 @@ import torch
 from kivy import Logger
 from mdutils import MdUtils
 from transformers import BertTokenizerFast, EncoderDecoderModel
-import config
+import app_config
 
 
 

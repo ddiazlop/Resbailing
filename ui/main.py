@@ -1,27 +1,52 @@
-import os
-
-from kivy import Logger, LOG_LEVELS
+from kivy import Logger
 from kivy.animation import Animation
 from kivy.app import App
-from kivy.core.audio import SoundLoader
-from kivy.lang import Builder
-from kivy.uix.boxlayout import BoxLayout
+from kivy.clock import Clock
+from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.image import Image
-from kivy.uix.screenmanager import ScreenManager, Screen, RiseInTransition, FadeTransition, SlideTransition
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, FadeTransition
+from kivy.uix.button import Button
 
-from src.utils import Soundmanager
+from ui.export.export_success import ExportSuccessScreen
+from ui.media.sound.utils import Soundmanager
 from ui.export.export import ExportScreen
 from ui.upload.upload import UploadScreen
-import config
+
+import app_config
+
+
+def change_screen(screen_name):
+    Logger.debug('Main: Changing screen to ' + screen_name)
+    main_app.screen_manager.transition = FadeTransition(duration=0.2)
+    main_app.screen_manager.current = screen_name
+
 
 class MainScreen(FloatLayout):
     def __init__(self, **kwargs):
         Soundmanager.play_done_sound()
         super(MainScreen, self).__init__(**kwargs)
 
-    def pressed_button(self, widget, *args):
+    def create_dropdown(self):
+        dropdown = DropDown()
+        for index, screen in enumerate(main_app.screen_manager.screens):
+            btn = Button(text=screen.name, size_hint_y=None, height=35)
+            btn.bind(on_release=lambda button: change_screen(button.text))
+            dropdown.add_widget(btn)
+
+        mainbutton = Button(text='Debug', size_hint=(None, None))
+        mainbutton.bind(on_release=dropdown.open)
+        mainbutton.pos_hint = {'top': 0.5, 'right': 0.6}
+        self.add_widget(mainbutton)
+
+    def pressed_button(self, button):
+        if app_config.DEBUG: # Only create the dropdown if in debug mode
+            self.create_dropdown()
+        else:
+            button.text = '¡Allá vamos!'
+
+
+    def released_button(self, widget, *args):
+        screenmanager = main_app.screen_manager.screens
         # Define the animation
         anim = Animation(background_color=(0,1,0,1), duration=0.5)
         # Change the text of the button
@@ -51,9 +76,14 @@ class Main(App):
         screen.add_widget(self.upload_screen)
         self.screen_manager.add_widget(screen)
 
-        self.export_screen = ExportScreen()
+        self.export_screen = ExportScreen(main_app=self)
         screen = Screen(name='Export')
         screen.add_widget(self.export_screen)
+        self.screen_manager.add_widget(screen)
+
+        self.export_success_screen = ExportSuccessScreen(main_app=self)
+        screen = Screen(name='ExportSuccess')
+        screen.add_widget(self.export_success_screen)
         self.screen_manager.add_widget(screen)
 
         return self.screen_manager
@@ -61,7 +91,7 @@ class Main(App):
 from kivy.config import Config
 if __name__ == '__main__':
     # If python is running in debug mode, enable kivy's debug mode
-    if __debug__: Config.set('kivy', 'log_level', 'debug')
+    if app_config.DEBUG: Config.set('kivy', 'log_level', 'debug')
 
     main_app = Main()
     main_app.run()
