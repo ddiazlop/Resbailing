@@ -15,7 +15,7 @@ class SummarizerClass:
         Logger.debug('src/superclasses/summarizer.py: Initializing summarizer')
         # Summarization parameters
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.ckpt = config.get_current_summarization_model()
+        self.ckpt = app_config.get_current_summarization_model()
         self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
         Logger.debug('src/markdown.py: Loading summarization model')
         self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)

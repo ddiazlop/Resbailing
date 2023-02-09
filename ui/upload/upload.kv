@@ -4,7 +4,7 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
-                source: './media/images/tobofondo2_estrellas.png'
+                source: 'ui/media/images/tobofondo2_estrellas.png'
     Button:
         id: upload
         text: '[b]Selecciona un archivo PDF[/b]'
@@ -12,6 +12,6 @@
         markup: True
         size_hint: 0.6, 0.3
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-        background_normal: './media/images/upload/boton_noback.png'
-        background_down: './media/images/upload/boton_noback_pressed.png'
+        background_normal: 'ui/media/images/upload/boton_noback.png'
+        background_down: 'ui/media/images/upload/boton_noback_pressed.png'
         on_release: root.show_load()

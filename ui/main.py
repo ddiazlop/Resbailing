@@ -1,3 +1,6 @@
+import os, sys
+from kivy.resources import resource_add_path, resource_find
+
 from kivy import Logger
 from kivy.animation import Animation
 from kivy.app import App
@@ -15,20 +18,17 @@ from ui.upload.upload import UploadScreen
 import app_config
 
 
-def change_screen(screen_name):
-    Logger.debug('Main: Changing screen to ' + screen_name)
-    main_app.screen_manager.transition = FadeTransition(duration=0.2)
-    main_app.screen_manager.current = screen_name
 
 
 class MainScreen(FloatLayout):
-    def __init__(self, **kwargs):
+    def __init__(self, main_app, **kwargs):
         Soundmanager.play_done_sound()
+        self.main_app = main_app
         super(MainScreen, self).__init__(**kwargs)
 
     def create_dropdown(self):
         dropdown = DropDown()
-        for index, screen in enumerate(main_app.screen_manager.screens):
+        for index, screen in enumerate(self.main_app.screen_manager.screens):
             btn = Button(text=screen.name, size_hint_y=None, height=35)
             btn.bind(on_release=lambda button: change_screen(button.text))
             dropdown.add_widget(btn)
@@ -46,7 +46,7 @@ class MainScreen(FloatLayout):
 
 
     def released_button(self, widget, *args):
-        screenmanager = main_app.screen_manager.screens
+        screenmanager = self.main_app.screen_manager.screens
         # Define the animation
         anim = Animation(background_color=(0,1,0,1), duration=0.5)
         # Change the text of the button
@@ -58,15 +58,20 @@ class MainScreen(FloatLayout):
 
     def redirect_to_upload(self, *args):
         Logger.debug('Main: Redirecting to upload')
-        main_app.screen_manager.transition = SlideTransition(direction='down', duration=0.5)
-        main_app.screen_manager.current = 'Upload'
+        self.main_app.screen_manager.transition = SlideTransition(direction='down', duration=0.5)
+        self.main_app.screen_manager.current = 'Upload'
+
+    def change_screen(self, screen_name):
+        Logger.debug('Main: Changing screen to ' + screen_name)
+        self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
+        self.main_app.screen_manager.current = screen_name
 
 
 class Main(App):
     def build(self):
         self.screen_manager = ScreenManager()
 
-        self.main_screen = MainScreen()
+        self.main_screen = MainScreen(main_app=self)
         screen = Screen(name='Main')
         screen.add_widget(self.main_screen)
         self.screen_manager.add_widget(screen)
@@ -88,10 +93,3 @@ class Main(App):
 
         return self.screen_manager
 
-from kivy.config import Config
-if __name__ == '__main__':
-    # If python is running in debug mode, enable kivy's debug mode
-    if app_config.DEBUG: Config.set('kivy', 'log_level', 'debug')
-
-    main_app = Main()
-    main_app.run()
