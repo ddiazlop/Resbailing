@@ -3,10 +3,7 @@ import io
 
 import panflute
 import pypandoc
-import torch
 from kivy import Logger
-from mdutils import MdUtils
-from transformers import BertTokenizerFast, EncoderDecoderModel
 
 
 from src.readers.superclasses.summarizer import SummarizerClass

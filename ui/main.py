@@ -1,10 +1,6 @@
-import os, sys
-from kivy.resources import resource_add_path, resource_find
-
 from kivy import Logger
 from kivy.animation import Animation
 from kivy.app import App
-from kivy.clock import Clock
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, FadeTransition
@@ -30,7 +26,7 @@ class MainScreen(FloatLayout):
         dropdown = DropDown()
         for index, screen in enumerate(self.main_app.screen_manager.screens):
             btn = Button(text=screen.name, size_hint_y=None, height=35)
-            btn.bind(on_release=lambda button: change_screen(button.text))
+            btn.bind(on_release=lambda button: self.change_screen(button.text))
             dropdown.add_widget(btn)
 
         mainbutton = Button(text='Debug', size_hint=(None, None))

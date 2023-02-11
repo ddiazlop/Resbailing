@@ -17,7 +17,7 @@ class PdfAnalyzer:
         Logger.debug('src/pdf.py: Initializing PDF analyzer')
         # Summarization parameters
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.ckpt = config.SUMMARIZATION_MODEL
+        self.ckpt = app_config.SUMMARIZATION_MODEL
         self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
         Logger.debug('src/pdf.py: Loading summarization model')
         self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)
@@ -81,7 +81,7 @@ class PdfAnalyzer:
 
         # Get table of contents
         self.mdFile.new_header(level=1, title='Tabla de contenidos')
-        contents = self.get_table_of_contents()
+        self.get_table_of_contents()
 
 
         for page in self.pages[1:]:
@@ -111,12 +111,6 @@ class PdfAnalyzer:
                 titles[page.page_number] = word_dict_by_position
 
         i = 0
-
-
-
-
-
-
         pass
 
     def generate_slide(self, page):
@@ -126,16 +120,10 @@ class PdfAnalyzer:
         pattern = re.compile(r'\W')
         text = ' '.join([word['text'] for word in word if not pattern.match(word['text'])])
         text = text.replace('.......................................................................................', '')
-        summary = self.generate_summary(text)
+        summary = self.generate_summary(text) #TODO: Change this to the class method
         #TODO: BUscar otra forma
         i = 0
 
-    def generate_summary(self, text):
-        inputs = self.tokenizer([text], padding="max_length", truncation=True, max_length=512, return_tensors="pt")
-        input_ids = inputs.input_ids.to(self.device)
-        attention_mask = inputs.attention_mask.to(self.device)
-        output = self.model.generate(input_ids, attention_mask=attention_mask)
-        return self.tokenizer.decode(output[0], skip_special_tokens=True)
 
     @staticmethod
     def get_subtitle(word_dict, words_same_height, highest_word):

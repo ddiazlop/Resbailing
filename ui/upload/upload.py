@@ -2,7 +2,6 @@ import os
 
 from kivy import Logger
 from kivy.clock import Clock
-from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
@@ -55,11 +54,6 @@ class UploadScreen(RelativeLayoutScreen):
         summarizer.summarize()
         # Redirect to export screen
         self.redirect_to_export()
-
-    def read_document(self, path):
-        Logger.debug('ui/upload/upload.py: Trying to read PDF')
-        analyzer = PdfAnalyzer(path)
-        analyzer.full_analysis()
 
 
     def loading_view(self, *args):

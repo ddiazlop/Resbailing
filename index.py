@@ -5,7 +5,7 @@ from kivy.config import Config
 from kivy.resources import resource_add_path
 
 import app_config
-from ui.main import Main, MainScreen
+from ui.main import Main
 
 if __name__ == '__main__':
     # If python is running in debug mode, enable kivy's debug mode

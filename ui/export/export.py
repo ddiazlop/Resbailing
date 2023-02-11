@@ -1,9 +1,6 @@
 import os
 
 from kivy import Logger
-from kivy.core.audio import SoundLoader
-from kivy.lang import Builder
-from kivy.uix.relativelayout import RelativeLayout
 from src.export.google_slides import GoogleSlides
 from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 

@@ -1,6 +1,3 @@
-from kivy.lang import Builder
-from kivy.uix.relativelayout import RelativeLayout
-
 from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
 
