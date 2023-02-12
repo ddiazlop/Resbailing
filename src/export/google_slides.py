@@ -43,6 +43,7 @@ class GoogleSlides:
         # created automatically when the authorization flow completes for the first
         # time.
         token_path = "src/export/token.json"
+        creds = self.creds
         if os.path.exists(token_path):
             creds = Credentials.from_authorized_user_file(token_path, SCOPES)
         # If there are no (valid) credentials available, let the user log in.
@@ -51,7 +52,7 @@ class GoogleSlides:
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    'credentials.json', SCOPES)
+                    'src/export/credentials.json', SCOPES)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open(token_path, 'w') as token:
