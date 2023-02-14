@@ -12,6 +12,8 @@ GOOGLE_SCOPES = ['https://www.googleapis.com/auth/presentations']
 SUMMARIZATION_MODELS = {'es':'mrm8488/bert2bert_shared-spanish-finetuned-summarization'}
 
 
+# IMAGE GENERATION #################################################################################
+IMAGE_GENERATION_MODEL = "stabilityai/stable-diffusion-2-1"
 
 
 
