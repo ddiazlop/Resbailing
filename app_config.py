@@ -15,8 +15,6 @@ SUMMARIZATION_MODELS = {'es':'mrm8488/bert2bert_shared-spanish-finetuned-summari
 # IMAGE GENERATION #################################################################################
 IMAGE_GENERATION_MODEL = "stabilityai/stable-diffusion-2-1"
 
-
-
 # FUNCTIONS #######################################################################################
 def get_current_summarization_model():
     return SUMMARIZATION_MODELS[LANGUAGE]

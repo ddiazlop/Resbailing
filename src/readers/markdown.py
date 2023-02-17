@@ -1,18 +1,24 @@
 import datetime
 import io
+import os
 
 import panflute
 import pypandoc
 from kivy import Logger
 from mdutils import MdUtils
 
-from src.readers.superclasses.content_generators import SummarizerClass, ImageGeneratorClass
+from src.utils.superclasses.content_generators import SummarizerClass, ImageGeneratorClass
 from src.utils.Docmdutils import count_words, parse_text
 
 
 class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
     def __init__(self, path):
         today = datetime.date.today()
+        # Create a folder for the session and its images
+        session = "sessions/" + today.__str__()
+        if not os.path.exists(session):
+            os.mkdir("sessions/" + today.__str__())
+            os.mkdir("sessions/" + today.__str__() + "/images")
         self.session_path = "sessions/" + today.__str__()
         self.mdFile = MdUtils(file_name=self.session_path + "/presentation", title=today.__str__())
         super().__init__(path=path)

@@ -1,4 +1,5 @@
 import datetime
+import os
 
 import torch
 from kivy import Logger
@@ -44,9 +45,11 @@ class ImageGeneratorClass(TransformerClass):
         Logger.debug('src/superclasses/image_generator.py: Initializing image generator')
         self.model_id = app_config.IMAGE_GENERATION_MODEL
         # Use the DPMSolverMultistepScheduler (DPM-Solver++) scheduler here instead
-        self.pipe = StableDiffusionPipeline.from_pretrained(self.model_id, torch_dtype=torch.float16)
+        self.pipe = StableDiffusionPipeline.from_pretrained(self.model_id, torch_dtype=torch.float32)
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(self.pipe.scheduler.config)
-        self.pipe = self.pipe.to(self.device)
+        # self.pipe = self.pipe.to(self.device)
+        self.pipe.enable_sequential_cpu_offload()
+        self.pipe.enable_attention_slicing(2)
 
     def generate_image(self, text):
         return self.pipe(text).images[0]
@@ -61,9 +64,10 @@ class ImageGeneratorClass(TransformerClass):
             Logger.exception('src/superclasses/image_generator.py:' + ValueError.__str__())
 
         Logger.debug('src/superclasses/image_generator.py: Generating image: ' + text[:10] + '...')
+        image_path = self.session_path + "/images/" + text[:10] + ".png"
         image = self.generate_image(text)
-        image.save(self.session_path + "/images/" + text[:10] + ".png")
-        self.mdFile.new_line("![](" + self.session_path + "/images/" + text[:10] + ".png)")
+        image.save(image_path)
+        self.mdFile.new_line("![](" + image_path + ".png)")
 
 
 
