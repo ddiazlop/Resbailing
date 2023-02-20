@@ -3,14 +3,21 @@ from __future__ import print_function
 import io
 import os.path
 
+from imgurpython import ImgurClient
+
 import panflute
 import pypandoc
+from PIL import Image
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from kivy import Logger
+
+import requests as req
+
+import app_config
 from app_config import GOOGLE_SCOPES as SCOPES
 
 from src.utils.Docmdutils import parse_text
@@ -19,13 +26,16 @@ from src.utils.Docmdutils import parse_text
 
 
 class GoogleSlides:
-    def __init__(self, session_path):
+    def __init__(self, session_manager):
         # The session is a markdown file
+        self.images = None
         self.paras = None
         self.title = None
         self.creds = None
         self.page_id = 0
-        self.path = session_path
+        self.path = session_manager.current_session_md
+        self.current_session = session_manager.current_session_name
+        self.imgur_client = ImgurClient(app_config.IMGUR_CLIENT_ID, None)
 
         self.init_content()
         self.get_credentials()
@@ -35,7 +45,9 @@ class GoogleSlides:
         presentation = self.create_presentation()
         for header, para in self.paras.items():
             self.create_slide(presentation.get('presentationId'), parse_text(header), parse_text(para[0]))
-        # Delete the first slide
+        if len(self.images) > 0:
+            self.insert_images(presentation.get('presentationId'))
+
 
 
     def get_credentials(self):
@@ -145,6 +157,7 @@ class GoogleSlides:
                     },
                 }
             ]
+
             self.send_batch_update(presentation_id, requests)
             Logger.info("Created slide with ID: " + 'pageId' + str(self.page_id))
             self.page_id += 1
@@ -152,6 +165,46 @@ class GoogleSlides:
             Logger.error("Slide creation failed")
             Logger.error("Error code: " + str(err.resp.status))
             Logger.error("Error message: " + err.resp.reason)
+
+    def insert_images(self, presentation_id):
+        for image in self.images:
+            try:
+
+                uploaded_image = self.imgur_client.upload_from_path('sessions/'+ self.current_session + image.url, config=None, anon=True) #TODO: Check if is still working
+
+                requests = [
+                    {
+                        'createImage': {
+                            'url': uploaded_image['link'],
+                            'elementProperties': {
+                                'pageObjectId': 'pageId' + str(self.images.index(image) + 1),
+                                'size': {
+                                    'height': {
+                                        'magnitude': 200,
+                                        'unit': 'PT'
+                                    },
+                                    'width': {
+                                        'magnitude': 200,
+                                        'unit': 'PT'
+                                    }
+                                },
+                                'transform': {
+                                    'scaleX': 1,
+                                    'scaleY': 1,
+                                    'translateX': 35,
+                                    'translateY': 185,
+                                    'unit': 'PT'
+                                }
+                            }
+                        }
+                    }
+                ]
+                self.send_batch_update(presentation_id, requests)
+                Logger.info("Inserted image: " + image.url)
+            except HttpError as err:
+                Logger.error("Image insertion failed")
+                Logger.error("Error code: " + str(err.resp.status))
+                Logger.error("Error message: " + err.resp.reason)
 
 
     def send_batch_update(self, presentation_id, requests):
@@ -170,16 +223,25 @@ class GoogleSlides:
             Logger.error("Error message: " + err.resp.reason)
 
     def init_content(self):
-        data = pypandoc.convert_file(self.path, 'json')
-        doc = panflute.load(io.StringIO(data))
+        # Open the markdown file
+        with open(self.path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            doc = panflute.convert_text(content, input_format='markdown')
+        images = []
         paras = {}
         Logger.debug('Markdown: Getting titles and paragraphs')
-        for elem in doc.content:
+        for elem in doc:
             if isinstance(elem, panflute.Header) and elem.level == 1:
                 self.title = parse_text(elem)
                 last_header = elem
             elif isinstance(elem, panflute.Header):
                 last_header = elem
             elif isinstance(elem, panflute.Para):
-                paras[last_header] = paras.get(last_header, []) + [elem]
+                if isinstance(elem.content.__getitem__(0), panflute.Image):
+                    images.append(elem.content.__getitem__(0))
+                else:
+                    paras[last_header] = paras.get(last_header, []) + [elem]
+            elif isinstance(elem, panflute.Image):
+                images.append(elem)
         self.paras = paras
+        self.images = images

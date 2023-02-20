@@ -6,6 +6,8 @@ from kivy import Logger
 from mdutils import MdUtils
 from transformers import BertTokenizerFast, EncoderDecoderModel
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
+from translate import Translator
+
 import app_config
 
 
@@ -52,7 +54,11 @@ class ImageGeneratorClass(TransformerClass):
         self.pipe.enable_attention_slicing(2)
 
     def generate_image(self, text):
-        return self.pipe(text).images[0]
+        extra_attrs = "photo, photography –s 625 –q 2 –iw 3" #TODO: Make this configurable
+        translator = Translator(to_lang="en", from_lang=app_config.LANGUAGE) #TODO: Case sensitive if default is english
+        translation = translator.translate(text)
+        full_text = f"{text},{extra_attrs}"
+        return self.pipe(full_text).images[0]
 
     def generate_image_to_mdfile(self, text):
         try:
@@ -64,10 +70,11 @@ class ImageGeneratorClass(TransformerClass):
             Logger.exception('src/superclasses/image_generator.py:' + ValueError.__str__())
 
         Logger.debug('src/superclasses/image_generator.py: Generating image: ' + text[:10] + '...')
-        image_path = self.session_path + "/images/" + text[:10] + ".png"
+        image_path = self.session_path + "/images/" + text[:10]+ ".png"
+        image_path = image_path.replace(' ', '_')
         image = self.generate_image(text)
         image.save(image_path)
-        self.mdFile.new_line("![](" + image_path + ".png)")
+        self.mdFile.new_line("\n![](" + image_path.replace(self.session_path, '') + ")")
 
 
 

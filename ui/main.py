@@ -6,6 +6,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, FadeTransition
 from kivy.uix.button import Button
 
+from src.utils.Sessions import SessionManager
 from ui.export.export_success import ExportSuccessScreen
 from ui.media.sound.utils import Soundmanager
 from ui.export.export import ExportScreen
@@ -65,6 +66,7 @@ class MainScreen(FloatLayout):
 
 class Main(App):
     def build(self):
+        self.session_manager = SessionManager()
         self.screen_manager = ScreenManager()
 
         self.main_screen = MainScreen(main_app=self)
