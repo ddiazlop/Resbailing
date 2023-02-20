@@ -40,6 +40,7 @@ class GoogleSlides:
         self.init_content()
         self.get_credentials()
         self.service = build('slides', 'v1', credentials=self.creds)
+        self.drive_service = build('drive', 'v3', credentials=self.creds)
 
     def export(self):
         presentation = self.create_presentation()
@@ -48,6 +49,18 @@ class GoogleSlides:
         if len(self.images) > 0:
             self.insert_images(presentation.get('presentationId'))
 
+    # def upload_image_to_drive(self, image_path):
+    #     try:
+    #         file_metadata = {
+    #             'name': image_path,
+    #         }
+    #         media = MediaFileUpload(image_path, mimetype='image/jpeg')
+    #         file = self.service.files().create(body=file_metadata,
+    #                                            media_body=media,
+    #                                            fields='id').execute()
+    #         return file.get('id')
+    #     except HttpError as e:
+    #         Logger.error('ImageUploadError: {}'.format(e))
 
 
     def get_credentials(self):
