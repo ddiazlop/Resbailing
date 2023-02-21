@@ -3,6 +3,7 @@ from __future__ import print_function
 import io
 import os.path
 
+from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 from imgurpython import ImgurClient
 
 import panflute
@@ -28,6 +29,7 @@ from src.utils.Docmdutils import parse_text
 class GoogleSlides:
     def __init__(self, session_manager):
         # The session is a markdown file
+        self.folder_id = None
         self.images = None
         self.paras = None
         self.title = None
@@ -44,23 +46,79 @@ class GoogleSlides:
 
     def export(self):
         presentation = self.create_presentation()
+        self.create_folder_in_drive("Resbailing")
         for header, para in self.paras.items():
             self.create_slide(presentation.get('presentationId'), parse_text(header), parse_text(para[0]))
         if len(self.images) > 0:
             self.insert_images(presentation.get('presentationId'))
+        self.move_files_to_folder(presentation.get('presentationId'))
 
-    # def upload_image_to_drive(self, image_path):
-    #     try:
-    #         file_metadata = {
-    #             'name': image_path,
-    #         }
-    #         media = MediaFileUpload(image_path, mimetype='image/jpeg')
-    #         file = self.service.files().create(body=file_metadata,
-    #                                            media_body=media,
-    #                                            fields='id').execute()
-    #         return file.get('id')
-    #     except HttpError as e:
-    #         Logger.error('ImageUploadError: {}'.format(e))
+
+    def create_folder_in_drive(self, folder_name):
+        try:
+            # Find if folder already exists
+            page_token = None
+            while True:
+                response = self.drive_service.files().list(q="mimeType='application/vnd.google-apps.folder'",
+                                                           spaces='drive',
+                                                           fields='nextPageToken, files(id, name)',
+                                                           pageToken=page_token).execute()
+                for file in response.get('files', []):
+                    if file.get('name') == folder_name:
+                        self.folder_id = file.get('id') #TODO: If folder gets deleted, this still points to the old folder
+                        return
+                page_token = response.get('nextPageToken', None)
+                if page_token is None:
+                    break
+
+            file_metadata = {
+                'name': folder_name,
+                'mimeType': 'application/vnd.google-apps.folder'
+            }
+            file = self.drive_service.files().create(body=file_metadata,
+                                               fields='id').execute()
+            self.folder_id = file.get('id')
+        except HttpError as e:
+            Logger.error('FolderCreationError: {}'.format(e))
+
+    def move_files_to_folder(self, file_id):
+        try:
+            file = self.drive_service.files().get(fileId=file_id,
+                                                  fields='parents').execute()
+            previous_parents = ",".join(file.get('parents'))
+            file = self.drive_service.files().update(fileId=file_id,
+                                                     addParents=self.folder_id,
+                                                     removeParents=previous_parents,
+                                                     fields='id, parents').execute()
+            Logger.info('FileMoveToFolderSuccess: Moved file with id' + file.get('id') + ' to folder with id' + self.folder_id)
+        except HttpError as e:
+            Logger.error('FileMoveToFolderError: {}'.format(e))
+
+    def upload_image_to_drive(self, image_path):
+        try:
+            file_metadata = {
+                'name': image_path,
+                'parents': [self.folder_id]
+            }
+
+
+            Logger.debug('src/export/google_slides.py/upload_image_to_drive: Uploading image with path' + image_path)
+            media = MediaFileUpload(image_path, mimetype='image/png')
+            file = self.drive_service.files().create(body=file_metadata,
+                                               media_body=media,
+                                               fields='id, webContentLink').execute()
+
+            Logger.debug('src/export/google_slides.py/upload_image_to_drive: Changing permissions for image with id' + file.get('id'))
+            permissions = {
+                'type': 'anyone',
+                'value': 'anyone',
+                'role': 'reader'
+            }
+            self.drive_service.permissions().create(fileId=file.get('id'), body=permissions).execute()
+
+            return file.get('webContentLink')
+        except HttpError as e:
+            Logger.error('ImageUploadError: {}'.format(e))
 
 
     def get_credentials(self):
@@ -179,16 +237,29 @@ class GoogleSlides:
             Logger.error("Error code: " + str(err.resp.status))
             Logger.error("Error message: " + err.resp.reason)
 
+    def upload_image(self, image_path):
+        try:
+            if app_config.IMAGE_STORAGE_SERVICE == "GoogleDrive":
+                image_id = self.upload_image_to_drive(image_path)
+                return image_id
+            elif app_config.IMAGE_STORAGE_SERVICE == "Imgur":
+                uploaded_image = self.imgur_client.upload_from_path(image_path, config=None, anon=True)
+                return uploaded_image['link']
+            else:
+                raise Exception("Invalid image storage service")
+        except Exception as e:
+            Logger.error("UploadImageError: {}".format(e))
+
+
     def insert_images(self, presentation_id):
         for image in self.images:
             try:
 
-                uploaded_image = self.imgur_client.upload_from_path('sessions/'+ self.current_session + image.url, config=None, anon=True) #TODO: Check if is still working
-
+                uploaded_image_url = self.upload_image('sessions/'+ self.current_session + image.url)
                 requests = [
                     {
                         'createImage': {
-                            'url': uploaded_image['link'],
+                            'url': uploaded_image_url,
                             'elementProperties': {
                                 'pageObjectId': 'pageId' + str(self.images.index(image) + 1),
                                 'size': {

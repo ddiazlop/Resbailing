@@ -4,7 +4,7 @@ import os
 import torch
 from kivy import Logger
 from mdutils import MdUtils
-from transformers import BertTokenizerFast, EncoderDecoderModel
+from transformers import BertTokenizerFast, EncoderDecoderModel, pipeline
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 from translate import Translator
 
@@ -24,9 +24,12 @@ class SummarizerClass(TransformerClass):
 
         # Summarization parameters
         self.ckpt = app_config.get_current_summarization_model()
-        self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
-        Logger.debug('src/markdown.py: Loading summarization model')
-        self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)
+        if app_config.LANGUAGE == 'es':
+            self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
+            Logger.debug('src/markdown.py: Loading summarization model')
+            self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)
+        elif app_config.LANGUAGE == 'en':
+            self.model = pipeline("summarization", model=self.ckpt)
 
         # Markdown file parameters
         self.pages = None
@@ -34,11 +37,14 @@ class SummarizerClass(TransformerClass):
         self.path = path
 
     def summarize_text(self, text):
-        inputs = self.tokenizer([text], padding="max_length", truncation=True, max_length=512, return_tensors="pt")
-        input_ids = inputs.input_ids.to(self.device)
-        attention_mask = inputs.attention_mask.to(self.device)
-        output = self.model.generate(input_ids, attention_mask=attention_mask)
-        return self.tokenizer.decode(output[0], skip_special_tokens=True)
+        if app_config.LANGUAGE == 'es':
+            inputs = self.tokenizer([text], padding="max_length", truncation=True, max_length=512, return_tensors="pt")
+            input_ids = inputs.input_ids.to(self.device)
+            attention_mask = inputs.attention_mask.to(self.device)
+            output = self.model.generate(input_ids, attention_mask=attention_mask)
+            return self.tokenizer.decode(output[0], skip_special_tokens=True)
+        if app_config.LANGUAGE == 'en':
+            return self.model(text, max_length=512, min_length=30, do_sample=False)[0]['summary_text']
 
 
 class ImageGeneratorClass(TransformerClass):
@@ -55,8 +61,9 @@ class ImageGeneratorClass(TransformerClass):
 
     def generate_image(self, text):
         extra_attrs = "photo, photography –s 625 –q 2 –iw 3" #TODO: Make this configurable
-        translator = Translator(to_lang="en", from_lang=app_config.LANGUAGE) #TODO: Case sensitive if default is english
-        translation = translator.translate(text)
+        if app_config.LANGUAGE != 'en':
+            translator = Translator(to_lang="en", from_lang=app_config.LANGUAGE)
+            text = translator.translate(text)
         full_text = f"{text},{extra_attrs}"
         return self.pipe(full_text).images[0]
 
