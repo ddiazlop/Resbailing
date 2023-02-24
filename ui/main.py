@@ -1,3 +1,4 @@
+import i18n
 from kivy import Logger
 from kivy.animation import Animation
 from kivy.app import App
@@ -36,13 +37,13 @@ class MainScreen(FloatLayout):
         if app_config.DEBUG:  # Only create the dropdown if in debug mode
             self.create_dropdown()
         else:
-            button.text = '¡Allá vamos!'
+            button.text = i18n.t('dict.lets_go')
 
     def released_button(self, widget, *args):
         # Define the animation
         anim = Animation(background_color=(0, 1, 0, 1), duration=0.5)
         # Change the text of the button
-        widget.text = '¿Preparado para deslizarte?'
+        widget.text = i18n.t('dict.ready_to_slide')
 
         anim.start(widget)
 

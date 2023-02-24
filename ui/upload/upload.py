@@ -1,5 +1,6 @@
 import os
 
+import i18n
 from kivy import Logger
 from kivy.clock import Clock
 from kivy.uix.button import Button
@@ -53,7 +54,7 @@ class UploadScreen(RelativeLayoutScreen):
             btn.bind(on_release=lambda button: self.select_session(button.text))
             content.add_widget(btn)
 
-        self._popup = Popup(title="Selecciona tu sesión", content=content,
+        self._popup = Popup(title=i18n.t('dict.select_session'), content=content,
                             size_hint=(0.9, 0.9))
         self._popup.open()
 
