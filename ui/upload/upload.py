@@ -11,15 +11,13 @@ from kivy.uix.screenmanager import FadeTransition
 from plyer import filechooser
 
 from src.readers.markdown import MarkdownSummarizer
-from src.utils.Sessions import get_session_md_path, get_session_names
-from ui.export.export import ExportScreen
 from ui.media.sound.utils import Soundmanager
 from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
 
 class UploadScreen(RelativeLayoutScreen):
-    def __init__(self,main_app, **kwargs):
-        super(UploadScreen, self).__init__(main_app,'ui/upload/upload.kv',**kwargs)
+    def __init__(self, main_app, **kwargs):
+        super(UploadScreen, self).__init__(main_app, 'ui/upload/upload.kv', **kwargs)
         self.cols = 1
 
     def dismiss_popup(self):
@@ -59,9 +57,6 @@ class UploadScreen(RelativeLayoutScreen):
                             size_hint=(0.9, 0.9))
         self._popup.open()
 
-
-
-
     def redirect_to_export(self, *args):
         Logger.debug('ui/upload/upload.py: Redirecting to export')
         Soundmanager.play_done_sound()
@@ -76,7 +71,6 @@ class UploadScreen(RelativeLayoutScreen):
         # Redirect to export screen
         self.redirect_to_export()
 
-
     def loading_view(self, *args):
         Logger.debug('ui/upload/upload.py: Loading view')
         self.remove_widget(self.ids.upload)
@@ -84,8 +78,3 @@ class UploadScreen(RelativeLayoutScreen):
 
         self.add_widget(Image(source='ui/media/images/upload/loading.gif'))
         self.add_widget(Label(text="Cargando..."))
-
-
-
-
-

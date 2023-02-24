@@ -1,29 +1,20 @@
 from __future__ import print_function
 
-import io
 import os.path
 
-from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
-from imgurpython import ImgurClient
-
 import panflute
-import pypandoc
-from PIL import Image
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaFileUpload
+from imgurpython import ImgurClient
 from kivy import Logger
-
-import requests as req
 
 import app_config
 from app_config import GOOGLE_SCOPES as SCOPES
-
 from src.utils.Docmdutils import parse_text
-
-
 
 
 class GoogleSlides:
@@ -53,7 +44,6 @@ class GoogleSlides:
             self.insert_images(presentation.get('presentationId'))
         self.move_files_to_folder(presentation.get('presentationId'))
 
-
     def create_folder_in_drive(self, folder_name):
         try:
             # Find if folder already exists
@@ -63,9 +53,10 @@ class GoogleSlides:
                                                            spaces='drive',
                                                            fields='nextPageToken, files(id, name)',
                                                            pageToken=page_token).execute()
-                for file in response.get('files', []):
-                    if file.get('name') == folder_name:
-                        self.folder_id = file.get('id') #TODO: If folder gets deleted, this still points to the old folder
+                for g_file in response.get('files', []):
+                    if g_file.get('name') == folder_name:
+                        self.folder_id = g_file.get(
+                            'id')  # TODO: If folder gets deleted, this still points to the old folder
                         return
                 page_token = response.get('nextPageToken', None)
                 if page_token is None:
@@ -75,22 +66,23 @@ class GoogleSlides:
                 'name': folder_name,
                 'mimeType': 'application/vnd.google-apps.folder'
             }
-            file = self.drive_service.files().create(body=file_metadata,
-                                               fields='id').execute()
-            self.folder_id = file.get('id')
+            g_file = self.drive_service.files().create(body=file_metadata,
+                                                     fields='id').execute()
+            self.folder_id = g_file.get('id')
         except HttpError as e:
             Logger.error('FolderCreationError: {}'.format(e))
 
     def move_files_to_folder(self, file_id):
         try:
-            file = self.drive_service.files().get(fileId=file_id,
+            g_file = self.drive_service.files().get(fileId=file_id,
                                                   fields='parents').execute()
-            previous_parents = ",".join(file.get('parents'))
-            file = self.drive_service.files().update(fileId=file_id,
+            previous_parents = ",".join(g_file.get('parents'))
+            g_file = self.drive_service.files().update(fileId=file_id,
                                                      addParents=self.folder_id,
                                                      removeParents=previous_parents,
                                                      fields='id, parents').execute()
-            Logger.info('FileMoveToFolderSuccess: Moved file with id' + file.get('id') + ' to folder with id' + self.folder_id)
+            Logger.info(
+                'FileMoveToFolderSuccess: Moved file with id' + g_file.get('id') + ' to folder with id' + self.folder_id)
         except HttpError as e:
             Logger.error('FileMoveToFolderError: {}'.format(e))
 
@@ -101,25 +93,25 @@ class GoogleSlides:
                 'parents': [self.folder_id]
             }
 
-
             Logger.debug('src/export/google_slides.py/upload_image_to_drive: Uploading image with path' + image_path)
             media = MediaFileUpload(image_path, mimetype='image/png')
-            file = self.drive_service.files().create(body=file_metadata,
-                                               media_body=media,
-                                               fields='id, webContentLink').execute()
+            g_file = self.drive_service.files().create(body=file_metadata,
+                                                     media_body=media,
+                                                     fields='id, webContentLink').execute()
 
-            Logger.debug('src/export/google_slides.py/upload_image_to_drive: Changing permissions for image with id' + file.get('id'))
+            Logger.debug(
+                'src/export/google_slides.py/upload_image_to_drive: Changing permissions for image with id' + g_file.get(
+                    'id'))
             permissions = {
                 'type': 'anyone',
                 'value': 'anyone',
                 'role': 'reader'
             }
-            self.drive_service.permissions().create(fileId=file.get('id'), body=permissions).execute()
+            self.drive_service.permissions().create(fileId=g_file.get('id'), body=permissions).execute()
 
-            return file.get('webContentLink')
+            return g_file.get('webContentLink')
         except HttpError as e:
             Logger.error('ImageUploadError: {}'.format(e))
-
 
     def get_credentials(self):
         # The file token.json stores the user's access and refresh tokens, and is
@@ -250,12 +242,11 @@ class GoogleSlides:
         except Exception as e:
             Logger.error("UploadImageError: {}".format(e))
 
-
     def insert_images(self, presentation_id):
         for image in self.images:
             try:
 
-                uploaded_image_url = self.upload_image('sessions/'+ self.current_session + image.url)
+                uploaded_image_url = self.upload_image('sessions/' + self.current_session + image.url)
                 requests = [
                     {
                         'createImage': {
@@ -289,7 +280,6 @@ class GoogleSlides:
                 Logger.error("Image insertion failed")
                 Logger.error("Error code: " + str(err.resp.status))
                 Logger.error("Error message: " + err.resp.reason)
-
 
     def send_batch_update(self, presentation_id, requests):
         try:

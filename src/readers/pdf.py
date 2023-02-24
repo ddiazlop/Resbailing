@@ -2,14 +2,14 @@ import datetime
 import re
 
 import pdfplumber
+import torch
 from kivy import Logger
 from mdutils import MdUtils
-# from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
-# import torch
-
-import torch
 from transformers import BertTokenizerFast, EncoderDecoderModel
+
 import app_config
+
+
 
 
 class PdfAnalyzer:
@@ -47,8 +47,7 @@ class PdfAnalyzer:
                 actions[action]()
 
         self.mdFile.create_md_file()
-        
-        
+
     def generate_first_slide(self):
         Logger.debug('PDF: Generating first slide')
         self.mdFile.new_line('---')
@@ -83,7 +82,6 @@ class PdfAnalyzer:
         self.mdFile.new_header(level=1, title='Tabla de contenidos')
         self.get_table_of_contents()
 
-
         for page in self.pages[1:]:
             self.generate_slide(page)
 
@@ -95,7 +93,7 @@ class PdfAnalyzer:
             word_dict = self.get_word_sizes_dict_by_height(page)
             most_common_height = max(word_dict, key=lambda key: len(word_dict[key]))
             number_of_words = len(word_dict[most_common_height])
-            if number_of_words < 250: # TODO: Change this to a percentage, not a good idea to use a fixed number
+            if number_of_words < 250:  # TODO: Change this to a percentage, not a good idea to use a fixed number
                 # Possible table of contents
                 # Group words at the same position
                 word_dict = self.get_word_sizes_dict(page)
@@ -119,11 +117,11 @@ class PdfAnalyzer:
         word = page.extract_words()
         pattern = re.compile(r'\W')
         text = ' '.join([word['text'] for word in word if not pattern.match(word['text'])])
-        text = text.replace('.......................................................................................', '')
-        summary = self.generate_summary(text) #TODO: Change this to the class method
-        #TODO: BUscar otra forma
+        text = text.replace('.......................................................................................',
+                            '')
+        summary = self.generate_summary(text)  # TODO: Change this to the class method
+        # TODO: BUscar otra forma
         i = 0
-
 
     @staticmethod
     def get_subtitle(word_dict, words_same_height, highest_word):
@@ -189,4 +187,3 @@ class PdfAnalyzer:
     #     image = pipe(prompt).images[0]
     #     image_name = prompt.replace(" ", "_") + ".png"
     #     image.save("sessions/images/" + image_name)
-
