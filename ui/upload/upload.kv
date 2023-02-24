@@ -1,3 +1,5 @@
+#:import i18n i18n
+
 <UploadScreen>
     RelativeLayout:
         canvas.before:
@@ -7,7 +9,7 @@
                 source: 'ui/media/images/tobofondo2_estrellas.png'
     Button:
         id: upload
-        text: '[b]Selecciona un archivo MD[/b]'
+        text: '[b]' + i18n.t('dict.select_an_md') + '[/b]'
         font_size: self.height * 0.18
         markup: True
         size_hint: 0.6, 0.3
@@ -17,7 +19,7 @@
         on_release: root.show_load()
     Button:
         id: upload
-        text: '[b]Cargar sesión antigua[/b]'
+        text: '[b]'+i18n.t('dict.load_old_session')+'[/b]'
         font_size: self.height * 0.18
         markup: True
         size_hint: 0.6, 0.3

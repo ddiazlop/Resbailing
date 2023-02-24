@@ -1,3 +1,5 @@
+#:import i18n i18n
+
 <ExportScreen>
     RelativeLayout:
         canvas.before:
@@ -11,14 +13,14 @@
             size_hint: 1, 0.8
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             Label:
-                text: '[b]Exportar a Google Slides[/b]'
+                text: '[b]'+i18n.t('dict.export_to_google_slides')+'[/b]'
                 font_size: self.height * 0.18
                 markup: True
                 size_hint: 1, 0.2
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 color: 0, 0, 0, 1
             Button:
-                text: 'Exportar'
+                text: i18n.t('dict.export')
                 font_size: self.height * 0.18
                 size_hint: 1, 0.2
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}

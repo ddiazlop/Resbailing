@@ -1,0 +1,9 @@
+en:
+    create_presentation: Create a Presentation
+    ready_to_slide: Ready to Slide?
+    lets_go: Let's Go!
+    select_an_md: Select an .md file
+    load_old_session: Load an old session
+    select_session: Select your session
+    export: Export
+    export_to_google_slides: Export to Google Slides
