@@ -1,11 +1,7 @@
-import datetime
-import os
-
 import torch
-from kivy import Logger
-from mdutils import MdUtils
-from transformers import BertTokenizerFast, EncoderDecoderModel, pipeline
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
+from kivy import Logger
+from transformers import BertTokenizerFast, EncoderDecoderModel, pipeline
 from translate import Translator
 
 import app_config
@@ -55,12 +51,11 @@ class ImageGeneratorClass(TransformerClass):
         # Use the DPMSolverMultistepScheduler (DPM-Solver++) scheduler here instead
         self.pipe = StableDiffusionPipeline.from_pretrained(self.model_id, torch_dtype=torch.float32)
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(self.pipe.scheduler.config)
-        # self.pipe = self.pipe.to(self.device)
         self.pipe.enable_sequential_cpu_offload()
         self.pipe.enable_attention_slicing(2)
 
     def generate_image(self, text):
-        extra_attrs = "photo, photography –s 625 –q 2 –iw 3" #TODO: Make this configurable
+        extra_attrs = "photo, photography –s 625 –q 2 –iw 3"  # TODO: Make this configurable
         if app_config.LANGUAGE != 'en':
             translator = Translator(to_lang="en", from_lang=app_config.LANGUAGE)
             text = translator.translate(text)
@@ -77,11 +72,8 @@ class ImageGeneratorClass(TransformerClass):
             Logger.exception('src/superclasses/image_generator.py:' + ValueError.__str__())
 
         Logger.debug('src/superclasses/image_generator.py: Generating image: ' + text[:10] + '...')
-        image_path = self.session_path + "/images/" + text[:10]+ ".png"
+        image_path = self.session_path + "/images/" + text[:10] + ".png"
         image_path = image_path.replace(' ', '_')
         image = self.generate_image(text)
         image.save(image_path)
         self.mdFile.new_line("\n![](" + image_path.replace(self.session_path, '') + ")")
-
-
-

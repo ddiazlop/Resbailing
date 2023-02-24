@@ -1,20 +1,17 @@
 from kivy import Logger
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, FadeTransition
-from kivy.uix.button import Button
-
-from src.utils.Sessions import SessionManager
-from ui.export.export_success import ExportSuccessScreen
-from ui.media.sound.utils import Soundmanager
-from ui.export.export import ExportScreen
-from ui.upload.upload import UploadScreen
 
 import app_config
-
-
+from src.utils.Sessions import SessionManager
+from ui.export.export import ExportScreen
+from ui.export.export_success import ExportSuccessScreen
+from ui.media.sound.utils import Soundmanager
+from ui.upload.upload import UploadScreen
 
 
 class MainScreen(FloatLayout):
@@ -36,16 +33,14 @@ class MainScreen(FloatLayout):
         self.add_widget(mainbutton)
 
     def pressed_button(self, button):
-        if app_config.DEBUG: # Only create the dropdown if in debug mode
+        if app_config.DEBUG:  # Only create the dropdown if in debug mode
             self.create_dropdown()
         else:
             button.text = '¡Allá vamos!'
 
-
     def released_button(self, widget, *args):
-        screenmanager = self.main_app.screen_manager.screens
         # Define the animation
-        anim = Animation(background_color=(0,1,0,1), duration=0.5)
+        anim = Animation(background_color=(0, 1, 0, 1), duration=0.5)
         # Change the text of the button
         widget.text = '¿Preparado para deslizarte?'
 
@@ -90,4 +85,3 @@ class Main(App):
         self.screen_manager.add_widget(screen)
 
         return self.screen_manager
-
