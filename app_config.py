@@ -1,7 +1,7 @@
 # APP ################################################################################################
 
 LANGUAGE = 'en'
-DEBUG = False
+DEBUG = True
 BASE_PATH = './'
 SESSIONS_PATH = BASE_PATH + 'sessions/'
 

@@ -1,3 +1,4 @@
+import i18n
 import torch
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 from kivy import Logger
@@ -14,15 +15,15 @@ class TransformerClass:
 
 
 class SummarizerClass(TransformerClass):
-    def __init__(self, path, **kwargs):
+    def __init__(self, path,**kwargs):
         super().__init__()
         Logger.debug('src/superclasses/content_generators.py: Initializing summarizer')
 
         # Summarization parameters
         self.ckpt = app_config.get_current_summarization_model()
+        Logger.debug('src/markdown.py: Loading summarization model')
         if app_config.LANGUAGE == 'es':
             self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
-            Logger.debug('src/markdown.py: Loading summarization model')
             self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)
         elif app_config.LANGUAGE == 'en':
             self.model = pipeline("summarization", model=self.ckpt)

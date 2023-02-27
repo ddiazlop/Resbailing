@@ -1,4 +1,8 @@
+from threading import Thread
+
+import i18n
 from kivy import Logger
+from kivy.uix.screenmanager import FadeTransition
 
 from src.export.google_slides import GoogleSlides
 from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
@@ -10,8 +14,16 @@ class ExportScreen(RelativeLayoutScreen):
 
     def export(self, *args):
         Logger.debug('ui/export/export.py: Exporting to Google Slides')
+        loading_screen = self.main_app.loading_screen
 
         # Export to Google Slides
-        slides = GoogleSlides(self.main_app.session_manager)
+        Thread(target=self.export_to_google_slides, args=(loading_screen,)).start()
+        self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
+        loading_screen.set_redirect_destination('ExportSuccess')
+        self.main_app.screen_manager.current = 'Loading'
+
+
+    def export_to_google_slides(self, loading_screen):
+        slides = GoogleSlides(self.main_app.session_manager, loading_screen)
         slides.export()
-        self.change_screen('ExportSuccess')
+        self.main_app.loading_screen.redirect = True
