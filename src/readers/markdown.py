@@ -2,6 +2,7 @@ import datetime
 import io
 import os
 
+import i18n
 import panflute
 import pypandoc
 from kivy import Logger
@@ -12,7 +13,8 @@ from src.utils.superclasses.content_generators import SummarizerClass, ImageGene
 
 
 class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
-    def __init__(self, path):
+    def __init__(self, path, loading_screen):
+        self.update_loading_info = loading_screen.update_info
         today = datetime.date.today()
         # Create a folder for the session and its images
         session = "sessions/" + today.__str__()
@@ -23,8 +25,11 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
         self.mdFile = MdUtils(file_name=self.session_path + "/presentation", title=today.__str__())
         super().__init__(path=path)
 
+        self.update_loading_info(i18n.t('dict.loading_summarization_model'))
+
     def summarize(self):
         Logger.debug('src/readers/markdown.py: Summarizing ' + self.path)
+        self.update_loading_info(i18n.t('dict.summarizing'))
         max_para_words, paras = self.init_content()
         # self.summarize_paras(max_para_words, paras)
         self.summarize_paras_lite(paras)
@@ -43,12 +48,15 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
                         # Extend the paragraph to make it longer
                         j = self.extend_para(header, i, num_paras, para, paras)
 
-                    Logger.debug('src/readers/markdown.py: Summarizing paragraph ' + str(i + 1) + 'to' + str(i+1+j) + '/' + str(
+                    Logger.debug('src/readers/markdown.py: Summarizing paragraph ' + str(i + 1) + '->' + str(i+1+j) + '/' + str(
                             len(paras[header])) + ' of header ' + parse_text(header))
+                    self.update_loading_info(i18n.t('dict.summarizing_paragraph') + ' ' + str(i + 1) + '->' + str(i+1+j) + '/' + str(
+                            len(paras[header])) + ' ' + i18n.t('dict.of_header') + ' ' + parse_text(header))
                     self.new_slide(header, para)
 
             else:
                 Logger.debug('src/readers/markdown.py: Summarizing paragraph 1/1 of header ' + parse_text(header))
+
                 self.new_slide(header, paras[header][0])
 
     @staticmethod
@@ -78,6 +86,7 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
         paras = {}
         max_para_words = {}
         Logger.debug('src/readers/markdown.py: Getting titles and paragraphs')
+        self.update_loading_info(i18n.t('dict.getting_titles_and_paragraphs'))
         for elem in doc.content:
             if isinstance(elem, panflute.Header) and elem.level == 1:
                 self.title = parse_text(elem)

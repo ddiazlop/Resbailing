@@ -11,6 +11,7 @@ import app_config
 from src.utils.Sessions import SessionManager
 from ui.export.export import ExportScreen
 from ui.export.export_success import ExportSuccessScreen
+from ui.loading.loading import LoadingScreen
 from ui.media.sound.utils import Soundmanager
 from ui.upload.upload import UploadScreen
 
@@ -32,6 +33,7 @@ class MainScreen(FloatLayout):
         mainbutton.bind(on_release=dropdown.open)
         mainbutton.pos_hint = {'top': 0.5, 'right': 0.6}
         self.add_widget(mainbutton)
+        Logger.debug('Main: Created dropdown')
 
     def pressed_button(self, button):
         if app_config.DEBUG:  # Only create the dropdown if in debug mode
@@ -83,6 +85,11 @@ class Main(App):
         self.export_success_screen = ExportSuccessScreen(main_app=self)
         screen = Screen(name='ExportSuccess')
         screen.add_widget(self.export_success_screen)
+        self.screen_manager.add_widget(screen)
+
+        self.loading_screen = LoadingScreen(main_app=self)
+        screen = Screen(name='Loading')
+        screen.add_widget(self.loading_screen)
         self.screen_manager.add_widget(screen)
 
         return self.screen_manager

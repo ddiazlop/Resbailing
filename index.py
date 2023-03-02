@@ -2,11 +2,15 @@ import os
 import sys
 
 from kivy.config import Config
+# Config.set('kivy', 'kivy_clock', 'free_all')
 from kivy.resources import resource_add_path
 
 import app_config
 import i18n
 from ui.main import Main
+
+
+
 
 if __name__ == '__main__':
     # If python is running in debug mode, enable kivy's debug mode

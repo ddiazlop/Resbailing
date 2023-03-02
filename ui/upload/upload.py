@@ -1,4 +1,5 @@
 import os
+from threading import Thread
 
 import i18n
 from kivy import Logger
@@ -36,8 +37,10 @@ class UploadScreen(RelativeLayoutScreen):
 
     def load(self, path):
         # self.loading_view() #TODO: This is not working
-        Clock.schedule_once(lambda dt: self.loading_view())
-        Clock.schedule_once(lambda dt: self.summarize(path[0]), 0.5)
+
+        self.loading_view()
+        Thread(target=self.summarize, args=(path[0],)).start()
+        # Clock.schedule_once_free(lambda dt: self.summarize(path[0]))
 
     def select_session(self, session_name, *args):
         Logger.debug('ui/upload/upload.py: Selecting session')
@@ -61,21 +64,22 @@ class UploadScreen(RelativeLayoutScreen):
     def redirect_to_export(self, *args):
         Logger.debug('ui/upload/upload.py: Redirecting to export')
         Soundmanager.play_done_sound()
-        self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
-        self.change_screen('Export')
+        self.main_app.loading_screen.redirect_to('Export')
+        # self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
+        # self.change_screen('Export')
 
     def summarize(self, path):
         Logger.debug('ui/upload/upload.py: Summarizing')
-        summarizer = MarkdownSummarizer(path)
+        loading_screen = self.main_app.loading_screen
+
+        summarizer = MarkdownSummarizer(path, loading_screen)
         summarizer.summarize()
         self.main_app.session_manager.select_last_session()
         # Redirect to export screen
-        self.redirect_to_export()
+        loading_screen.next_redirect = 'Export'
+        loading_screen.redirect = True
 
     def loading_view(self, *args):
         Logger.debug('ui/upload/upload.py: Loading view')
-        self.remove_widget(self.ids.upload)
-        self.add_widget(GridLayout(cols=1))
-
-        self.add_widget(Image(source='ui/media/images/upload/loading.gif'))
-        self.add_widget(Label(text="Cargando..."))
+        self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
+        self.change_screen('Loading')

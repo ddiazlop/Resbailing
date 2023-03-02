@@ -2,7 +2,9 @@ from __future__ import print_function
 
 import os.path
 
+import i18n
 import panflute
+from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -18,7 +20,9 @@ from src.utils.Docmdutils import parse_text
 
 
 class GoogleSlides:
-    def __init__(self, session_manager):
+    def __init__(self, session_manager, loading_screen):
+        self.loading_screen = loading_screen
+
         # The session is a markdown file
         self.folder_id = None
         self.images = None
@@ -32,10 +36,12 @@ class GoogleSlides:
 
         self.init_content()
         self.get_credentials()
+        self.loading_screen.update_info(i18n.t('dict.logged_in_google'))
         self.service = build('slides', 'v1', credentials=self.creds)
         self.drive_service = build('drive', 'v3', credentials=self.creds)
 
     def export(self):
+        self.loading_screen.update_info(i18n.t('dict.exporting_to_google_slides'))
         presentation = self.create_presentation()
         self.create_folder_in_drive("Resbailing")
         for header, para in self.paras.items():
@@ -123,8 +129,15 @@ class GoogleSlides:
             creds = Credentials.from_authorized_user_file(token_path, SCOPES)
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
+            self.loading_screen.update_info(i18n.t('dict.login_to_google'))
             if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
+                try:
+                    creds.refresh(Request())
+                except RefreshError:
+                    Logger.error("ExportGoogleSlidesError: Credentials refresh failed")
+                    Logger.info("GoogleSlidesExport: Deleting token.json")
+                    os.remove(token_path)
+                    self.get_credentials()
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
                     'src/export/credentials.json', SCOPES)
@@ -150,6 +163,7 @@ class GoogleSlides:
 
     def set_title_slide(self, presentation_id):
         Logger.info("ui/export/google_slides.py: Creating title slide")
+        self.loading_screen.update_info(i18n.t('dict.creating_title_slide'))
         requests = [
             {
                 'createSlide': {
@@ -223,6 +237,7 @@ class GoogleSlides:
 
             self.send_batch_update(presentation_id, requests)
             Logger.info("Created slide with ID: " + 'pageId' + str(self.page_id))
+            self.loading_screen.update_info(i18n.t('dict.creating_slide') + " " + str(self.page_id))
             self.page_id += 1
         except HttpError as err:
             Logger.error("Slide creation failed")
@@ -245,7 +260,7 @@ class GoogleSlides:
     def insert_images(self, presentation_id):
         for image in self.images:
             try:
-
+                self.loading_screen.update_info(i18n.t('dict.inserting_image') + " " + image.url)
                 uploaded_image_url = self.upload_image('sessions/' + self.current_session + image.url)
                 requests = [
                     {
@@ -276,6 +291,7 @@ class GoogleSlides:
                 ]
                 self.send_batch_update(presentation_id, requests)
                 Logger.info("Inserted image: " + image.url)
+
             except HttpError as err:
                 Logger.error("Image insertion failed")
                 Logger.error("Error code: " + str(err.resp.status))
