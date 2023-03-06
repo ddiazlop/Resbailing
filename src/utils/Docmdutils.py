@@ -6,4 +6,12 @@ def count_words(elem):
 
 
 def parse_text(elem):
-    return ' '.join([x.text for x in elem.content if isinstance(x, panflute.Str)])
+    result = ''
+    for x in elem.content:
+        if isinstance(x, panflute.Str):
+            result += x.text
+        elif isinstance(x, panflute.Space):
+            result += ' '
+        elif isinstance(x, panflute.Quoted):
+            result += '"' + parse_text(x) + '"'
+    return result

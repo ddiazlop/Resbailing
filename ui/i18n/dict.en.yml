@@ -20,3 +20,5 @@ en:
     login_to_google: Log in to Google in order to continue
     logged_in_google: Thanks for logging in to Google
     inserting_image: Inserting image
+    encoding_text: Encoding text...
+    export_success: Exported successfully to Google Slides

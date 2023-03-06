@@ -123,29 +123,30 @@ class GoogleSlides:
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
-        token_path = "src/export/token.json"
-        creds = self.creds
-        if os.path.exists(token_path):
-            creds = Credentials.from_authorized_user_file(token_path, SCOPES)
-        # If there are no (valid) credentials available, let the user log in.
-        if not creds or not creds.valid:
-            self.loading_screen.update_info(i18n.t('dict.login_to_google'))
-            if creds and creds.expired and creds.refresh_token:
-                try:
+        try:
+            token_path = "src/export/token.json"
+            creds = self.creds
+            if os.path.exists(token_path):
+                creds = Credentials.from_authorized_user_file(token_path, SCOPES)
+            # If there are no (valid) credentials available, let the user log in.
+            if not creds or not creds.valid:
+                self.loading_screen.update_info(i18n.t('dict.login_to_google'))
+                if creds and creds.expired and creds.refresh_token:
                     creds.refresh(Request())
-                except RefreshError:
-                    Logger.error("ExportGoogleSlidesError: Credentials refresh failed")
-                    Logger.info("GoogleSlidesExport: Deleting token.json")
-                    os.remove(token_path)
-                    self.get_credentials()
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    'src/export/credentials.json', SCOPES)
-                creds = flow.run_local_server(port=0)
-            # Save the credentials for the next run
-            with open(token_path, 'w') as token:
-                token.write(creds.to_json())
-        self.creds = creds
+                else:
+                    flow = InstalledAppFlow.from_client_secrets_file(
+                        'src/export/credentials.json', SCOPES)
+                    creds = flow.run_local_server(port=0)
+                # Save the credentials for the next run
+                with open(token_path, 'w') as token:
+                    token.write(creds.to_json())
+            self.creds = creds
+
+        except RefreshError:
+            Logger.error("ExportGoogleSlidesError: Credentials refresh failed")
+            Logger.info("GoogleSlidesExport: Deleting token.json")
+            os.remove(token_path)
+            self.get_credentials()
 
     def create_presentation(self):
         try:
@@ -160,6 +161,7 @@ class GoogleSlides:
             Logger.error("Presentation creation failed")
             Logger.error("Error code: " + str(err.resp.status))
             Logger.error("Error message: " + err.resp.reason)
+
 
     def set_title_slide(self, presentation_id):
         Logger.info("ui/export/google_slides.py: Creating title slide")

@@ -21,7 +21,7 @@ class SummarizerClass(TransformerClass):
 
         # Summarization parameters
         self.ckpt = app_config.get_current_summarization_model()
-        Logger.debug('src/markdown.py: Loading summarization model')
+        Logger.debug('src/summarizer.py: Loading summarization model')
         if app_config.LANGUAGE == 'es':
             self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
             self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)
@@ -55,6 +55,8 @@ class ImageGeneratorClass(TransformerClass):
         self.pipe.enable_sequential_cpu_offload()
         self.pipe.enable_attention_slicing(2)
 
+        self.image_order = 0
+
     def generate_image(self, text):
         extra_attrs = "photo, photography –s 625 –q 2 –iw 3"  # TODO: Make this configurable
         if app_config.LANGUAGE != 'en':
@@ -73,7 +75,8 @@ class ImageGeneratorClass(TransformerClass):
             Logger.exception('src/superclasses/image_generator.py:' + ValueError.__str__())
 
         Logger.debug('src/superclasses/image_generator.py: Generating image: ' + text[:10] + '...')
-        image_path = self.session_path + "/images/" + text[:10] + ".png"
+        image_path = self.session_path + "/images/image" + str(self.image_order) + ".png"
+        self.image_order += 1
         image_path = image_path.replace(' ', '_')
         image = self.generate_image(text)
         image.save(image_path)
