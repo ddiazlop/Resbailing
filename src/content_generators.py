@@ -41,7 +41,7 @@ class SummarizerClass(TransformerClass):
             output = self.model.generate(input_ids, attention_mask=attention_mask)
             return self.tokenizer.decode(output[0], skip_special_tokens=True)
         if app_config.LANGUAGE == 'en':
-            return self.model(text, max_length=52, min_length=30, do_sample=False)[0]['summary_text']
+            return self.model(text, max_length=43, min_length=5, do_sample=False)[0]['summary_text']
 
 
 class ImageGeneratorClass(TransformerClass):
