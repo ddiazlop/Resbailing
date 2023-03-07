@@ -76,7 +76,7 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
 
                         similarities_with_first_sentence = [x for x in numpy.inner(sentence_embeddings[0], sentence_embeddings[1:])]
                         # similarities_mean = numpy.mean(similarities_with_first_sentence)
-                        similarities_mean = 0.2
+                        similarities_mean = 0.3
 
                         text_to_resume = sentence
 

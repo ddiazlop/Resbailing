@@ -41,7 +41,7 @@ class SummarizerClass(TransformerClass):
             output = self.model.generate(input_ids, attention_mask=attention_mask)
             return self.tokenizer.decode(output[0], skip_special_tokens=True)
         if app_config.LANGUAGE == 'en':
-            return self.model(text, max_length=512, min_length=30, do_sample=False)[0]['summary_text']
+            return self.model(text, max_length=52, min_length=30, do_sample=False)[0]['summary_text']
 
 
 class ImageGeneratorClass(TransformerClass):
@@ -58,7 +58,7 @@ class ImageGeneratorClass(TransformerClass):
         self.image_order = 0
 
     def generate_image(self, text):
-        extra_attrs = "photo, photography –s 625 –q 2 –iw 3"  # TODO: Make this configurable
+        extra_attrs = "amazing, astonishing, wonderful, beautiful, highly detailed, centered"  # TODO: Make this configurable
         if app_config.LANGUAGE != 'en':
             translator = Translator(to_lang="en", from_lang=app_config.LANGUAGE)
             text = translator.translate(text)
