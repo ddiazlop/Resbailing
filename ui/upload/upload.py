@@ -23,7 +23,7 @@ class UploadScreen(RelativeLayoutScreen):
         self._popup.dismiss()
 
     def show_load(self, *args):
-        Logger.debug('ui/upload/upload.py: Loading dialog')
+        Logger.debug('Resbailing: Loading dialog')
         # There is a bug (?) in filechooser that changes the current working directory
         # to the directory of the file that is selected. This is a workaround.
         curr_dir = os.getcwd()
@@ -40,13 +40,13 @@ class UploadScreen(RelativeLayoutScreen):
         # Clock.schedule_once_free(lambda dt: self.summarize(path[0]))
 
     def select_session(self, session_name, *args):
-        Logger.debug('ui/upload/upload.py: Selecting session')
+        Logger.debug('Resbailing: Selecting session')
         self.main_app.session_manager.set_current_session(session_name)
         self.dismiss_popup()
         self.redirect_to_export()
 
     def show_select_session_popup(self, *args):
-        Logger.debug('ui/upload/upload.py: Prompting the user to select a session')
+        Logger.debug('Resbailing: Prompting the user to select a session')
         content = GridLayout(cols=1, spacing=10, size_hint_y=None)
         content.bind(minimum_height=content.setter('height'))
         for session in self.main_app.session_manager.session_names:
@@ -59,14 +59,12 @@ class UploadScreen(RelativeLayoutScreen):
         self._popup.open()
 
     def redirect_to_export(self, *args):
-        Logger.debug('ui/upload/upload.py: Redirecting to export')
+        Logger.debug('Resbailing: Redirecting to export')
         Soundmanager.play_done_sound()
         self.main_app.loading_screen.redirect_to('Export')
-        # self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
-        # self.change_screen('Export')
 
     def summarize(self, path):
-        Logger.debug('ui/upload/upload.py: Summarizing')
+        Logger.debug('Resbailing: Summarizing')
         loading_screen = self.main_app.loading_screen
 
         summarizer = MarkdownSummarizer(path, loading_screen)
@@ -77,6 +75,6 @@ class UploadScreen(RelativeLayoutScreen):
         loading_screen.redirect = True
 
     def loading_view(self, *args):
-        Logger.debug('ui/upload/upload.py: Loading view')
+        Logger.debug('Resbailing: Loading view')
         self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
         self.change_screen('Loading')

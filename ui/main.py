@@ -33,7 +33,7 @@ class MainScreen(FloatLayout):
         mainbutton.bind(on_release=dropdown.open)
         mainbutton.pos_hint = {'top': 0.5, 'right': 0.6}
         self.add_widget(mainbutton)
-        Logger.debug('Main: Created dropdown')
+        Logger.debug('Resbailing: Created dropdown')
 
     def pressed_button(self, button):
         if app_config.DEBUG:  # Only create the dropdown if in debug mode
@@ -52,12 +52,12 @@ class MainScreen(FloatLayout):
         anim.bind(on_complete=self.redirect_to_upload)
 
     def redirect_to_upload(self, *args):
-        Logger.debug('Main: Redirecting to upload')
+        Logger.debug('Resbailing: Redirecting to upload')
         self.main_app.screen_manager.transition = SlideTransition(direction='down', duration=0.5)
         self.main_app.screen_manager.current = 'Upload'
 
     def change_screen(self, screen_name):
-        Logger.debug('Main: Changing screen to ' + screen_name)
+        Logger.debug('Resbailing: Changing screen to ' + screen_name)
         self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
         self.main_app.screen_manager.current = screen_name
 
