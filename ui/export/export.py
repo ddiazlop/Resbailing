@@ -13,7 +13,7 @@ class ExportScreen(RelativeLayoutScreen):
         super(ExportScreen, self).__init__(main_app, 'ui/export/export.kv', **kwargs)
 
     def export(self, *args):
-        Logger.debug('ui/export/export.py: Exporting to Google Slides')
+        Logger.debug('Resbailing: Exporting to Google Slides')
         loading_screen = self.main_app.loading_screen
 
         # Export to Google Slides

@@ -16,8 +16,8 @@ from kivy import Logger
 
 import app_config
 from app_config import GOOGLE_SCOPES as SCOPES
+from src.utils.Loggers import ErrorLogger
 from src.utils.Docmdutils import parse_text
-
 
 class GoogleSlides:
     def __init__(self, session_manager, loading_screen):
@@ -62,7 +62,7 @@ class GoogleSlides:
                 for g_file in response.get('files', []):
                     if g_file.get('name') == folder_name:
                         self.folder_id = g_file.get(
-                            'id')  # TODO: If folder gets deleted, this still points to the old folder
+                            'id')
                         return
                 page_token = response.get('nextPageToken', None)
                 if page_token is None:
@@ -76,7 +76,7 @@ class GoogleSlides:
                                                      fields='id').execute()
             self.folder_id = g_file.get('id')
         except HttpError as e:
-            Logger.error('FolderCreationError: {}'.format(e))
+            ErrorLogger.log_error(e)
 
     def move_files_to_folder(self, file_id):
         try:
@@ -90,7 +90,7 @@ class GoogleSlides:
             Logger.info(
                 'FileMoveToFolderSuccess: Moved file with id' + g_file.get('id') + ' to folder with id' + self.folder_id)
         except HttpError as e:
-            Logger.error('FileMoveToFolderError: {}'.format(e))
+            ErrorLogger.log_error(e)
 
     def upload_image_to_drive(self, image_path):
         try:
@@ -99,14 +99,14 @@ class GoogleSlides:
                 'parents': [self.folder_id]
             }
 
-            Logger.debug('src/export/google_slides.py/upload_image_to_drive: Uploading image with path' + image_path)
+            Logger.debug('Resbailing: Uploading image with path' + image_path)
             media = MediaFileUpload(image_path, mimetype='image/png')
             g_file = self.drive_service.files().create(body=file_metadata,
                                                      media_body=media,
                                                      fields='id, webContentLink').execute()
 
             Logger.debug(
-                'src/export/google_slides.py/upload_image_to_drive: Changing permissions for image with id' + g_file.get(
+                'Resbailing: Changing permissions for image with id' + g_file.get(
                     'id'))
             permissions = {
                 'type': 'anyone',
@@ -117,7 +117,7 @@ class GoogleSlides:
 
             return g_file.get('webContentLink')
         except HttpError as e:
-            Logger.error('ImageUploadError: {}'.format(e))
+            ErrorLogger.log_error(e)
 
     def get_credentials(self):
         # The file token.json stores the user's access and refresh tokens, and is
@@ -143,8 +143,8 @@ class GoogleSlides:
             self.creds = creds
 
         except RefreshError:
-            Logger.error("ExportGoogleSlidesError: Credentials refresh failed")
-            Logger.info("GoogleSlidesExport: Deleting token.json")
+            ErrorLogger.log_warning("Credentials refresh failed")
+            Logger.info("ResbailingGoogleSlidesExport: Deleting token.json")
             os.remove(token_path)
             self.get_credentials()
 
@@ -155,16 +155,14 @@ class GoogleSlides:
             }
             presentation = self.service.presentations().create(body=body).execute()
             self.set_title_slide(presentation.get('presentationId'))
-            Logger.info("Presentation created: " + presentation.get('presentationId'))
+            Logger.info("Resbailing: Presentation created -> " + presentation.get('presentationId'))
             return presentation
         except HttpError as err:
-            Logger.error("Presentation creation failed")
-            Logger.error("Error code: " + str(err.resp.status))
-            Logger.error("Error message: " + err.resp.reason)
+            ErrorLogger.log_error(err, "Presentation creation failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
 
 
     def set_title_slide(self, presentation_id):
-        Logger.info("ui/export/google_slides.py: Creating title slide")
+        Logger.info("Resbailing: Creating title slide")
         self.loading_screen.update_info(i18n.t('dict.creating_title_slide'))
         requests = [
             {
@@ -238,13 +236,11 @@ class GoogleSlides:
             ]
 
             self.send_batch_update(presentation_id, requests)
-            Logger.info("Created slide with ID: " + 'pageId' + str(self.page_id))
+            Logger.info("Resbailing: Created slide with ID -> " + 'pageId' + str(self.page_id))
             self.loading_screen.update_info(i18n.t('dict.creating_slide') + " " + str(self.page_id))
             self.page_id += 1
         except HttpError as err:
-            Logger.error("Slide creation failed")
-            Logger.error("Error code: " + str(err.resp.status))
-            Logger.error("Error message: " + err.resp.reason)
+            ErrorLogger.log_error(err, "Slide creation failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
 
     def upload_image(self, image_path):
         try:
@@ -257,7 +253,7 @@ class GoogleSlides:
             else:
                 raise Exception("Invalid image storage service")
         except Exception as e:
-            Logger.error("UploadImageError: {}".format(e))
+            ErrorLogger.log_error(e, "Image upload failed")
 
     def insert_images(self, presentation_id):
         for image in self.images:
@@ -292,12 +288,10 @@ class GoogleSlides:
                     }
                 ]
                 self.send_batch_update(presentation_id, requests)
-                Logger.info("Inserted image: " + image.url)
+                Logger.info("Resbailing: Inserted image -> " + image.url)
 
             except HttpError as err:
-                Logger.error("Image insertion failed")
-                Logger.error("Error code: " + str(err.resp.status))
-                Logger.error("Error message: " + err.resp.reason)
+                ErrorLogger.log_error(err, "Image insertion failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
 
     def send_batch_update(self, presentation_id, requests):
         try:
@@ -306,13 +300,11 @@ class GoogleSlides:
             }
 
             response = self.service.presentations().batchUpdate(presentationId=presentation_id, body=body).execute()
-            Logger.debug("Batch update response: " + str(response))
+            Logger.debug("Resbailing: Batch update response -> " + str(response))
             return response
 
         except HttpError as err:
-            Logger.error("src/export/google_slides.py: Batch update failed")
-            Logger.error("Error code: " + str(err.resp.status))
-            Logger.error("Error message: " + err.resp.reason)
+            ErrorLogger.log_error(err, "Batch update failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
 
     def init_content(self):
         # Open the markdown file
@@ -321,7 +313,7 @@ class GoogleSlides:
             doc = panflute.convert_text(content, input_format='markdown')
         images = []
         paras = {}
-        Logger.debug('Markdown: Getting titles and paragraphs')
+        Logger.debug('Resbailing: Getting titles and paragraphs')
         for elem in doc:
             if isinstance(elem, panflute.Header) and elem.level == 1:
                 self.title = parse_text(elem)

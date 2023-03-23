@@ -14,12 +14,12 @@ import app_config
 
 class PdfAnalyzer:
     def __init__(self, path):
-        Logger.debug('src/pdf.py: Initializing PDF analyzer')
+        Logger.debug('Resbailing: Initializing PDF analyzer')
         # Summarization parameters
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.ckpt = app_config.SUMMARIZATION_MODEL
         self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
-        Logger.debug('src/pdf.py: Loading summarization model')
+        Logger.debug('Resbailing: Loading summarization model')
         self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)
 
         # Markdown file parameters
@@ -35,7 +35,7 @@ class PdfAnalyzer:
         self.action(['first_slide', 'presentation'])
 
     def action(self, actions, *args):
-        Logger.debug('PDF: Reading PDF' + self.path + " ##### Actions: " + str(actions))
+        Logger.debug('Resbailing: Reading PDF' + self.path + " ##### Actions: " + str(actions))
         actions = {
             'first_slide': self.generate_first_slide,
             'presentation': self.generate_presentation
@@ -49,7 +49,7 @@ class PdfAnalyzer:
         self.mdFile.create_md_file()
 
     def generate_first_slide(self):
-        Logger.debug('PDF: Generating first slide')
+        Logger.debug('Resbailing: Generating first slide')
         self.mdFile.new_line('---')
         first_page = self.pages[0]
         word_dict = self.get_word_sizes_dict(first_page)
@@ -66,7 +66,7 @@ class PdfAnalyzer:
         pass
 
     def generate_presentation(self):
-        Logger.debug('PDF: Generating presentation')
+        Logger.debug('Resbailing: Generating presentation')
         self.mdFile.new_line('---')
         # Delete both the title and subtitle then check if there are any words left
         # If there are, then generate a new slide
@@ -112,7 +112,7 @@ class PdfAnalyzer:
         pass
 
     def generate_slide(self, page):
-        Logger.debug('PDF: Generating slide from page ' + str(page.page_number))
+        Logger.debug('Resbailing: Generating slide from page ' + str(page.page_number))
         self.mdFile.new_line('---')
         word = page.extract_words()
         pattern = re.compile(r'\W')

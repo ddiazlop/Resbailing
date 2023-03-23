@@ -11,17 +11,17 @@ import app_config
 class TransformerClass:
     def __init__(self, **kwargs):
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        Logger.info('src/superclasses/content_generators.py: Using device: ' + self.device)
+        Logger.info('Resbailing: Using device: ' + self.device)
 
 
 class SummarizerClass(TransformerClass):
     def __init__(self, path,**kwargs):
         super().__init__()
-        Logger.debug('src/superclasses/content_generators.py: Initializing summarizer')
+        Logger.debug('Resbailing: Initializing summarizer')
 
         # Summarization parameters
         self.ckpt = app_config.get_current_summarization_model()
-        Logger.debug('src/summarizer.py: Loading summarization model')
+        Logger.debug('Resbailing: Loading summarization model')
         if app_config.LANGUAGE == 'es':
             self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
             self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)
@@ -47,7 +47,7 @@ class SummarizerClass(TransformerClass):
 class ImageGeneratorClass(TransformerClass):
     def __init__(self, **kwargs):
         super().__init__()
-        Logger.debug('src/superclasses/image_generator.py: Initializing image generator')
+        Logger.debug('Resbailing: Initializing image generator')
         self.model_id = app_config.IMAGE_GENERATION_MODEL
         # Use the DPMSolverMultistepScheduler (DPM-Solver++) scheduler here instead
         self.pipe = StableDiffusionPipeline.from_pretrained(self.model_id, torch_dtype=torch.float32)
@@ -72,9 +72,9 @@ class ImageGeneratorClass(TransformerClass):
             if session_path is None:
                 raise ValueError('Session path not initialized')
         except ValueError:
-            Logger.exception('src/superclasses/image_generator.py:' + ValueError.__str__())
+            Logger.exception('Resbailing:' + ValueError.__str__())
 
-        Logger.debug('src/superclasses/image_generator.py: Generating image: ' + text[:10] + '...')
+        Logger.debug('Resbailing: Generating image: ' + text[:10] + '...')
         image_path = session_path + "/images/image" + str(self.image_order) + ".png"
         self.image_order += 1
         image_path = image_path.replace(' ', '_')

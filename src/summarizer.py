@@ -67,7 +67,7 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
 
 
     def summarize(self):
-        Logger.debug('src/readers/summarizer.py: Summarizing ' + self.path)
+        Logger.debug('Resbailing: Summarizing ' + self.path)
         self.update_loading_info(i18n.t('dict.summarizing'))
         max_para_words, paras = self.init_content()
         self.get_paras_corr(paras)
@@ -94,7 +94,7 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
 
 
     def summarize_paras_lazy(self, paras):
-        Logger.debug('src/readers/summarizer.py: Summarizing paragraphs')
+        Logger.debug('Resbailing: Summarizing paragraphs')
         for header in paras.keys():
             num_paras = len(paras[header])
             if num_paras > 1:
@@ -106,14 +106,14 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
                         # Extend the paragraph to make it longer
                         j = self.extend_para(header, i, num_paras, para, paras)
 
-                    Logger.debug('src/readers/summarizer.py: Summarizing paragraph ' + str(i + 1) + '->' + str(i+1+j) + '/' + str(
+                    Logger.debug('Resbailing: Summarizing paragraph ' + str(i + 1) + '->' + str(i+1+j) + '/' + str(
                             len(paras[header])) + ' of header ' + parse_text(header))
                     self.update_loading_info(i18n.t('dict.summarizing_paragraph') + ' ' + str(i + 1) + '->' + str(i+1+j) + '/' + str(
                             len(paras[header])) + ' ' + i18n.t('dict.of_header') + ' ' + parse_text(header))
                     self.writer.parse_new_slide(header, para)
 
             else:
-                Logger.debug('src/readers/summarizer.py: Summarizing paragraph 1/1 of header ' + parse_text(header))
+                Logger.debug('Resbailing: Summarizing paragraph 1/1 of header ' + parse_text(header))
 
                 self.writer.parse_new_slide(header, paras[header][0])
 
@@ -133,7 +133,7 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
         doc = panflute.load(io.StringIO(data))
         paras = {}
         max_para_words = {}
-        Logger.debug('src/readers/summarizer.py: Getting titles and paragraphs')
+        Logger.debug('Resbailing: Getting titles and paragraphs')
         self.update_loading_info(i18n.t('dict.getting_titles_and_paragraphs'))
         for elem in doc.content:
             if isinstance(elem, panflute.Header) and elem.level == 1:
