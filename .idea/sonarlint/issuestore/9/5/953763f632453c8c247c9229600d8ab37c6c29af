@@ -1,16 +1,0 @@
-
-jpython:S116"NRename this field "mdFile" to match the regular expression ^[_a-z][_a-z0-9]*$.(ßƒ°åýÿÿÿÿ
-Cpython:S1172%",Remove the unused function parameter "args".(Ô‚…L
-4python:S2772B"Remove this unneeded "pass".(ã‘Û¾
-Epython:S1481K"-Remove the unused local variable "word_list".(×‹ê¤
-4python:S2772X"Remove this unneeded "pass".(ã‘Û¾
-Lpython:S1135M"4Complete the task associated to this "TODO" comment.(ÌŠÂ½
-Bpython:S1481o"%Remove the unused local variable "i".(£ýú¼þÿÿÿÿ
-4python:S2772p"Remove this unneeded "pass".(ã‘Û¾
-»python:S1515^"¢Add a parameter to the parent lambda function and use variable "word_dict" as its default value; The value of "word_dict" might change at the next loop iteration.(ýüïÎ
-Kpython:S1135`"4Complete the task associated to this "TODO" comment.(ð­µ
-Hpython:S1481z"+Remove the unused local variable "summary".(·ÆúÔùÿÿÿÿ
-Bpython:S1481|"%Remove the unused local variable "i".(£ýú¼þÿÿÿÿ
-Qpython:S1135z"4Complete the task associated to this "TODO" comment.(·ÆúÔùÿÿÿÿ
-Lpython:S1135{"4Complete the task associated to this "TODO" comment.(ú‰ãû
-<python:S125´"Remove this commented out code.(–ÞñÈøÿÿÿÿ

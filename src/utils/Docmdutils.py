@@ -15,3 +15,14 @@ def parse_text(elem):
         elif isinstance(x, panflute.Quoted):
             result += '"' + parse_text(x) + '"'
     return result
+
+def parse_paras(paras):
+        parsed_paras = {}
+        for header in paras:
+            parsed_header = parse_text(header)
+            for para in paras[header]:
+                parsed_para = parse_text(para)
+                if parsed_header not in parsed_paras:
+                    parsed_paras[parsed_header] = []
+                parsed_paras[parsed_header].append(parsed_para)
+        return parsed_paras

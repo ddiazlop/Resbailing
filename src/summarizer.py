@@ -11,26 +11,60 @@ from kivy import Logger
 from mdutils import MdUtils
 from transformers import AutoTokenizer, AutoModel
 
-import app_config
 import torch.nn.functional as F
-from src.utils.Docmdutils import count_words, parse_text
+from src.utils.Docmdutils import count_words, parse_text, parse_paras
 from src.content_generators import SummarizerClass, ImageGeneratorClass
+from src.utils.TextAnalyzer import TextAnalyzer
+
+
+class MarkdownWriter:
+    def __init__(self):
+
+        today = datetime.date.today()
+        session = "sessions/" + today.__str__()
+
+        if not os.path.exists(session):
+            os.mkdir(session)
+            os.mkdir(session + "/images")
+
+        self.session_path = session
+        self.summarizer = SummarizerClass(session)
+        self.image_generator = ImageGeneratorClass()
+        self.md_file = MdUtils(file_name=self.session_path + "/presentation", title=today.__str__())
+
+    def create_file(self):
+        self.md_file.create_md_file()
+
+    def new_slide(self, header, para):
+        self.slide_break()
+        self.write_header(header)
+        summarized_text = self.summarizer.summarize_text(para)
+        self.write_paragraph(summarized_text)
+        self.image_generator.generate_image_to_mdfile(summarized_text, self.md_file, self.session_path)
+
+    def parse_new_slide(self, header, para):
+        header_parsed = parse_text(header)
+        para_parsed = parse_text(para)
+        self.new_slide(header_parsed, para_parsed)
+
+    def slide_break(self):
+        self.md_file.new_line('\n---\n')
+
+    def write_header(self, header, level=2):
+        self.md_file.new_header(level=level, title=header)
+
+    def write_paragraph(self, para):
+        self.md_file.new_paragraph(para)
 
 
 class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
     def __init__(self, path, loading_screen):
+        self.writer = MarkdownWriter()
+        self.text_analyzer = TextAnalyzer();
         self.update_loading_info = loading_screen.update_info
-        today = datetime.date.today()
-        # Create a folder for the session and its images
-        session = "sessions/" + today.__str__()
-        if not os.path.exists(session):
-            os.mkdir(session)
-            os.mkdir(session + "/images")
-        self.session_path = session
-        self.mdFile = MdUtils(file_name=self.session_path + "/presentation", title=today.__str__())
+        self.update_loading_info(i18n.t('dict.loading_summarization_model'))
         super().__init__(path=path)
 
-        self.update_loading_info(i18n.t('dict.loading_summarization_model'))
 
     def summarize(self):
         Logger.debug('src/readers/summarizer.py: Summarizing ' + self.path)
@@ -38,74 +72,25 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
         max_para_words, paras = self.init_content()
         self.get_paras_corr(paras)
         # self.summarize_paras_lazy(paras)
-        self.mdFile.create_md_file()
+        self.writer.create_file()
 
-    @staticmethod
-    def mean_pooling(model_output, attention_mask):
-        token_embeddings = model_output[0]
-        input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
-        return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+
 
     def get_paras_corr(self, paras):
-        tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
-        model = AutoModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
         self.update_loading_info(i18n.t('dict.encoding_text'))
-        slides = {}
-        for header in paras:
-            parsed_header = parse_text(header)
-            slides[parsed_header] = []
-            previus_text = ''
-            for para in paras[header]:
-                text = parse_text(para)
-                sentences = text.split(".")
-                sentences = [x.strip() for x in sentences]
-                sentences.insert(0, previus_text) # This way we force checking the similarity with the previous paragraph
-                sentences = [x for x in sentences if x != '']
-                sentences_aux = sentences.copy()
+        parsed_paras = parse_paras(paras)
 
-                for sentence in sentences:
-                    if len(sentences_aux) > 1 and sentence in sentences_aux:
-                        if parsed_header == "Conclusion":
-                            i = 0
-                        encoded_input = tokenizer(sentences_aux, padding=True, truncation=True, max_length=512, return_tensors='pt')
-                        with torch.no_grad():
-                            model_output = model(**encoded_input)
-
-                        sentence_embeddings = self.mean_pooling(model_output, encoded_input['attention_mask'])
-                        sentence_embeddings = F.normalize(sentence_embeddings, p=2, dim=1)
-
-                        similarities_with_first_sentence = [x for x in numpy.inner(sentence_embeddings[0], sentence_embeddings[1:])]
-                        # similarities_mean = numpy.mean(similarities_with_first_sentence)
-                        similarities_mean = 0.3
-
-                        text_to_resume = sentence
-
-                        # Prevent repeating the same paragraph
-                        if text_to_resume is previus_text:
-                            slides[parsed_header].__delitem__(-1)
-
-
-                        sentences_aux.__delitem__(0)
-                        for i, x in enumerate(similarities_with_first_sentence):
-                            if x >= similarities_mean:
-                                text_to_resume += " " + sentences_aux[0]
-                                sentences_aux.__delitem__(0)
-                            else:
-                                break
-
-                        previus_text = text_to_resume
-                        slides[parsed_header].append(text_to_resume)
-                    elif sentence not in previus_text and sentence in sentences_aux:
-                        slides[parsed_header].append(sentence)
-
-                previus_text = slides[parsed_header][-1]
-
+        self.text_analyzer.populate_slides(parsed_paras)
+        slides = self.text_analyzer.slides
 
         for header, paras in slides.items():
             for para in paras:
                 self.update_loading_info(i18n.t('dict.summarizing_paragraph') + ' ' + str(paras.index(para) + 1) + '/' + str(
                     len(paras)) + ' ' + i18n.t('dict.of_header') + ' ' + header)
-                self.new_slide_parsed(header, para)
+                self.writer.new_slide(header, para)
+
+
+
 
 
     def summarize_paras_lazy(self, paras):
@@ -125,12 +110,12 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
                             len(paras[header])) + ' of header ' + parse_text(header))
                     self.update_loading_info(i18n.t('dict.summarizing_paragraph') + ' ' + str(i + 1) + '->' + str(i+1+j) + '/' + str(
                             len(paras[header])) + ' ' + i18n.t('dict.of_header') + ' ' + parse_text(header))
-                    self.new_slide(header, para)
+                    self.writer.parse_new_slide(header, para)
 
             else:
                 Logger.debug('src/readers/summarizer.py: Summarizing paragraph 1/1 of header ' + parse_text(header))
 
-                self.new_slide(header, paras[header][0])
+                self.writer.parse_new_slide(header, paras[header][0])
 
     @staticmethod
     def extend_para(header, i, num_paras, para, paras):
@@ -142,25 +127,8 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
                 paras[header].remove(next_para)
         return j
 
-
-    def new_slide(self, header, para):
-        self.slide_break()
-        self.mdFile.new_header(level=2, title=parse_text(header))
-        summarized_text = self.summarize_text(parse_text(para))
-        self.mdFile.new_paragraph(summarized_text)
-        self.generate_image_to_mdfile(summarized_text)
-
-    def new_slide_parsed(self, header, para):
-        self.slide_break()
-        self.mdFile.new_header(level=2, title=header)
-        summarized_text = self.summarize_text(para)
-        self.mdFile.new_paragraph(summarized_text)
-        self.generate_image_to_mdfile(summarized_text)
-
-    def slide_break(self):
-        self.mdFile.new_line('\n---\n')
-
     def init_content(self):
+        last_header = None
         data = pypandoc.convert_file(self.path, 'json')
         doc = panflute.load(io.StringIO(data))
         paras = {}
@@ -170,7 +138,7 @@ class MarkdownSummarizer(SummarizerClass, ImageGeneratorClass):
         for elem in doc.content:
             if isinstance(elem, panflute.Header) and elem.level == 1:
                 self.title = parse_text(elem)
-                self.mdFile.new_header(level=1, title=self.title)
+                self.writer.write_header(self.title, 1)
                 last_header = elem
             elif isinstance(elem, panflute.Header):
                 last_header = elem

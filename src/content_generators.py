@@ -65,19 +65,19 @@ class ImageGeneratorClass(TransformerClass):
         full_text = f"{text},{extra_attrs}"
         return self.pipe(full_text).images[0]
 
-    def generate_image_to_mdfile(self, text):
+    def generate_image_to_mdfile(self, text, md_file, session_path):
         try:
-            if self.mdFile is None:
+            if md_file is None:
                 raise ValueError('Markdown file not initialized')
-            if self.session_path is None:
+            if session_path is None:
                 raise ValueError('Session path not initialized')
         except ValueError:
             Logger.exception('src/superclasses/image_generator.py:' + ValueError.__str__())
 
         Logger.debug('src/superclasses/image_generator.py: Generating image: ' + text[:10] + '...')
-        image_path = self.session_path + "/images/image" + str(self.image_order) + ".png"
+        image_path = session_path + "/images/image" + str(self.image_order) + ".png"
         self.image_order += 1
         image_path = image_path.replace(' ', '_')
         image = self.generate_image(text)
         image.save(image_path)
-        self.mdFile.new_line("\n![](" + image_path.replace(self.session_path, '') + ")")
+        md_file.new_line("\n![](" + image_path.replace(session_path, '') + ")")
