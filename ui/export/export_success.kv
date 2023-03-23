@@ -1,3 +1,6 @@
+#:import i18n i18n
+
+
 <ExportSuccessScreen>
     RelativeLayout:
         canvas.before:
@@ -18,7 +21,7 @@
             size_hint_y: None
             height: 100
         Label:
-            text: 'Exportación completada con éxito'
+            text: i18n.t('dict.export_success')
             font_size: 30
             color: 0, 0, 0, 1
             size_hint_y: None

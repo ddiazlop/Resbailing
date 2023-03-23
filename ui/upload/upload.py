@@ -3,16 +3,13 @@ from threading import Thread
 
 import i18n
 from kivy import Logger
-from kivy.clock import Clock
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.image import Image
-from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import FadeTransition
 from plyer import filechooser
 
-from src.readers.markdown import MarkdownSummarizer
+from src.summarizer import MarkdownSummarizer
 from ui.media.sound.utils import Soundmanager
 from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 

@@ -21,7 +21,7 @@ class SummarizerClass(TransformerClass):
 
         # Summarization parameters
         self.ckpt = app_config.get_current_summarization_model()
-        Logger.debug('src/markdown.py: Loading summarization model')
+        Logger.debug('src/summarizer.py: Loading summarization model')
         if app_config.LANGUAGE == 'es':
             self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
             self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)
@@ -41,7 +41,7 @@ class SummarizerClass(TransformerClass):
             output = self.model.generate(input_ids, attention_mask=attention_mask)
             return self.tokenizer.decode(output[0], skip_special_tokens=True)
         if app_config.LANGUAGE == 'en':
-            return self.model(text, max_length=512, min_length=30, do_sample=False)[0]['summary_text']
+            return self.model(text, max_length=43, min_length=5, do_sample=False)[0]['summary_text']
 
 
 class ImageGeneratorClass(TransformerClass):
@@ -55,26 +55,29 @@ class ImageGeneratorClass(TransformerClass):
         self.pipe.enable_sequential_cpu_offload()
         self.pipe.enable_attention_slicing(2)
 
+        self.image_order = 0
+
     def generate_image(self, text):
-        extra_attrs = "photo, photography –s 625 –q 2 –iw 3"  # TODO: Make this configurable
+        extra_attrs = "amazing, astonishing, wonderful, beautiful, highly detailed, centered"  # TODO: Make this configurable
         if app_config.LANGUAGE != 'en':
             translator = Translator(to_lang="en", from_lang=app_config.LANGUAGE)
             text = translator.translate(text)
         full_text = f"{text},{extra_attrs}"
         return self.pipe(full_text).images[0]
 
-    def generate_image_to_mdfile(self, text):
+    def generate_image_to_mdfile(self, text, md_file, session_path):
         try:
-            if self.mdFile is None:
+            if md_file is None:
                 raise ValueError('Markdown file not initialized')
-            if self.session_path is None:
+            if session_path is None:
                 raise ValueError('Session path not initialized')
         except ValueError:
             Logger.exception('src/superclasses/image_generator.py:' + ValueError.__str__())
 
         Logger.debug('src/superclasses/image_generator.py: Generating image: ' + text[:10] + '...')
-        image_path = self.session_path + "/images/" + text[:10] + ".png"
+        image_path = session_path + "/images/image" + str(self.image_order) + ".png"
+        self.image_order += 1
         image_path = image_path.replace(' ', '_')
         image = self.generate_image(text)
         image.save(image_path)
-        self.mdFile.new_line("\n![](" + image_path.replace(self.session_path, '') + ")")
+        md_file.new_line("\n![](" + image_path.replace(session_path, '') + ")")

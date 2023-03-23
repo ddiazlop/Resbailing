@@ -17,6 +17,9 @@ GOOGLE_SCOPES = ['https://www.googleapis.com/auth/presentations', 'https://www.g
 SUMMARIZATION_MODELS = {'es': 'mrm8488/bert2bert_shared-spanish-finetuned-summarization',
                         'en': 'facebook/bart-large-cnn'}
 
+SENTENCE_ENCODERS = {'en' : 'https://tfhub.dev/google/universal-sentence-encoder/4'}
+SENTENCE_ENCODER = SENTENCE_ENCODERS[LANGUAGE]
+
 # IMAGE GENERATION #################################################################################
 IMAGE_GENERATION_MODEL = "stabilityai/stable-diffusion-2-1"
 
