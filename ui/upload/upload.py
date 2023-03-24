@@ -2,6 +2,8 @@ import os
 from threading import Thread
 
 import i18n
+import src.utils.strategies.StrategyGuesser as StrategyGuesser
+
 from kivy import Logger
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
@@ -9,7 +11,6 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import FadeTransition
 from plyer import filechooser
 
-from src.summarizer import MarkdownSummarizer
 from ui.media.sound.utils import Soundmanager
 from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
@@ -67,7 +68,7 @@ class UploadScreen(RelativeLayoutScreen):
         Logger.debug('Resbailing: Summarizing')
         loading_screen = self.main_app.loading_screen
 
-        summarizer = MarkdownSummarizer(path, loading_screen)
+        summarizer = StrategyGuesser.guess_summarization_strategy(path, loading_screen)
         summarizer.summarize()
         self.main_app.session_manager.select_last_session()
         # Redirect to export screen

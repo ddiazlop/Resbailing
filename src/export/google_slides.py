@@ -16,7 +16,7 @@ from kivy import Logger
 
 import app_config
 from app_config import GOOGLE_SCOPES as SCOPES
-from src.utils.Loggers import ErrorLogger
+from src.utils.loggers import ErrorLogger
 from src.utils.Docmdutils import parse_text
 
 class GoogleSlides:

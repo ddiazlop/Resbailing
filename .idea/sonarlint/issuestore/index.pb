@@ -23,7 +23,5 @@ C
 ui/i18n/dict.es.yml,6\9\69a511d24a0de3c4c15490fd4ac1ecd5166d22ed
 C
 ui/i18n/dict.en.yml,0\8\08ce11ebbe56b87f7df31c7c1f6e78eb1e90ec80
-C
-ui/export/export.kv,b\8\b8895abf00879e78665f513c0684039647355fdd
 K
 src/export/credentials.json,0\d\0d4ebb060199770184d4597645cd404a8a125365
