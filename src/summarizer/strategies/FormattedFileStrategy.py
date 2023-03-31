@@ -12,10 +12,11 @@ from src.utils.Docmdutils import parse_text, parse_paras
 
 class FormattedFileStrategy(SummarizerStrategy):
 
-    def __init__(self, path, loading_screen, lazy = False):
-        super().__init__(path, loading_screen)
+    def __init__(self, path, loading_screen, lazy = False, generate_image = True):
+        super().__init__(path, loading_screen, generate_image=generate_image)
         self.title = None
         self.lazy = lazy
+        Logger.debug('Resbailing: Using FormattedFileStrategy')
 
 
     def init_content(self):
@@ -49,12 +50,7 @@ class FormattedFileStrategy(SummarizerStrategy):
         self.text_analyzer.populate_slides(parsed_paras)
         slides = self.text_analyzer.slides
 
-        for header, paras in slides.items():
-            for para in paras:
-                self.update_loading_info(
-                    i18n.t('dict.summarizing_paragraph') + ' ' + str(paras.index(para) + 1) + '/' + str(
-                        len(paras)) + ' ' + i18n.t('dict.of_header') + ' ' + header)
-                self.new_slide(header, para)
+        self.generate_slides(slides)
 
     def lazy_create_presentation(self, paras):
         Logger.debug('Resbailing: Summarizing paragraphs')

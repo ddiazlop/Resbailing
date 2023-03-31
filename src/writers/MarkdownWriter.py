@@ -24,11 +24,12 @@ class MarkdownWriter:
     def create_file(self):
         self.md_file.create_md_file()
 
-    def new_slide(self, header, para):
+    def new_slide(self, header, para, generate_image : bool=True) -> None:
         self.slide_break()
         self.write_header(header)
         self.write_paragraph(para)
-        self.image_generator.generate_image_to_mdfile(para, self.md_file, self.session_path)
+        if generate_image:
+            self.image_generator.generate_image_to_mdfile(para, self.md_file, self.session_path)
 
     def parse_new_slide(self, header, para):
         header_parsed = parse_text(header)

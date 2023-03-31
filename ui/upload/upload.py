@@ -68,7 +68,7 @@ class UploadScreen(RelativeLayoutScreen):
         Logger.debug('Resbailing: Summarizing')
         loading_screen = self.main_app.loading_screen
 
-        summarizer = StrategyGuesser.guess_summarization_strategy(path, loading_screen)
+        summarizer = StrategyGuesser.guess_summarization_strategy(path, loading_screen, generate_images=False) # TODO: Make this configurable
         summarizer.summarize()
         self.main_app.session_manager.select_last_session()
         # Redirect to export screen

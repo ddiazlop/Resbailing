@@ -15,7 +15,7 @@ class TransformerClass:
 
 
 class SummarizerClass(TransformerClass):
-    def __init__(self, path,**kwargs):
+    def __init__(self, path,max_length=43, **kwargs):
         super().__init__()
         Logger.debug('Resbailing: Initializing summarizer')
 
@@ -32,16 +32,20 @@ class SummarizerClass(TransformerClass):
         self.pages = None
         self.title = None
         self.path = path
+        self.max_length = max_length
 
-    def summarize_text(self, text):
+    def summarize_text(self, text, max_length=None):
+        if max_length is None:
+            max_length = self.max_length
+
         if app_config.LANGUAGE == 'es':
-            inputs = self.tokenizer([text], padding="max_length", truncation=True, max_length=512, return_tensors="pt")
+            inputs = self.tokenizer([text], padding="max_length", truncation=True, max_length=max_length, return_tensors="pt")
             input_ids = inputs.input_ids.to(self.device)
             attention_mask = inputs.attention_mask.to(self.device)
             output = self.model.generate(input_ids, attention_mask=attention_mask)
             return self.tokenizer.decode(output[0], skip_special_tokens=True)
         if app_config.LANGUAGE == 'en':
-            return self.model(text, max_length=43, min_length=5, do_sample=False)[0]['summary_text']
+            return self.model(text, max_length=max_length, min_length=5, do_sample=False)[0]['summary_text']
 
 
 class ImageGeneratorClass(TransformerClass):
