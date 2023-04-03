@@ -2,7 +2,7 @@ import os
 from threading import Thread
 
 import i18n
-import src.utils.strategies.StrategyGuesser as StrategyGuesser
+import src.summarizer.strategies.utils.StrategyGuesser as StrategyGuesser
 
 from kivy import Logger
 from kivy.uix.button import Button
