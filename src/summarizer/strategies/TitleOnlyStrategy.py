@@ -3,7 +3,6 @@ from kivy import Logger
 
 import app_config
 from src.summarizer.Summarizer import SummarizerStrategy
-from src.utils import Docmdutils
 from src.utils.text.TextCleaner import CleanerMethod
 
 
@@ -40,7 +39,7 @@ class TitleOnlyStrategy(SummarizerStrategy):
         # This way we can guess the titles for each slide.
         for sentence in merged_senteces:
             self.update_loading_info(i18n.t('dict.creating_titles') + ' ' + str(merged_senteces.index(sentence) + 1) + '/' + str(len(merged_senteces)))
-            really_summarized = self.summarizer.summarize_text(sentence, max_length=9)
+            really_summarized = self.summarizer.generate_title(sentence)
             if really_summarized not in paras:
                 paras[really_summarized] = [sentence]
             else:

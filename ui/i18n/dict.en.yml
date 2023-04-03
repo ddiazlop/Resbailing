@@ -24,3 +24,6 @@ en:
     export_success: Exported successfully to Google Slides
     analyzing_text: Analyzing text...
     creating_titles: Guessing title
+    want_images: Do you want to generate images for your presentation?
+    yes: Yes
+    no: No

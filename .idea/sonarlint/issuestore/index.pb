@@ -4,8 +4,6 @@
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 O
 .github/ISSUE_TEMPLATE/tarea.md,6\7\67f7d1aae29b2635d64f97173e76927df761ca85
-C
-ui/upload/upload.kv,0\a\0a676140fd83e9ba77592e46cbe43984e4e11165
 :
 
 ui/main.kv,9\a\9ace8ef8615c59e64a6fadfeb9ad6358bd62ce9b
@@ -38,3 +36,5 @@ C
 ui/export/export.py,4\4\444e91a73a897d5afc5c8b4543161be4609a3681
 P
  src/utils/loggers/ErrorLogger.py,0\d\0d3bbc55d05adf8c994d4903acb250e6a5a55e13
+G
+src/utils/Docmdutils.py,d\e\de04864c0814f986a1ca20a4bd9260e77682c304

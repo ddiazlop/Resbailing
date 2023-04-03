@@ -122,7 +122,7 @@ class TextAnalyzer:
             sim_threshold = self.get_sim_threshold(mode, similarities[1:])
             Logger.debug("Resbailing: Similarities: " + str(sim_threshold))
             if similarities[i+1] > sim_threshold:
-                merged_sentence += sentences_aux[i + 1] + ". "
+                merged_sentence += ". " + sentences_aux[i + 1]
                 count += 1
             else:
                 break

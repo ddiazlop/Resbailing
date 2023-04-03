@@ -19,11 +19,13 @@ class UploadScreen(RelativeLayoutScreen):
     def __init__(self, main_app, **kwargs):
         super(UploadScreen, self).__init__(main_app, 'ui/upload/upload.kv', **kwargs)
         self.cols = 1
+        self.render_images = False
+        self._popup = None
 
     def dismiss_popup(self):
         self._popup.dismiss()
 
-    def show_load(self, *args):
+    def show_load(self):
         Logger.debug('Resbailing: Loading dialog')
         # There is a bug (?) in filechooser that changes the current working directory
         # to the directory of the file that is selected. This is a workaround.
@@ -33,12 +35,30 @@ class UploadScreen(RelativeLayoutScreen):
         if path:
             self.load(path)
 
-    def load(self, path):
-        # self.loading_view() #TODO: This is not working
+    def set_render_images(self, value: bool):
+        self.render_images = value
+        self.dismiss_popup()
+        self.show_load()
 
+    def popup_want_images(self):
+        """Shows a popup to the user to ask if he wants to generate images for the presentation"""
+        Logger.debug('Resbailing: Prompting the user to generate images')
+        content = GridLayout(cols=1, spacing=10, size_hint_y=None)
+        content.bind(minimum_height=content.setter('height'))
+        btn = Button(text='Si', size_hint_y=None, height=40)
+        btn.bind(on_release=lambda button: self.set_render_images(True))
+        content.add_widget(btn)
+        btn = Button(text='No', size_hint_y=None, height=40)
+        btn.bind(on_release=lambda button: self.set_render_images(False))
+        content.add_widget(btn)
+
+        self._popup = Popup(title=i18n.t('dict.want_images'), content=content,
+                            size_hint=(0.6, 0.3))
+        self._popup.open()
+
+    def load(self, path):
         self.loading_view()
         Thread(target=self.summarize, args=(path[0],)).start()
-        # Clock.schedule_once_free(lambda dt: self.summarize(path[0]))
 
     def select_session(self, session_name, *args):
         Logger.debug('Resbailing: Selecting session')
@@ -59,6 +79,7 @@ class UploadScreen(RelativeLayoutScreen):
                             size_hint=(0.9, 0.9))
         self._popup.open()
 
+
     def redirect_to_export(self, *args):
         Logger.debug('Resbailing: Redirecting to export')
         Soundmanager.play_done_sound()
@@ -68,7 +89,7 @@ class UploadScreen(RelativeLayoutScreen):
         Logger.debug('Resbailing: Summarizing')
         loading_screen = self.main_app.loading_screen
 
-        summarizer = StrategyGuesser.guess_summarization_strategy(path, loading_screen, generate_images=False) # TODO: Make this configurable
+        summarizer = StrategyGuesser.guess_summarization_strategy(path, loading_screen, generate_images=self.render_images)
         summarizer.summarize()
         self.main_app.session_manager.select_last_session()
         # Redirect to export screen

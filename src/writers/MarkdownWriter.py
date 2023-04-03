@@ -29,7 +29,7 @@ class MarkdownWriter:
         self.write_header(header)
         self.write_paragraph(para)
         if generate_image:
-            self.image_generator.generate_image_to_mdfile(para, self.md_file, self.session_path)
+            self.image_generator.generate_image_to_mdfile(header, self.md_file, self.session_path)
 
     def parse_new_slide(self, header, para):
         header_parsed = parse_text(header)
