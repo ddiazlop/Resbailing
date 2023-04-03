@@ -1,7 +1,4 @@
 
-:
-
-.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 O
 .github/ISSUE_TEMPLATE/tarea.md,6\7\67f7d1aae29b2635d64f97173e76927df761ca85
 E
