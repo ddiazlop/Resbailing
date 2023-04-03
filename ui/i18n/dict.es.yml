@@ -22,3 +22,8 @@ es:
     inserting_image: Insertando imagen
     encoding_text: Codificando texto...
     export_success: Exportado con éxito a Google Slides
+    analyzing_text: Analizando texto...
+    creating_titles: Deduciendo título
+    want_images: ¿Quieres generar imágenes para tu presentación?
+    yes: Sí
+    no: No

@@ -16,7 +16,7 @@
         pos_hint: {'center_x': 0.5, 'center_y': 0.3}
         background_normal: 'ui/media/images/upload/boton_noback.png'
         background_down: 'ui/media/images/upload/boton_noback_pressed.png'
-        on_release: root.show_load()
+        on_release: root.popup_want_images()
     Button:
         id: upload
         text: '[b]'+i18n.t('dict.load_old_session')+'[/b]'
