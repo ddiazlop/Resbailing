@@ -1,11 +1,11 @@
 import io
 from abc import abstractmethod
 
-import i18n
 import panflute
 import pypandoc
 from kivy import Logger
 
+from src.i18n.Translator import t as _
 from src.summarizer.Summarizer import SummarizerStrategy
 from src.utils.Docmdutils import parse_text, parse_paras
 
@@ -25,7 +25,7 @@ class FormattedFileStrategy(SummarizerStrategy):
         doc = panflute.load(io.StringIO(data))
         paras = {}
         Logger.debug('Resbailing: Getting titles and paragraphs')
-        self.update_loading_info(i18n.t('dict.getting_titles_and_paragraphs'))
+        self.update_loading_info(_('loading.getting_titles_and_paragraphs'))
         for elem in doc.content:
             if isinstance(elem, panflute.Header) and elem.level == 1:
                 self.title = parse_text(elem)
@@ -45,7 +45,7 @@ class FormattedFileStrategy(SummarizerStrategy):
             self.smart_create_presentation(paras)
 
     def smart_create_presentation(self, paras):
-        self.update_loading_info(i18n.t('dict.encoding_text'))
+        self.update_loading_info(_('dict.encoding_text'))
         parsed_paras = parse_paras(paras)
         self.text_analyzer.populate_slides(parsed_paras)
         slides = self.text_analyzer.slides
@@ -68,8 +68,8 @@ class FormattedFileStrategy(SummarizerStrategy):
                     Logger.debug('Resbailing: Summarizing paragraph ' + str(i + 1) + '->' + str(i + 1 + j) + '/' + str(
                         len(paras[header])) + ' of header ' + parse_text(header))
                     self.update_loading_info(
-                        i18n.t('dict.summarizing_paragraph') + ' ' + str(i + 1) + '->' + str(i + 1 + j) + '/' + str(
-                            len(paras[header])) + ' ' + i18n.t('dict.of_header') + ' ' + parse_text(header))
+                        _('loading.summarizing_paragraph') + ' ' + str(i + 1) + '->' + str(i + 1 + j) + '/' + str(
+                            len(paras[header])) + ' ' + _('loading.of_header') + ' ' + parse_text(header))
                     self.parse_new_slide(header, para)
 
             else:

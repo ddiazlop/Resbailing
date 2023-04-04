@@ -1,4 +1,3 @@
-import i18n
 from kivy import Logger
 from kivy.animation import Animation
 from kivy.app import App
@@ -8,6 +7,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, FadeTransition
 
 import app_config
+from src.i18n.Translator import t as _
 from src.utils.Sessions import SessionManager
 from ui.export.export import ExportScreen
 from ui.export.export_success import ExportSuccessScreen
@@ -39,13 +39,13 @@ class MainScreen(FloatLayout):
         if app_config.DEBUG:  # Only create the dropdown if in debug mode
             self.create_dropdown()
         else:
-            button.text = i18n.t('dict.lets_go')
+            button.text = _('main.lets_go')
 
     def released_button(self, widget, *args):
         # Define the animation
         anim = Animation(background_color=(0, 1, 0, 1), duration=0.5)
         # Change the text of the button
-        widget.text = i18n.t('dict.ready_to_slide')
+        widget.text = _('main.ready_to_slide')
 
         anim.start(widget)
 

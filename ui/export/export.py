@@ -1,6 +1,5 @@
 from threading import Thread
 
-import i18n
 from kivy import Logger
 from kivy.uix.screenmanager import FadeTransition
 

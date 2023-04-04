@@ -1,7 +1,6 @@
 import os
 from threading import Thread
 
-import i18n
 import src.summarizer.strategies.utils.StrategyGuesser as StrategyGuesser
 
 from kivy import Logger
@@ -13,6 +12,7 @@ from plyer import filechooser
 
 from ui.media.sound.utils import Soundmanager
 from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
+from src.i18n.Translator import t as _
 
 
 class UploadScreen(RelativeLayoutScreen):
@@ -52,7 +52,7 @@ class UploadScreen(RelativeLayoutScreen):
         btn.bind(on_release=lambda button: self.set_render_images(False))
         content.add_widget(btn)
 
-        self._popup = Popup(title=i18n.t('dict.want_images'), content=content,
+        self._popup = Popup(title=_('upload.want_images'), content=content,
                             size_hint=(0.6, 0.3))
         self._popup.open()
 
@@ -75,7 +75,7 @@ class UploadScreen(RelativeLayoutScreen):
             btn.bind(on_release=lambda button: self.select_session(button.text))
             content.add_widget(btn)
 
-        self._popup = Popup(title=i18n.t('dict.select_session'), content=content,
+        self._popup = Popup(title=_('upload.select_session'), content=content,
                             size_hint=(0.9, 0.9))
         self._popup.open()
 

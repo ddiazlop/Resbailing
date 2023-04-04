@@ -1,8 +1,8 @@
-import i18n
 from kivy import Logger
 
 from src.summarizer.strategies.TitleOnlyStrategy import TitleOnlyStrategy
 from src.utils.text.TextCleaner import CleanerMethod
+from src.i18n.Translator import t as _
 
 
 class NoFormatStrategy(TitleOnlyStrategy):
@@ -24,7 +24,7 @@ class NoFormatStrategy(TitleOnlyStrategy):
             lines = [line.strip() for line in lines]
             sentences = []
 
-            self.update_loading_info(i18n.t('dict.analyzing_text'))
+            self.update_loading_info(_('loading.analyzing_text'))
             for line in lines:
                 line = self.cleaner.clean_text(line)
                 line_sentences = self.text_analyzer.split_into_sentences(line)

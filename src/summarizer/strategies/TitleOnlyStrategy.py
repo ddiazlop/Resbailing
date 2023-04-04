@@ -1,9 +1,9 @@
-import i18n
 from kivy import Logger
 
 import app_config
 from src.summarizer.Summarizer import SummarizerStrategy
 from src.utils.text.TextCleaner import CleanerMethod
+from src.i18n.Translator import t as _
 
 
 class TitleOnlyStrategy(SummarizerStrategy):
@@ -19,7 +19,7 @@ class TitleOnlyStrategy(SummarizerStrategy):
             lines = [line.strip() for line in lines[1:]]
             sentences = []
 
-            self.update_loading_info(i18n.t('dict.analyzing_text'))
+            self.update_loading_info(_('loading.analyzing_text'))
             for line in lines:
                 line = self.cleaner.clean_text(line)
                 line_sentences = self.text_analyzer.split_into_sentences(line)
@@ -38,7 +38,7 @@ class TitleOnlyStrategy(SummarizerStrategy):
 
         # This way we can guess the titles for each slide.
         for sentence in merged_senteces:
-            self.update_loading_info(i18n.t('dict.creating_titles') + ' ' + str(merged_senteces.index(sentence) + 1) + '/' + str(len(merged_senteces)))
+            self.update_loading_info(_('loading.creating_titles') + ' ' + str(merged_senteces.index(sentence) + 1) + '/' + str(len(merged_senteces)))
             really_summarized = self.summarizer.generate_title(sentence)
             if really_summarized not in paras:
                 paras[really_summarized] = [sentence]
