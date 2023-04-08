@@ -1,6 +1,7 @@
 import torch
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 from kivy import Logger
+from mdutils import MdUtils
 from transformers import BertTokenizerFast, EncoderDecoderModel, pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
 from translate import Translator
 
@@ -79,7 +80,6 @@ class ImageGeneratorClass(TransformerClass):
         self.pipe.enable_sequential_cpu_offload()
         self.pipe.enable_attention_slicing(2)
 
-        self.image_order = 0
 
     def generate_image(self, text):
         extra_attrs = "amazing, astonishing, wonderful, beautiful, highly detailed, centered, trending on artstation"  # TODO: Make this configurable
@@ -89,7 +89,7 @@ class ImageGeneratorClass(TransformerClass):
         full_text = f"{text},{extra_attrs}"
         return self.pipe(full_text).images[0]
 
-    def generate_image_to_mdfile(self, text, md_file, session_path):
+    def generate_image_to_mdfile(self, text, md_file, session_path, slide_count):
         try:
             if md_file is None:
                 raise ValueError('Markdown file not initialized')
@@ -99,9 +99,13 @@ class ImageGeneratorClass(TransformerClass):
             Logger.exception('Resbailing:' + ValueError.args[0])
 
         Logger.debug('Resbailing: Generating image: ' + text[:10] + '...')
-        image_path = session_path + "/images/image" + str(self.image_order) + ".png"
-        self.image_order += 1
-        image_path = image_path.replace(' ', '_')
+        image_path = session_path + "/images/image" + str(slide_count) + ".png"
         image = self.generate_image(text)
         image.save(image_path)
+        md_file.new_line("\n![](" + image_path.replace(session_path, '') + ")")
+
+
+    @staticmethod
+    def place_image_to_mdfile(image_path:str, session_path:str, md_file : MdUtils):
+        image_path = '/images/' + image_path
         md_file.new_line("\n![](" + image_path.replace(session_path, '') + ")")

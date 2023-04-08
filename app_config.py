@@ -20,6 +20,9 @@ SUMMARIZATION_MODELS = {'es': 'mrm8488/bert2bert_shared-spanish-finetuned-summar
 TITLE_GENERATION_MODELS = {'en': 'deep-learning-analytics/automatic-title-generation'}
 
 SENTENCE_ENCODERS = {'en' : 'https://tfhub.dev/google/universal-sentence-encoder/4'}
+
+if LANGUAGE not in SENTENCE_ENCODERS.keys():
+    SENTENCE_ENCODERS[LANGUAGE] = SENTENCE_ENCODERS['en']
 SENTENCE_ENCODER = SENTENCE_ENCODERS[LANGUAGE]
 
 # IMAGE GENERATION #################################################################################

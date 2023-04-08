@@ -98,17 +98,10 @@ class TextAnalyzer:
         """
         for header, paras in paras.items():
             self.slides[header] = []
-            for text in paras:
-                sentences = self.split_into_sentences(text)
-                if len(self.memos) > 0 and len(self.slides[header]) > 0:
-                    sentences.insert(0, self.memos[-1].last_sentece)
-                    self.slides[header].pop()
-
-                merged_sentences = self.recursive_merge(sentences, [])
-                Logger.debug("Resbailing: Merged sentences: " + str(merged_sentences))
-
-                self.memos.append(LastSentenceMemorandum(merged_sentences[-1]))
-                self.slides[header].extend(merged_sentences)
+            full_text = " ".join(paras)
+            sentences = self.split_into_sentences(full_text)
+            merged_sentences = self.recursive_merge(sentences, [])
+            self.slides[header].extend(merged_sentences)
 
 
     def merge_similar_sentences(self, sentences : List[str], mode : ThresholdMode) -> (str, int):

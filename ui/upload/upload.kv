@@ -1,4 +1,4 @@
-#:import i18n i18n
+#:import _ src.i18n.Translator.t
 
 <UploadScreen>
     RelativeLayout:
@@ -9,7 +9,7 @@
                 source: 'ui/media/images/tobofondo2_estrellas.png'
     Button:
         id: upload
-        text: '[b]' + i18n.t('dict.select_an_md') + '[/b]'
+        text: '[b]' + _('upload.select_an_md') + '[/b]'
         font_size: self.height * 0.18
         markup: True
         size_hint: 0.6, 0.3
@@ -19,7 +19,7 @@
         on_release: root.popup_want_images()
     Button:
         id: upload
-        text: '[b]'+i18n.t('dict.load_old_session')+'[/b]'
+        text: '[b]'+_('upload.load_old_session')+'[/b]'
         font_size: self.height * 0.18
         markup: True
         size_hint: 0.6, 0.3

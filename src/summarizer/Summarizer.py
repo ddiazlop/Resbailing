@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from typing import Dict, List
 
-import i18n
 from kivy import Logger
 
 from src.utils.Docmdutils import parse_text
@@ -9,6 +8,7 @@ from src.content_generators import SummarizerClass
 from src.utils.text.TextAnalyzer import TextAnalyzer, ThresholdMode
 from src.utils.text.TextCleaner import TextCleaner
 from src.writers.MarkdownWriter import MarkdownWriter
+from src.i18n.Translator import t as _
 
 
 
@@ -34,7 +34,7 @@ class SummarizerStrategy:
 
     def __init__(self, path, loading_screen, generate_image : bool=True):
         self.update_loading_info = loading_screen.update_info
-        self.update_loading_info(i18n.t('dict.loading_summarization_model'))
+        self.update_loading_info(_('loading.loading_summarization_model'))
         self.writer = MarkdownWriter()
         self.summarizer = SummarizerClass(path)
         self.text_analyzer = TextAnalyzer(ThresholdMode.MEDIAN)
@@ -57,7 +57,7 @@ class SummarizerStrategy:
 
     def summarize(self):
         Logger.debug('Resbailing: Summarizing ' + self.path)
-        self.update_loading_info(i18n.t('dict.summarizing'))
+        self.update_loading_info(_('loading.summarizing'))
         paras = self.init_content()
         self.create_presentation(paras)
         self.writer.create_file()
@@ -72,8 +72,8 @@ class SummarizerStrategy:
             if not header.__contains__('CNN'):
                 for para in paras:
                     self.update_loading_info(
-                        i18n.t('dict.summarizing_paragraph') + ' ' + str(paras.index(para) + 1) + '/' + str(
-                                len(paras)) + ' ' + i18n.t('dict.of_header') + ' ' + header)
+                        _('loading.summarizing_paragraph') + ' ' + str(paras.index(para) + 1) + '/' + str(
+                                len(paras)) + ' ' + _('loading.of_header') + ' ' + header)
                     self.new_slide(header, para)
 
     @abstractmethod
@@ -84,4 +84,8 @@ class SummarizerStrategy:
     def create_presentation(self, paras):
         pass
 
+    @staticmethod
+    @abstractmethod
+    def check_input(values, **kwargs):
+        pass
 

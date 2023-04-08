@@ -20,16 +20,33 @@ class MarkdownWriter:
         self.session_path = session
         self.image_generator = ImageGeneratorClass()
         self.md_file = MdUtils(file_name=self.session_path + "/presentation", title=today.__str__())
+        self.slide_count = 0
+        self.pregenerated_images = []
 
     def create_file(self):
         self.md_file.create_md_file()
 
     def new_slide(self, header, para, generate_image : bool=True) -> None:
+        if self.slide_count == 0:
+            self.get_pregenerated_images()
+
         self.slide_break()
         self.write_header(header)
         self.write_paragraph(para)
-        if generate_image:
-            self.image_generator.generate_image_to_mdfile(header, self.md_file, self.session_path)
+
+        if self.slide_count < len(self.pregenerated_images):
+            self.image_generator.place_image_to_mdfile(self.pregenerated_images[self.slide_count], self.session_path, self.md_file)
+        elif generate_image:
+            self.image_generator.generate_image_to_mdfile(header, self.md_file, self.session_path, self.slide_count)
+
+        self.slide_count += 1
+
+    def get_pregenerated_images(self):
+        # Look for already existing images
+        files = os.listdir(self.session_path + "/images")
+        for file in files:
+            if file.startswith("image"):
+                self.pregenerated_images.append(file)
 
     def parse_new_slide(self, header, para):
         header_parsed = parse_text(header)

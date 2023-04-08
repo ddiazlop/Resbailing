@@ -1,4 +1,4 @@
-#:import i18n i18n
+#:import _ src.i18n.Translator.t
 
 <LoadingScreen>
     RelativeLayout:
@@ -24,14 +24,14 @@
             size_hint: 1, 1
             pos_hint: {'center_x': .5, 'center_y': .5}
         Label:
-            text: i18n.t('Loading...')
+            text: _('loading.loading')
             font_size: 30
             color: 1, 1, 1, 1
             size_hint: 1, 1
             pos_hint: {'center_x': .5, 'center_y': .5}
         Label:
             id: info
-            text: i18n.t('Please wait...')
+            text: _('loading.please_wait')
             font_size: 20
             color: 1, 1, 1, 1
             size_hint: 1, 1
