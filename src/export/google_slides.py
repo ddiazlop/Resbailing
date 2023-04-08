@@ -258,7 +258,7 @@ class GoogleSlides:
     def insert_images(self, presentation_id):
         for image in self.images:
             try:
-                self.loading_screen.update_info(_('dict.inserting_image') + " " + image.url)
+                self.loading_screen.update_info(_('export.inserting_image') + " " + image.url)
                 uploaded_image_url = self.upload_image('sessions/' + self.current_session + image.url)
                 requests = [
                     {

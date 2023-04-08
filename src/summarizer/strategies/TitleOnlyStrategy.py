@@ -7,6 +7,17 @@ from src.i18n.Translator import t as _
 
 
 class TitleOnlyStrategy(SummarizerStrategy):
+
+    @staticmethod
+    def check_input(values, **kwargs):
+        order = kwargs.get('order', None)
+        if order is None:
+            return False
+        if order[0] != 1:
+            return False
+
+        return values['title'] == 1 and values['section'] == 0 and values['images'] == 0
+
     def __init__(self, path, loading_screen, generate_image=True):
         super().__init__(path, loading_screen, generate_image=generate_image)
         Logger.debug('Resbailing: Using TitleOnlyStrategy')
@@ -49,3 +60,4 @@ class TitleOnlyStrategy(SummarizerStrategy):
 
     def create_presentation(self, paras) -> None:
         self.generate_slides(paras)
+

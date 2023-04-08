@@ -10,6 +10,10 @@ class NoFormatStrategy(TitleOnlyStrategy):
         super().__init__(path, loading_screen, generate_image)
         Logger.debug('Resbailing: Using NoFormatStrategy')
 
+    @staticmethod
+    def check_input(values, **kwargs):
+        return values['title'] == 0 and values['section'] == 0 and values['images'] == 0
+
     def read_lines(self):
         with open(self.path, 'r', encoding='utf-8') as f:
             full_text = f.read()

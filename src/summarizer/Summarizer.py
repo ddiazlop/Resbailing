@@ -84,4 +84,8 @@ class SummarizerStrategy:
     def create_presentation(self, paras):
         pass
 
+    @staticmethod
+    @abstractmethod
+    def check_input(values, **kwargs):
+        pass
 
