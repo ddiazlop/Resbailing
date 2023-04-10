@@ -30,14 +30,9 @@ E
 ui/i18n/global/en.yml,c\6\c623fe0b83cdbddf7f7fd655c6772237a21615e1
 C
 ui/i18n/main/es.yml,2\c\2c883d00514e4e2ca51549c97a7ac6918ec9d48e
-8
-index.py,6\4\6472638a56b927e3afcc8451f0e14ed178d59041
 :
 
 ui/main.kv,9\a\9ace8ef8615c59e64a6fadfeb9ad6358bd62ce9b
-:
-
-ui/main.py,3\2\320d47d88da44ad2bf30e7dce91aaa3ca1f90372
 E
 ui/loading/loading.kv,e\6\e6ea8dd4d3081240eaa2859713c771f45324d693
 E
@@ -52,8 +47,6 @@ N
 src/utils/text/TextAnalyzer.py,6\2\62ff36ccae96d69c9a09f0e51ee225af96987a64
 C
 ui/upload/upload.kv,0\a\0a676140fd83e9ba77592e46cbe43984e4e11165
-L
-src/summarizer/Summarizer.py,1\2\12bc11324cd67ff1c699937ec53a115c990a8e08
 C
 ui/i18n/main/en.yml,c\2\c28b4b16098a56d5241425069e68910f9a7cb272
 b
