@@ -16,6 +16,7 @@ class MarkdownWriter:
         if not os.path.exists(session):
             os.mkdir(session)
             os.mkdir(session + "/images")
+            os.mkdir(session + "/audio")
 
         self.session_path = session
         self.image_generator = ImageGeneratorClass()

@@ -17,20 +17,20 @@ class NoFormatStrategy(TitleOnlyStrategy):
     def read_lines(self):
         with open(self.path, 'r', encoding='utf-8') as f:
             full_text = f.read()
+            return self.extract_sentences(full_text)
 
-            # This is the only difference between this class and TitleOnlyStrategy
-            cleaned_text = self.cleaner.clean_text(full_text.__str__(), CleanerMethod.ALL)
-            title = self.summarizer.generate_title(cleaned_text)
-            self.writer.write_header(title, 1)
-            # End of difference
-
-            lines = full_text.splitlines()
-            lines = [line.strip() for line in lines]
-            sentences = []
-
-            self.update_loading_info(_('loading.analyzing_text'))
-            for line in lines:
-                line = self.cleaner.clean_text(line)
-                line_sentences = self.text_analyzer.split_into_sentences(line)
-                sentences.extend(line_sentences)
-            return sentences
+    def extract_sentences(self, full_text):
+        # This is the only difference between this class and TitleOnlyStrategy
+        cleaned_text = self.cleaner.clean_text(full_text.__str__(), CleanerMethod.ALL)
+        title = self.summarizer.generate_title(cleaned_text)
+        self.writer.write_header(title, 1)
+        # End of difference
+        lines = full_text.splitlines()
+        lines = [line.strip() for line in lines]
+        sentences = []
+        self.update_loading_info(_('loading.analyzing_text'))
+        for line in lines:
+            line = self.cleaner.clean_text(line)
+            line_sentences = self.text_analyzer.split_into_sentences(line)
+            sentences.extend(line_sentences)
+        return sentences

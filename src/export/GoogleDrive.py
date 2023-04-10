@@ -19,6 +19,37 @@ from src.utils.loggers import ErrorLogger
 from src.utils.Docmdutils import parse_text
 from src.i18n.Translator import t as _
 
+
+def get_credentials(creds=None, update_loading_screen=None):
+    # The file token.json stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    token_path = "src/export/token.json"
+    try:
+        if os.path.exists(token_path):
+            creds = Credentials.from_authorized_user_file(token_path, SCOPES)
+        # If there are no (valid) credentials available, let the user log in.
+        if not creds or not creds.valid:
+            if update_loading_screen:
+                update_loading_screen(_('export.login_to_google'))
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    'src/export/credentials.json', SCOPES)
+                creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            with open(token_path, 'w') as token:
+                token.write(creds.to_json())
+        return creds
+
+    except RefreshError:
+        ErrorLogger.log_warning("Credentials refresh failed")
+        Logger.info("ResbailingGoogleSlidesExport: Deleting token.json")
+        os.remove(token_path)
+        get_credentials()
+
+
 class GoogleSlides:
     def __init__(self, session_manager, loading_screen):
         self.loading_screen = loading_screen
@@ -39,6 +70,7 @@ class GoogleSlides:
         self.loading_screen.update_info(_('export.logged_in_google'))
         self.service = build('slides', 'v1', credentials=self.creds)
         self.drive_service = build('drive', 'v3', credentials=self.creds)
+
 
     def export(self):
         self.loading_screen.update_info(_('export.exporting_to_google_slides'))
@@ -123,30 +155,7 @@ class GoogleSlides:
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
-        try:
-            token_path = "src/export/token.json"
-            creds = self.creds
-            if os.path.exists(token_path):
-                creds = Credentials.from_authorized_user_file(token_path, SCOPES)
-            # If there are no (valid) credentials available, let the user log in.
-            if not creds or not creds.valid:
-                self.loading_screen.update_info(_('export.login_to_google'))
-                if creds and creds.expired and creds.refresh_token:
-                    creds.refresh(Request())
-                else:
-                    flow = InstalledAppFlow.from_client_secrets_file(
-                        'src/export/credentials.json', SCOPES)
-                    creds = flow.run_local_server(port=0)
-                # Save the credentials for the next run
-                with open(token_path, 'w') as token:
-                    token.write(creds.to_json())
-            self.creds = creds
-
-        except RefreshError:
-            ErrorLogger.log_warning("Credentials refresh failed")
-            Logger.info("ResbailingGoogleSlidesExport: Deleting token.json")
-            os.remove(token_path)
-            self.get_credentials()
+        self.creds = get_credentials(update_loading_screen=self.loading_screen.update_info)
 
     def create_presentation(self):
         try:
