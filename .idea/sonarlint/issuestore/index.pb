@@ -16,8 +16,6 @@ P
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
-E
-ui/loading/loading.py,1\f\1f533ac7e1dd77db98a12b6325b258b86eea0d69
 C
 ui/export/export.kv,b\8\b8895abf00879e78665f513c0684039647355fdd
 E
@@ -40,8 +38,6 @@ C
 ui/i18n/main/es.yml,2\c\2c883d00514e4e2ca51549c97a7ac6918ec9d48e
 C
 ui/i18n/main/en.yml,c\2\c28b4b16098a56d5241425069e68910f9a7cb272
-8
-index.py,6\4\6472638a56b927e3afcc8451f0e14ed178d59041
 C
 ui/upload/upload.kv,0\a\0a676140fd83e9ba77592e46cbe43984e4e11165
 :
@@ -50,14 +46,8 @@ ui/main.kv,9\a\9ace8ef8615c59e64a6fadfeb9ad6358bd62ce9b
 :
 
 ui/main.py,3\2\320d47d88da44ad2bf30e7dce91aaa3ca1f90372
-=
-app_config.py,1\b\1b1565e7e455861651f9d6a5e53202f9d563d822
-E
-ui/loading/loading.kv,e\6\e6ea8dd4d3081240eaa2859713c771f45324d693
 E
 src/utils/Sessions.py,5\4\542b6fcfc65a13ab6dd59df95dc5f2e03cefb8cf
-F
-src/i18n/Translator.py,3\6\366403b0d2da93cfae6d3f2cd819bc76a59d3d15
 F
 ui/i18n/loading/en.yml,1\6\1690e66897268357b10beda7c66b80597647b178
 E
