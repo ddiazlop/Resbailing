@@ -1,13 +1,10 @@
 import os
 
-import requests
 from kivy import Logger
 from pydub.silence import split_on_silence
 
 from transformers import Wav2Vec2Processor, Wav2Vec2ForCTC
-from datasets import load_dataset
 import torch
-import torchaudio
 import librosa
 
 from pydub import AudioSegment
@@ -47,7 +44,7 @@ class AudioStrategy(NoFormatStrategy):
     @staticmethod
     def check_input(values, **kwargs):
         filename = kwargs['filename']
-        return filename.endswith('.mp3') or filename.endswith('.wav') or filename.endswith('.ogg')
+        return filename.endswith('.mp3') or filename.endswith('.wav')
 
     def read_lines(self):
         """
@@ -96,22 +93,6 @@ class AudioStrategy(NoFormatStrategy):
 
         return whole_text
 
-    def get_inference_api_transcription(self, chunk_filename, whole_text): # TODO: Remove at some point
-        """
-        Uses the inference API to transcribe the audio file.
-        :param chunk_filename:
-        :param whole_text:
-        :return:
-        """
-        api_url = "https://api-inference.huggingface.co/models/facebook/wav2vec2-large-960h-lv60-self"
-        headers = {"Authorization": "Bearer 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"}
-        with open(chunk_filename, "rb") as f:
-            data = f.read()
-        response = requests.post(api_url, headers=headers, data=data)
-        transcription = response.json()['text']
-        whole_text += self.cleaner.style_sentence(transcription)
-        return whole_text
-
     def get_native_transcription(self, chunk_filename, whole_text):
         """
         Uses the native Wav2Vec2 model to transcribe the audio file.
@@ -130,14 +111,4 @@ class AudioStrategy(NoFormatStrategy):
         whole_text += self.cleaner.style_sentence(transcription)
         return whole_text
 
-    def split_to_chunks(self, sound):
-        """
-        Splits the audio file into chunks of 10 seconds.
-        :param sound:
-        :return:
-        """
-        chunks = []
-        for i in range(0, len(sound), 10000):
-            chunks.append(sound[i:i+10000])
-        return chunks
 

@@ -28,6 +28,9 @@ class MarkdownSummarizerContext:
     def summarize(self):
         self._strategy.summarize()
 
+    def delete_output(self):
+        self._strategy.delete_output()
+
 
 
 class SummarizerStrategy:
@@ -75,6 +78,9 @@ class SummarizerStrategy:
                         _('loading.summarizing_paragraph') + ' ' + str(paras.index(para) + 1) + '/' + str(
                                 len(paras)) + ' ' + _('loading.of_header') + ' ' + header)
                     self.new_slide(header, para)
+
+    def delete_output(self):
+        self.writer.delete_session()
 
     @abstractmethod
     def init_content(self):

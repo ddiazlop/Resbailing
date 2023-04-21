@@ -1,5 +1,6 @@
 import pytest
 import app_config
+from src.summarizer.strategies.AudioStrategy import AudioStrategy
 
 from src.summarizer.strategies.FormattedFileStrategy import FormattedFileStrategy
 from src.summarizer.strategies.NoFormatStrategy import NoFormatStrategy
@@ -19,7 +20,7 @@ class TestStrategyGuesser:
         Tests that the FormattedFileStrategy is correctly guessed.
         :return:
         """
-        guessed_strategy = guess_summarization_strategy2('tests/mocks/formatted_file.md', self.loading_screen)
+        guessed_strategy = guess_summarization_strategy2('tests/mocks/input/formatted_file.md', self.loading_screen)
         assert guessed_strategy.strategy.__class__ == FormattedFileStrategy
 
     def test_titleonlystrategy(self):
@@ -38,4 +39,10 @@ class TestStrategyGuesser:
         guessed_strategy = guess_summarization_strategy2('tests/mocks/input/no_format.md', self.loading_screen)
         assert guessed_strategy.strategy.__class__ == NoFormatStrategy
 
-
+    def test_audiostrategy(self):
+        """
+        Tests that the AudioStrategy is correctly guessed.
+        :return:
+        """
+        guessed_strategy = guess_summarization_strategy2('tests/mocks/input/audio.mp3', self.loading_screen)
+        assert guessed_strategy.strategy.__class__ == AudioStrategy

@@ -43,9 +43,6 @@ C
 :
 
 ui/main.kv,9\a\9ace8ef8615c59e64a6fadfeb9ad6358bd62ce9b
-:
-
-ui/main.py,3\2\320d47d88da44ad2bf30e7dce91aaa3ca1f90372
 E
 src/utils/Sessions.py,5\4\542b6fcfc65a13ab6dd59df95dc5f2e03cefb8cf
 F

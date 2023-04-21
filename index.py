@@ -10,10 +10,7 @@ import app_config
 from src.i18n import Translator
 from ui.main import Main
 
-
-
-
-if __name__ == '__main__':
+def start():
     # If python is running in debug mode, enable kivy's debug mode
     if app_config.DEBUG: Config.set('kivy', 'log_level', 'debug')
     if hasattr(sys, '_MEIPASS'):
@@ -31,3 +28,7 @@ if __name__ == '__main__':
     # Load main app
     main_app = Main()
     main_app.run()
+    return main_app
+
+if __name__ == '__main__':
+    start()
