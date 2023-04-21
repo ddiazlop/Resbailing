@@ -1,6 +1,6 @@
-    select_an_md: Select an .md file
+    select_an_md: Select a file
     load_old_session: Load an old session
     select_session: Select your session
     want_images: Do you want to generate images for your presentation?
-    yes: Yes
-    no: No
+    'yes': "Yes"
+    'no': "No"
