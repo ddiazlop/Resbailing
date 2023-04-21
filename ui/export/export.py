@@ -3,7 +3,7 @@ from threading import Thread
 from kivy import Logger
 from kivy.uix.screenmanager import FadeTransition
 
-from src.export.google_slides import GoogleSlides
+from src.export.GoogleDrive import GoogleSlides
 from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
 

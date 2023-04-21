@@ -1,4 +1,5 @@
 import os
+from asyncio import sleep
 from threading import Thread
 
 import src.summarizer.strategies.utils.StrategyGuesser as StrategyGuesser
@@ -30,7 +31,7 @@ class UploadScreen(RelativeLayoutScreen):
         # There is a bug (?) in filechooser that changes the current working directory
         # to the directory of the file that is selected. This is a workaround.
         curr_dir = os.getcwd()
-        path = filechooser.open_file(title='Selecciona tu documento .md', filters=[('markdown files', '*.md')])
+        path = filechooser.open_file(title='Selecciona tu documento .md', filters=[('md, mp3, wav', '*.md', '*.mp3', '*.wav')])
         os.chdir(curr_dir)
         if path:
             self.load(path)
@@ -45,10 +46,10 @@ class UploadScreen(RelativeLayoutScreen):
         Logger.debug('Resbailing: Prompting the user to generate images')
         content = GridLayout(cols=1, spacing=10, size_hint_y=None)
         content.bind(minimum_height=content.setter('height'))
-        btn = Button(text='Si', size_hint_y=None, height=40)
+        btn = Button(text=_('upload.yes'), size_hint_y=None, height=40)
         btn.bind(on_release=lambda button: self.set_render_images(True))
         content.add_widget(btn)
-        btn = Button(text='No', size_hint_y=None, height=40)
+        btn = Button(text=_('upload.no'), size_hint_y=None, height=40)
         btn.bind(on_release=lambda button: self.set_render_images(False))
         content.add_widget(btn)
 

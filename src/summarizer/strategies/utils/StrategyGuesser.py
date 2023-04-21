@@ -1,4 +1,5 @@
 from src.summarizer.Summarizer import MarkdownSummarizerContext
+from src.summarizer.strategies.AudioStrategy import AudioStrategy
 from src.summarizer.strategies.FormattedFileStrategy import FormattedFileStrategy
 from src.summarizer.strategies.NoFormatStrategy import NoFormatStrategy
 from src.summarizer.strategies.TitleOnlyStrategy import TitleOnlyStrategy
@@ -29,8 +30,15 @@ def guess_summarization_strategy2(path, loading_screen, lazy = False, generate_i
     :param generate_images:
     :return:
     """
+
     values = {'title': 0, 'section': 0, 'images': 0}
     order = []
+
+    # AudioStrategy
+    if AudioStrategy.check_input(values, filename=path):
+        return MarkdownSummarizerContext(AudioStrategy(path, loading_screen, generate_image=generate_images))
+
+
     with open(path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
         for line in lines: #TODO: This is a very naive approach, improve it
@@ -44,9 +52,6 @@ def guess_summarization_strategy2(path, loading_screen, lazy = False, generate_i
                 values['images'] += 1
                 order.append('Image')
 
-        # Order needs some padding to avoid index out of bounds errors
-        if len(order) < 2:
-            order.append(0)
 
         # FormattedFileStrategy
         if FormattedFileStrategy.check_input(values, order = order):

@@ -19,6 +19,21 @@ class TextCleaner:
         }
 
     @staticmethod
+    def style_sentence(sentence : str) -> str:
+        """
+        Styles a sentence to be more readable. Lowercases everything, removes unnecessary spaces and adds a period at the end.
+        Also capitalizes the first letter.
+        :param sentence:
+        :return:
+        """
+        sentence = sentence.lower()
+        sentence = sentence.strip()
+        sentence = sentence[0].upper() + sentence[1:]
+        if not sentence.endswith('.'):
+            sentence += '.'
+        return sentence
+
+    @staticmethod
     def clean_md_text(text : str) -> str:
         """Removes all markdown formatting from the text."""
         text = panflute.convert_text(text, standalone=True, input_format='markdown', output_format='plain')
