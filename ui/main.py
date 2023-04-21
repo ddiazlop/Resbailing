@@ -9,11 +9,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, FadeT
 import app_config
 from src.i18n.Translator import t as _
 from src.utils.Sessions import SessionManager
-from ui.export.export import ExportScreen
-from ui.export.export_success import ExportSuccessScreen
-from ui.loading.loading import LoadingScreen
+from ui.screens.export.export import ExportScreen
+from ui.screens.export.export_success import ExportSuccessScreen
+from ui.screens.loading.loading import LoadingScreen
 from ui.media.sound.utils import Soundmanager
-from ui.upload.upload import UploadScreen
+from ui.screens.upload.upload import UploadScreen
 
 
 class MainScreen(FloatLayout):

@@ -4,12 +4,12 @@ from kivy import Logger
 from kivy.uix.screenmanager import FadeTransition
 
 from src.export.GoogleDrive import GoogleSlides
-from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
+from ui.utils.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
 
 class ExportScreen(RelativeLayoutScreen):
     def __init__(self, main_app, **kwargs):
-        super(ExportScreen, self).__init__(main_app, 'ui/export/export.kv', **kwargs)
+        super(ExportScreen, self).__init__(main_app, 'ui/screens/export/export.kv', **kwargs)
 
     def export(self, *args):
         Logger.debug('Resbailing: Exporting to Google Slides')

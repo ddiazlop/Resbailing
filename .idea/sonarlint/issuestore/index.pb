@@ -11,8 +11,6 @@ B
 src/readers/pdf.py,9\5\953763f632453c8c247c9229600d8ab37c6c29af
 K
 ui/export/export_success.py,9\3\9302735bca145dcdeb0ac2291b9b65f3195d746b
-P
- src/utils/loggers/ErrorLogger.py,0\d\0d3bbc55d05adf8c994d4903acb250e6a5a55e13
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
@@ -40,9 +38,6 @@ C
 ui/i18n/main/en.yml,c\2\c28b4b16098a56d5241425069e68910f9a7cb272
 C
 ui/upload/upload.kv,0\a\0a676140fd83e9ba77592e46cbe43984e4e11165
-:
-
-ui/main.kv,9\a\9ace8ef8615c59e64a6fadfeb9ad6358bd62ce9b
 E
 src/utils/Sessions.py,5\4\542b6fcfc65a13ab6dd59df95dc5f2e03cefb8cf
 F

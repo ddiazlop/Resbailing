@@ -21,6 +21,7 @@ class TestStrategyGuesser:
         :return:
         """
         guessed_strategy = guess_summarization_strategy2('tests/mocks/input/formatted_file.md', self.loading_screen)
+        guessed_strategy.delete_output()
         assert guessed_strategy.strategy.__class__ == FormattedFileStrategy
 
     def test_titleonlystrategy(self):
@@ -29,6 +30,7 @@ class TestStrategyGuesser:
         :return:
         """
         guessed_strategy = guess_summarization_strategy2('tests/mocks/input/title_only.md', self.loading_screen)
+        guessed_strategy.delete_output()
         assert guessed_strategy.strategy.__class__ == TitleOnlyStrategy
 
     def test_noformatstrategy(self):
@@ -37,6 +39,7 @@ class TestStrategyGuesser:
         :return:
         """
         guessed_strategy = guess_summarization_strategy2('tests/mocks/input/no_format.md', self.loading_screen)
+        guessed_strategy.delete_output()
         assert guessed_strategy.strategy.__class__ == NoFormatStrategy
 
     def test_audiostrategy(self):
@@ -45,4 +48,5 @@ class TestStrategyGuesser:
         :return:
         """
         guessed_strategy = guess_summarization_strategy2('tests/mocks/input/audio.mp3', self.loading_screen)
+        guessed_strategy.delete_output()
         assert guessed_strategy.strategy.__class__ == AudioStrategy
