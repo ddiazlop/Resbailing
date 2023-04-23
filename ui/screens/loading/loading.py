@@ -1,8 +1,7 @@
 from kivy.clock import Clock
-from kivy.eventmanager import EventManagerBase
 from kivy.uix.screenmanager import FadeTransition
 
-from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
+from ui.utils.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
 
 
@@ -10,7 +9,7 @@ from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 class LoadingScreen(RelativeLayoutScreen):
 
     def __init__(self, main_app, **kwargs):
-        super(LoadingScreen, self).__init__(main_app, 'ui/loading/loading.kv', **kwargs)
+        super(LoadingScreen, self).__init__(main_app, 'ui/screens/loading/loading.kv', **kwargs)
         self.cols = 1
         self.progress = 0
         self.progress_max = 0

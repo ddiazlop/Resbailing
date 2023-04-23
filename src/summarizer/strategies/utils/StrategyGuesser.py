@@ -5,6 +5,7 @@ from src.summarizer.strategies.NoFormatStrategy import NoFormatStrategy
 from src.summarizer.strategies.TitleOnlyStrategy import TitleOnlyStrategy
 
 
+### This is the old guesser, it is not used anymore, but it is kept for reference
 def guess_summarization_strategy(path, loading_screen, lazy = False, generate_images = True):
     with open(path, 'r', encoding='utf-8') as file:
         text = file.read()

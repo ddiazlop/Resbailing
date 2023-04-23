@@ -1,5 +1,7 @@
 import datetime
 import os
+import random
+import shutil
 
 from mdutils import MdUtils
 
@@ -13,12 +15,21 @@ class MarkdownWriter:
         today = datetime.date.today()
         session = "sessions/" + today.__str__()
 
-        if not os.path.exists(session):
-            os.mkdir(session)
-            os.mkdir(session + "/images")
-            os.mkdir(session + "/audio")
+        while os.path.exists(session):
+            if session.__contains__("_"):
+                session = session + random.randint(0, 10).__str__()
+            else:
+                session = session + "_" + random.randint(0, 10).__str__()
 
         self.session_path = session
+        self.images_dir = session + "/images"
+        self.audio_dir = session + "/audio"
+
+        os.mkdir(session)
+        os.mkdir(self.images_dir)
+        os.mkdir(self.audio_dir)
+
+
         self.image_generator = ImageGeneratorClass()
         self.md_file = MdUtils(file_name=self.session_path + "/presentation", title=today.__str__())
         self.slide_count = 0
@@ -26,6 +37,9 @@ class MarkdownWriter:
 
     def create_file(self):
         self.md_file.create_md_file()
+
+    def delete_session(self):
+        shutil.rmtree(self.session_path)
 
     def new_slide(self, header, para, generate_image : bool=True) -> None:
         if self.slide_count == 0:
@@ -44,7 +58,7 @@ class MarkdownWriter:
 
     def get_pregenerated_images(self):
         # Look for already existing images
-        files = os.listdir(self.session_path + "/images")
+        files = os.listdir(self.images_dir)
         for file in files:
             if file.startswith("image"):
                 self.pregenerated_images.append(file)

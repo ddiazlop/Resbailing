@@ -1,5 +1,4 @@
 import os
-from asyncio import sleep
 from threading import Thread
 
 import src.summarizer.strategies.utils.StrategyGuesser as StrategyGuesser
@@ -12,13 +11,13 @@ from kivy.uix.screenmanager import FadeTransition
 from plyer import filechooser
 
 from ui.media.sound.utils import Soundmanager
-from ui.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
+from ui.utils.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 from src.i18n.Translator import t as _
 
 
 class UploadScreen(RelativeLayoutScreen):
     def __init__(self, main_app, **kwargs):
-        super(UploadScreen, self).__init__(main_app, 'ui/upload/upload.kv', **kwargs)
+        super(UploadScreen, self).__init__(main_app, 'ui/screens/upload/upload.kv', **kwargs)
         self.cols = 1
         self.render_images = False
         self._popup = None

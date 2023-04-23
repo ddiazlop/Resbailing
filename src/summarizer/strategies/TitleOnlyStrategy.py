@@ -11,7 +11,7 @@ class TitleOnlyStrategy(SummarizerStrategy):
     @staticmethod
     def check_input(values, **kwargs):
         order = kwargs.get('order', None)
-        if order is None or len(order) <= 1:
+        if order is None or len(order) < 1:
             return False
         if order[0] != 1:
             return False
