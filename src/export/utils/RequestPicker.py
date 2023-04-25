@@ -6,6 +6,7 @@ from src.export.creator.BackGroundImageRequestCreator import BackGroundImageRequ
 from src.export.creator.SideImageSlideRequestCreator import  RightImageSlideRequestCreator, \
     LeftImageSlideRequestCreator
 from src.export.creator.TitleAndTextRequestCreator import TitleAndTextRequestCreator
+from src.export.creator.TitleRequestCreator import TitleRequestCreator
 
 
 def get_request_creator(request_type: RequestType, page_id: int, **kwargs) -> RequestCreator:
@@ -14,6 +15,8 @@ def get_request_creator(request_type: RequestType, page_id: int, **kwargs) -> Re
     if title is not None and body is not None and len(title) > len(body):
         return BackGroundImageRequestCreator(page_id, title=body, body=title)
 
+    if request_type == RequestType.TITLE:
+        return TitleRequestCreator(page_id, **kwargs)
     if request_type == RequestType.TITLE_AND_TEXT:
         return TitleAndTextRequestCreator(page_id, **kwargs)
     elif request_type == RequestType.RIGHT_IMAGE:
@@ -24,5 +27,5 @@ def get_request_creator(request_type: RequestType, page_id: int, **kwargs) -> Re
         raise ValueError("Invalid request type")
 
 def get_random_request_type(page_id: int, **kwargs) -> RequestCreator:
-    number = random.randint(2, 4)
+    number = random.randint(3, 4) # So far, 1 and 2 are not used since they are not as good as 3 and 4
     return get_request_creator(RequestType(number), page_id, **kwargs)
