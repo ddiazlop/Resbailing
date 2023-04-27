@@ -5,8 +5,10 @@ import shutil
 
 from mdutils import MdUtils
 
+import app_config
 from src.content_generators import  ImageGeneratorClass
 from src.utils.Docmdutils import parse_text
+from src.utils.Translator import trans_to_es
 
 
 class MarkdownWriter:
@@ -15,11 +17,10 @@ class MarkdownWriter:
         today = datetime.date.today()
         session = "sessions/" + today.__str__()
 
+        count = 0
         while os.path.exists(session):
-            if session.__contains__("_"):
-                session = session + random.randint(0, 10).__str__()
-            else:
-                session = session + "_" + random.randint(0, 10).__str__()
+            count += 1
+            session = f"{session}_{count}"
 
         self.session_path = session
         self.images_dir = session + "/images"
@@ -41,7 +42,13 @@ class MarkdownWriter:
     def delete_session(self):
         shutil.rmtree(self.session_path)
 
-    def new_slide(self, header, para, generate_image : bool=True) -> None:
+    def new_slide(self, header:str, para:str, generate_image : bool=True) -> None:
+        if app_config.LANGUAGE == "es":
+            header = trans_to_es(header)
+            para = trans_to_es(para)
+        elif app_config.LANGUAGE != "en":
+            raise ValueError("Language not supported")
+
         if self.slide_count == 0:
             self.get_pregenerated_images()
 

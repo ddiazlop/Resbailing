@@ -1,6 +1,6 @@
 # APP ################################################################################################
 
-LANGUAGE = 'en'
+LANGUAGE = 'es'
 DEBUG = True
 BASE_PATH = './'
 SESSIONS_PATH = BASE_PATH + 'sessions/'
@@ -31,7 +31,7 @@ IMAGE_GENERATION_MODEL = "stabilityai/stable-diffusion-2-1"
 
 # FUNCTIONS #######################################################################################
 def get_current_summarization_model():
-    return SUMMARIZATION_MODELS[LANGUAGE]
+    return SUMMARIZATION_MODELS['en']
 
 def get_current_title_generation_model():
-    return TITLE_GENERATION_MODELS[LANGUAGE]
+    return TITLE_GENERATION_MODELS['en']

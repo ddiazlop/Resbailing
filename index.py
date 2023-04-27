@@ -10,6 +10,8 @@ import app_config
 from src.i18n import Translator
 from ui.main import Main
 
+
+
 def start():
     # If python is running in debug mode, enable kivy's debug mode
     if app_config.DEBUG: Config.set('kivy', 'log_level', 'debug')

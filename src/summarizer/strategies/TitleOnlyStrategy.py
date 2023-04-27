@@ -42,7 +42,7 @@ class TitleOnlyStrategy(SummarizerStrategy):
         sentences = self.read_lines()
 
         # Merging sentences that are similiar to each other.
-        merged_senteces = self.text_analyzer.recursive_merge(sentences, [])
+        merged_senteces = self.text_analyzer.get_merged_sentences(sentences)
         if app_config.DEBUG:
             for sentence in merged_senteces:
                 Logger.debug('Resbailing: Merged sentence ' + str(merged_senteces.index(sentence) + 1)+'/' + str(len(merged_senteces))  + ': ' + sentence)

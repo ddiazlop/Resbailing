@@ -8,6 +8,10 @@ from transformers import AutoTokenizer, AutoModel
 import torch.nn.functional as f
 from typing import Dict, List
 
+import app_config
+from src.utils.Translator import trans_large_to_en
+
+
 class LastSentenceMemorandum:
     def __init__(self, last_sentence: str):
         self.last_sentece = last_sentence
@@ -100,7 +104,7 @@ class TextAnalyzer:
             self.slides[header] = []
             full_text = " ".join(paras)
             sentences = self.split_into_sentences(full_text)
-            merged_sentences = self.recursive_merge(sentences, [])
+            merged_sentences = self.get_merged_sentences(sentences)
             self.slides[header].extend(merged_sentences)
 
 
@@ -150,6 +154,19 @@ class TextAnalyzer:
         sentences = sentences[count:]
 
         return self.recursive_merge(sentences, merged_sentences)
+
+    def get_merged_sentences(self, sentences : List[str]) -> List[str]:
+        """Get a list of merged sentences"""
+        sentences2 = sentences.copy()
+        if app_config.LANGUAGE == "es":
+            sentences2 = [trans_large_to_en(x) for x in sentences]
+        elif app_config.LANGUAGE != "en":
+            Logger.error("Resbailing: Language not supported")
+            raise NotImplementedError("Language not supported")
+
+
+        merged_sentences = self.recursive_merge(sentences2, [])
+        return merged_sentences
 
     @staticmethod
     def split_into_sentences(text : str) -> List[str]:
