@@ -43,10 +43,10 @@ def load_dict(subfolder : str) -> Dict[str, str]:
     """
     # Load the file
     try:
-        with open(r'{}/{}/{}.yml'.format(lang_dir, subfolder, lang), 'r') as file:
+        with open(r'{}/{}/{}.yml'.format(lang_dir, subfolder, lang), 'r', encoding='utf8') as file:
             dictt = yaml.load(file, Loader=yaml.FullLoader)
             return dictt
     except FileNotFoundError:
-        with open(r'./ui/i18n/{}/{}.yml'.format(subfolder, lang), 'r') as file:
+        with open(r'./ui/i18n/{}/{}.yml'.format(subfolder, lang), 'r', encoding='utf8') as file:
             dictt = yaml.load(file, Loader=yaml.FullLoader)
             return dictt
