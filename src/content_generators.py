@@ -2,10 +2,10 @@ import torch
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 from kivy import Logger
 from mdutils import MdUtils
-from transformers import BertTokenizerFast, EncoderDecoderModel, pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
 
 from src.utils.Translator import trans_large_to_en
-import app_config
+from AppConfig import app_config
 
 
 class TransformerClass:
@@ -20,8 +20,8 @@ class SummarizerClass(TransformerClass):
         Logger.debug('Resbailing: Initializing summarizer')
 
         # Summarization parameters
-        ckpt = app_config.get_current_summarization_model()
-        title_ckpt = app_config.get_current_title_generation_model()
+        ckpt = app_config.summarization_model
+        title_ckpt = app_config.title_generation_model
         Logger.debug('Resbailing: Loading summarization model')
 
         self.model = pipeline("summarization", model=ckpt)
@@ -37,7 +37,7 @@ class SummarizerClass(TransformerClass):
 
 
     def generate_title(self, text):
-        if app_config.LANGUAGE == 'es':
+        if app_config.language == 'es':
             text = trans_large_to_en(text)
 
         inputs = self.title_tokenizer(text, padding="max_length", truncation=True, max_length=512, return_tensors="pt")
@@ -52,7 +52,7 @@ class SummarizerClass(TransformerClass):
         return answer
 
     def summarize_text(self, text, max_length=None):
-        if app_config.LANGUAGE == 'es':
+        if app_config.language == 'es':
             text = trans_large_to_en(text)
 
         if max_length is None:
@@ -67,7 +67,7 @@ class ImageGeneratorClass(TransformerClass):
     def __init__(self):
         super().__init__()
         Logger.debug('Resbailing: Initializing image generator')
-        self.model_id = app_config.IMAGE_GENERATION_MODEL
+        self.model_id = app_config.image_generation_model
         # Use the DPMSolverMultistepScheduler (DPM-Solver++) scheduler here instead
         self.pipe = StableDiffusionPipeline.from_pretrained(self.model_id, torch_dtype=torch.float32)
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(self.pipe.scheduler.config)
@@ -94,6 +94,15 @@ class ImageGeneratorClass(TransformerClass):
         image = self.generate_image(text)
         image.save(image_path)
         md_file.new_line("\n![](" + image_path.replace(session_path, '') + ")")
+
+
+
+    def generate_background_image(self, text, session_path):
+        extra_attrs = "cool geometric light background, white shapes, professional slideshow, wallpaper"
+        full_text = f"{text},{extra_attrs}"
+        background = self.pipe(full_text).images[0]
+        background_path = session_path + "/images/background.png"
+        background.save(background_path)
 
 
     @staticmethod

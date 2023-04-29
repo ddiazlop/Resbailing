@@ -1,16 +1,16 @@
 import os
 import re
 
-import app_config
+from AppConfig import app_config
 
 
 def get_session_md_path(session_name):
-    return app_config.SESSIONS_PATH + '/' + session_name + '/presentation.md'
+    return app_config.sessions_path + '/' + session_name + '/presentation.md'
 
 
 def get_session_names():
     date_regex = r'\.\/sessions\/\d{4}-\d{2}-\d{2}(-en)?$'
-    sessions_list = [x[0].replace('./sessions/', '') for x in os.walk(app_config.SESSIONS_PATH) if
+    sessions_list = [x[0].replace('./sessions/', '') for x in os.walk(app_config.sessions_path) if
                      re.match(date_regex, x[0])]
     sessions_list.sort()
     return sessions_list

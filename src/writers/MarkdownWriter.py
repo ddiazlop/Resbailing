@@ -1,11 +1,10 @@
 import datetime
 import os
-import random
 import shutil
 
 from mdutils import MdUtils
 
-import app_config
+from AppConfig import app_config
 from src.content_generators import  ImageGeneratorClass
 from src.utils.Docmdutils import parse_text
 from src.utils.Translator import trans_to_es
@@ -20,6 +19,7 @@ class MarkdownWriter:
         count = 0
         while os.path.exists(session):
             count += 1
+            session = session.split("_")[0]
             session = f"{session}_{count}"
 
         self.session_path = session
@@ -43,10 +43,10 @@ class MarkdownWriter:
         shutil.rmtree(self.session_path)
 
     def new_slide(self, header:str, para:str, generate_image : bool=True) -> None:
-        if app_config.LANGUAGE == "es":
+        if app_config.language == "es":
             header = trans_to_es(header)
             para = trans_to_es(para)
-        elif app_config.LANGUAGE != "en":
+        elif app_config.language != "en":
             raise ValueError("Language not supported")
 
         if self.slide_count == 0:

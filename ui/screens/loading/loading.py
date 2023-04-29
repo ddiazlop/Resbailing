@@ -1,4 +1,4 @@
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 from kivy.uix.screenmanager import FadeTransition
 
 from ui.utils.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
@@ -46,6 +46,7 @@ class LoadingScreen(RelativeLayoutScreen):
     def change_info(self, info):
         self.ids.info.text = info
 
+    @mainthread
     def update_info(self, info):
         Clock.schedule_once(lambda dt: self.change_info(info), -1)
         Clock.tick()

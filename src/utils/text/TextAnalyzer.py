@@ -8,7 +8,7 @@ from transformers import AutoTokenizer, AutoModel
 import torch.nn.functional as f
 from typing import Dict, List
 
-import app_config
+from AppConfig import app_config
 from src.utils.Translator import trans_large_to_en
 
 
@@ -158,9 +158,9 @@ class TextAnalyzer:
     def get_merged_sentences(self, sentences : List[str]) -> List[str]:
         """Get a list of merged sentences"""
         sentences2 = sentences.copy()
-        if app_config.LANGUAGE == "es":
+        if app_config.language == "es":
             sentences2 = [trans_large_to_en(x) for x in sentences]
-        elif app_config.LANGUAGE != "en":
+        elif app_config.language != "en":
             Logger.error("Resbailing: Language not supported")
             raise NotImplementedError("Language not supported")
 

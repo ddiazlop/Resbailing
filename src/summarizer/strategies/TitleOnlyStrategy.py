@@ -1,6 +1,6 @@
 from kivy import Logger
 
-import app_config
+from AppConfig import app_config
 from src.summarizer.Summarizer import SummarizerStrategy
 from src.utils.text.TextCleaner import CleanerMethod
 from src.i18n.Translator import t as _
@@ -25,8 +25,9 @@ class TitleOnlyStrategy(SummarizerStrategy):
     def read_lines(self):
         with open(self.path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
-            header = self.cleaner.clean_text(lines[0], CleanerMethod.MD)
-            self.writer.write_header(header, 1)
+            self.title = self.cleaner.clean_text(lines[0], CleanerMethod.MD)
+            self.writer.write_header(self.title, 1)
+
             lines = [line.strip() for line in lines[1:]]
             sentences = []
 
@@ -43,7 +44,7 @@ class TitleOnlyStrategy(SummarizerStrategy):
 
         # Merging sentences that are similiar to each other.
         merged_senteces = self.text_analyzer.get_merged_sentences(sentences)
-        if app_config.DEBUG:
+        if app_config.debug:
             for sentence in merged_senteces:
                 Logger.debug('Resbailing: Merged sentence ' + str(merged_senteces.index(sentence) + 1)+'/' + str(len(merged_senteces))  + ': ' + sentence)
 

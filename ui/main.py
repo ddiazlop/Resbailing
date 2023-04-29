@@ -6,7 +6,7 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, FadeTransition
 
-import app_config
+from AppConfig import app_config
 from src.i18n.Translator import t as _
 from src.utils.Sessions import SessionManager
 from ui.screens.export.export import ExportScreen
@@ -36,7 +36,7 @@ class MainScreen(FloatLayout):
         Logger.debug('Resbailing: Created dropdown')
 
     def pressed_button(self, button):
-        if app_config.DEBUG:  # Only create the dropdown if in debug mode
+        if app_config.debug:  # Only create the dropdown if in debug mode
             self.create_dropdown()
         else:
             button.text = _('main.lets_go')

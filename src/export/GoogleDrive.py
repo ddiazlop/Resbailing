@@ -11,11 +11,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
-from imgurpython import ImgurClient
 from kivy import Logger
 
-import app_config
-from app_config import GOOGLE_SCOPES as SCOPES
+from AppConfig import app_config
 
 from src.export.utils import RequestPicker
 from src.export.creator.TitleRequestCreator import TitleRequestCreator
@@ -23,6 +21,7 @@ from src.utils.loggers import ErrorLogger
 from src.utils.Docmdutils import parse_text
 from src.i18n.Translator import t as _
 
+SCOPES = app_config.google_scopes
 
 def get_credentials(creds=None, update_loading_screen=None):
     # The file token.json stores the user's access and refresh tokens, and is
@@ -67,7 +66,6 @@ class GoogleSlides:
         self.page_id = 0
         self.path = session_manager.current_session_md
         self.current_session = session_manager.current_session_name
-        self.imgur_client = ImgurClient(app_config.IMGUR_CLIENT_ID, None)
 
         self.init_content()
         self.get_credentials()
@@ -201,12 +199,9 @@ class GoogleSlides:
 
     def upload_image(self, image_path):
         try:
-            if app_config.IMAGE_STORAGE_SERVICE == "GoogleDrive":
+            if app_config.image_storage_service == "GoogleDrive":
                 image_id = self.upload_image_to_drive(image_path)
                 return image_id
-            elif app_config.IMAGE_STORAGE_SERVICE == "Imgur":
-                uploaded_image = self.imgur_client.upload_from_path(image_path, config=None, anon=True)
-                return uploaded_image['link']
             else:
                 raise Exception("Invalid image storage service")
         except Exception as e:
