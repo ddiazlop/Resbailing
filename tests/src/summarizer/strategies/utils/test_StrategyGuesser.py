@@ -1,5 +1,3 @@
-import pytest
-import AppConfig
 from src.summarizer.strategies.AudioStrategy import AudioStrategy
 
 from src.summarizer.strategies.FormattedFileStrategy import FormattedFileStrategy

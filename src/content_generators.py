@@ -40,7 +40,7 @@ class SummarizerClass(TransformerClass):
         if app_config.language == 'es':
             text = trans_large_to_en(text)
 
-        inputs = self.title_tokenizer(text, padding="max_length", truncation=True, max_length=512, return_tensors="pt")
+        inputs = self.title_tokenizer(text, padding="max_length", truncation=True, max_length=100, return_tensors="pt")
         inputs = {'input_ids': inputs['input_ids'], 'attention_mask': inputs['attention_mask']}
         outputs = self.title_model.generate(input_ids=inputs['input_ids'], attention_mask=inputs['attention_mask'], do_sample=True,
                                                 max_length=120,
@@ -97,12 +97,20 @@ class ImageGeneratorClass(TransformerClass):
 
 
 
-    def generate_background_image(self, text, session_path):
-        extra_attrs = "cool geometric light background, white shapes, professional slideshow, wallpaper"
-        full_text = f"{text},{extra_attrs}"
-        background = self.pipe(full_text).images[0]
-        background_path = session_path + "/images/background.png"
-        background.save(background_path)
+    def generate_background_image(self, text, session_path, default = True):
+        if not default:
+            extra_attrs = "cool geometric white background, minimalistic shapes, professional slideshow, wallpaper"
+            full_text = f"{extra_attrs},{text}"
+            background = self.pipe(full_text).images[0]
+            background_path = session_path + "/images/background.png"
+            background.save(background_path)
+        else:
+            with open(app_config.base_path + '/src/export/media/background.png', 'rb') as f:
+                background = f.read()
+            background_path = session_path + "/images/background.png"
+
+            with open(background_path, 'wb') as f:
+                f.write(background)
 
 
     @staticmethod

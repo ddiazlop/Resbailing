@@ -1,6 +1,6 @@
-from src.export.RequestCreator import RequestCreator
-from src.export.creator.super_creators.BlankRequestCreator import BlankRequestCreator
-from src.export.utils import UnitTranslator
+from src.export.requests import CommonRequests
+from src.export.requests.creators.super_creators.BlankRequestCreator import BlankRequestCreator
+from src.export.requests.utils import UnitTranslator
 
 
 class BackGroundImageRequestCreator(BlankRequestCreator):
@@ -135,40 +135,7 @@ class BackGroundImageRequestCreator(BlankRequestCreator):
 
 
     def prepare_image_request(self, uploaded_image_url: str, image_index: int) -> None:
-        requests = [
-            {
-                'createImage': {
-                    'url': uploaded_image_url,
-                    'elementProperties': {
-                        'pageObjectId': 'pageId' + str(image_index),
-                        'size': {
-                            'height': {
-                                'magnitude': UnitTranslator.cm_to_pt(26.86),
-                                'unit': 'PT'
-                            },
-                            'width': {
-                                'magnitude': UnitTranslator.cm_to_pt(26.86),
-                                'unit': 'PT'
-                            }
-                        },
-                        'transform': {
-                            'scaleX': 1,
-                            'scaleY': 1,
-                            'translateX': UnitTranslator.cm_to_pt(-1.46),
-                            'translateY': UnitTranslator.cm_to_pt(-7.24),
-                            'unit': 'PT'
-                        }
-                    }
-                }
-            },
-            # Image overlaps with title, so title needs to be brought to front
-            {
-                'updatePageElementsZOrder': {
-                    'pageElementObjectIds': ['titleId' + str(image_index)],
-                    'operation': 'BRING_TO_FRONT'
-                }
-            }
-        ]
+        requests = CommonRequests.set_background_image(uploaded_image_url, image_index, image_index)
         self._image_request = requests
 
 

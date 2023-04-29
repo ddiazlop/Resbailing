@@ -4,8 +4,6 @@ O
 ?
 environment.yml,5\4\54c391de2500e0856c23737daf64f9d931569110
 E
-ui/i18n/export/es.yml,5\2\522eb4149c5be283bb02db935146d0b99fd68611
-E
 ui/i18n/upload/es.yml,c\f\cff96e1247667bc1a891c6c9798a2a804f96f7ad
 E
 ui/i18n/upload/en.yml,e\7\e74e04b922be001d44dc3e3301a4462999963ccd
@@ -20,8 +18,6 @@ M
 ]
 -ui/utils/superclasses/RelativeLayoutScreen.py,8\e\8e3651d9fbf8b71abc4505960f0a628057743c68
 K
-ui/screens/upload/upload.py,4\f\4f78036f134fcaef832ad97439ae41187e5c370d
-K
 ui/screens/upload/upload.kv,3\6\365d4f792025c9300dc9bf5508ee324ab4d463d9
 K
 ui/screens/export/export.kv,6\9\69065712a73645c24a9f3eca641669a1bb75370a
@@ -29,8 +25,6 @@ K
 ui/screens/export/export.py,3\a\3a6c6d3cdc9d3796b006738ed65937c70b36aee7
 S
 #ui/screens/export/export_success.kv,9\a\9a7917464e0cacf16a488210a2ed47e3d27fa435
-R
-"src/export/utils/UnitTranslator.py,3\7\378198dab628be9d9c9fab2eeebfd2d00e7614b5
 W
 'src/export/credentials/credentials.json,a\0\a0d4714e29b1b14673882f7b71d764a8c10b7f5d
 Y
@@ -39,13 +33,5 @@ Y
 0src/export/creator/TitleAndTextRequestCreator.py,9\0\9015111d79a25be85e52b02e4b4e0bfb620b8e40
 b
 2src/export/creator/SideImageSlideRequestCreator.py,b\4\b4e26369070c2f940f5d62f589fcc7a4f6cc29c5
-h
-8src/export/creator/super_creators/BlankRequestCreator.py,0\c\0c350d3963c2af5b95c7d62faece686a266cecdc
-L
-src/export/RequestCreator.py,d\a\da32b6c1f22cf904b75cb02b8c3bfda4390d1d64
-Q
-!src/export/utils/RequestPicker.py,2\4\248d00525fdf7791b5d6b5a629025db790a16515
-c
-3src/export/creator/BackGroundImageRequestCreator.py,e\a\eab8abdb1a08e84323c5a9be6599f9ab5e9e113f
 G
 src/utils/Translator.py,3\1\3152b705bb2c7ccd5b4f5457ba4723f353784945

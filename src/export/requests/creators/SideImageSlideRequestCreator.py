@@ -1,9 +1,8 @@
 from abc import abstractmethod
 from typing import Dict, Union, Any
 
-from src.export.RequestCreator import RequestCreator
-from src.export.creator.super_creators.BlankRequestCreator import BlankRequestCreator
-from src.export.utils import UnitTranslator
+from src.export.requests.creators.super_creators.BlankRequestCreator import BlankRequestCreator
+from src.export.requests.utils import UnitTranslator
 
 
 class SideImageRequestCreator(BlankRequestCreator):

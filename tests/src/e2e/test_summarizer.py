@@ -1,5 +1,3 @@
-from asyncio import sleep
-
 import pytest
 
 from src.summarizer.strategies.utils import StrategyGuesser
