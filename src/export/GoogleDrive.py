@@ -79,13 +79,13 @@ class GoogleSlides:
 
     def export(self):
         self.loading_screen.update_info(_('export.exporting_to_google_slides'))
-        presentation = self._create_presentation()
+        presentation = self.create_presentation()
         self._create_folder_in_drive("Resbailing")
         for header, para in self.paras.items():
             self._create_slide(presentation.get('presentationId'), parse_text(header), parse_text(para[0]))
         if len(self.images) > 0:
-            self._insert_images(presentation.get('presentationId'))
-            self._insert_backgrounds(presentation.get('presentationId'))
+            self.insert_images(presentation.get('presentationId'))
+            self.insert_backgrounds(presentation.get('presentationId'))
         self._move_files_to_folder(presentation.get('presentationId'))
 
     def _create_folder_in_drive(self, folder_name):
@@ -130,7 +130,7 @@ class GoogleSlides:
         except HttpError as e:
             ErrorLogger.log_error(e)
 
-    def _upload_image_to_drive(self, image_path):
+    def upload_image_to_drive(self, image_path):
         try:
             file_metadata = {
                 'name': image_path,
@@ -163,7 +163,7 @@ class GoogleSlides:
         # time.
         self.creds = get_credentials(update_loading_screen=self.loading_screen.update_info)
 
-    def _create_presentation(self):
+    def create_presentation(self):
         try:
             body = {
                 'title': self.title
@@ -183,7 +183,7 @@ class GoogleSlides:
         creator = TitleRequestCreator(self.page_id, title=self.title)
         requests = creator.create_request()
 
-        self._send_batch_update(presentation_id, requests)
+        self.send_batch_update(presentation_id, requests)
         self.page_id += 1
 
     def _create_slide(self, presentation_id, title, body):
@@ -192,53 +192,53 @@ class GoogleSlides:
             requests = creator.create_request()
 
             self.creator_memos.append(creator) # Save the creator to be able to add images later
-            self._send_batch_update(presentation_id, requests)
+            self.send_batch_update(presentation_id, requests)
             Logger.info("Resbailing: Created slide with ID -> " + 'pageId' + str(self.page_id))
             self.loading_screen.update_info(_('loading.creating_slide') + " " + str(self.page_id))
             self.page_id += 1
         except HttpError as err:
             ErrorLogger.log_error(err, "Slide creation failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
 
-    def _upload_image(self, image_path):
+    def upload_image(self, image_path):
         try:
             if app_config.image_storage_service == "GoogleDrive":
-                image_id = self._upload_image_to_drive(image_path)
+                image_id = self.upload_image_to_drive(image_path)
                 return image_id
             else:
                 raise Exception("Invalid image storage service")
         except Exception as e:
             ErrorLogger.log_error(e, "Image upload failed")
 
-    def _insert_images(self, presentation_id):
+    def insert_images(self, presentation_id):
         for image in self.images:
             try:
                 sleep(0.5) # To avoid rate limit
                 self.loading_screen.update_info(_('export.inserting_image') + " " + image.url)
-                uploaded_image_url = self._upload_image('sessions/' + self.current_session + image.url)
+                uploaded_image_url = self.upload_image('sessions/' + self.current_session + image.url)
                 index = self.images.index(image) + 1
 
                 # Restores the creator used to create the slide.
                 creator = self.creator_memos[index - 1]
                 requests = creator.create_image_request(uploaded_image_url, index)
 
-                self._send_batch_update(presentation_id, requests)
+                self.send_batch_update(presentation_id, requests)
                 Logger.info("Resbailing: Inserted image -> " + image.url)
             except HttpError as err:
                 ErrorLogger.log_error(err, "Image insertion failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
 
-    def _insert_backgrounds(self, presentation_id):
+    def insert_backgrounds(self, presentation_id):
         try:
-            background_image_url = self._upload_image('sessions/' + self.current_session + '/images/background.png')
+            background_image_url = self.upload_image('sessions/' + self.current_session + '/images/background.png')
             self.loading_screen.update_info(_('export.inserting_background'))
             for index in range(0, len(self.images)):
                 sleep(0.5) # To avoid rate limit
                 requests = CommonRequests.set_image_as_background(background_image_url, index)
-                self._send_batch_update(presentation_id, requests)
+                self.send_batch_update(presentation_id, requests)
                 Logger.info("Resbailing: Inserted background -> " + str(index) + '/' + str(len(self.images)))
         except HttpError as err:
             ErrorLogger.log_error(err, "Background insertion failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
 
-    def _send_batch_update(self, presentation_id, requests):
+    def send_batch_update(self, presentation_id, requests):
         try:
             body = {
                 'requests': requests
