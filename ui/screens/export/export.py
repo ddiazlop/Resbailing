@@ -4,7 +4,7 @@ from kivy import Logger
 from kivy.uix.screenmanager import FadeTransition
 
 from src.export.GoogleDrive import GoogleSlides
-from ui.utils.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
+from ui.screens.__superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
 
 class ExportScreen(RelativeLayoutScreen):

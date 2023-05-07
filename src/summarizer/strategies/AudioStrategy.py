@@ -9,7 +9,7 @@ import librosa
 
 from pydub import AudioSegment
 
-import app_config
+from AppConfig import app_config
 from src.summarizer.strategies.NoFormatStrategy import NoFormatStrategy
 
 from src.i18n.Translator import t as _
@@ -27,9 +27,9 @@ class AudioStrategy(NoFormatStrategy):
     def __init__(self, path, loading_screen, generate_image: bool = True):
         super().__init__(path, loading_screen, generate_image)
         Logger.debug('Resbailing: Using AudioStrategy')
-        if app_config.LANGUAGE == 'en':
+        if app_config.language == 'en':
             self.locale = 'en-US'
-        elif app_config.LANGUAGE == 'es':
+        elif app_config.language == 'es':
             self.locale = 'es-ES'
         else:
             raise ValueError('Language not supported')

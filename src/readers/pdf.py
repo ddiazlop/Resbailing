@@ -7,7 +7,7 @@ from kivy import Logger
 from mdutils import MdUtils
 from transformers import BertTokenizerFast, EncoderDecoderModel
 
-import app_config
+from AppConfig import app_config
 
 
 
@@ -17,7 +17,7 @@ class PdfAnalyzer:
         Logger.debug('Resbailing: Initializing PDF analyzer')
         # Summarization parameters
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.ckpt = app_config.SUMMARIZATION_MODEL
+        self.ckpt = app_config.summarization_model
         self.tokenizer = BertTokenizerFast.from_pretrained(self.ckpt)
         Logger.debug('Resbailing: Loading summarization model')
         self.model = EncoderDecoderModel.from_pretrained(self.ckpt).to(self.device)

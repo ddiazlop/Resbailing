@@ -44,6 +44,7 @@ class SummarizerStrategy:
         self.cleaner = TextCleaner()
         self.path = path
         self.generate_image = generate_image
+        self.title = None
 
     def new_slide(self, header, para):
         if len(para) > self.summarizer.max_length:
@@ -62,6 +63,12 @@ class SummarizerStrategy:
         Logger.debug('Resbailing: Summarizing ' + self.path)
         self.update_loading_info(_('loading.summarizing'))
         paras = self.init_content()
+
+        self.update_loading_info(_('loading.getting_background_image'))
+        if self.generate_image:
+            self.writer.image_generator.generate_background_image(self.title, self.writer.session_path)
+
+        self.update_loading_info(_('loading.generating_slides'))
         self.create_presentation(paras)
         self.writer.create_file()
 

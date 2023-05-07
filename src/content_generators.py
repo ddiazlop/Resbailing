@@ -2,10 +2,10 @@ import torch
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 from kivy import Logger
 from mdutils import MdUtils
-from transformers import BertTokenizerFast, EncoderDecoderModel, pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
-from translate import Translator
+from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
 
-import app_config
+from src.utils.Translator import trans_large_to_en
+from AppConfig import app_config
 
 
 class TransformerClass:
@@ -20,17 +20,13 @@ class SummarizerClass(TransformerClass):
         Logger.debug('Resbailing: Initializing summarizer')
 
         # Summarization parameters
-        ckpt = app_config.get_current_summarization_model()
-        title_ckpt = app_config.get_current_title_generation_model()
+        ckpt = app_config.summarization_model
+        title_ckpt = app_config.title_generation_model
         Logger.debug('Resbailing: Loading summarization model')
-        if app_config.LANGUAGE == 'es':
-            self.tokenizer = BertTokenizerFast.from_pretrained(ckpt)
-            self.model = EncoderDecoderModel.from_pretrained(ckpt).to(self.device)
-        elif app_config.LANGUAGE == 'en':
-            self.model = pipeline("summarization", model=ckpt)
 
-            self.title_tokenizer = AutoTokenizer.from_pretrained(title_ckpt)
-            self.title_model = AutoModelForSeq2SeqLM.from_pretrained(title_ckpt)
+        self.model = pipeline("summarization", model=ckpt)
+        self.title_tokenizer = AutoTokenizer.from_pretrained(title_ckpt)
+        self.title_model = AutoModelForSeq2SeqLM.from_pretrained(title_ckpt)
 
         # Markdown file parameters
         self.pages = None
@@ -39,41 +35,39 @@ class SummarizerClass(TransformerClass):
         self.max_length = max_length
 
 
+
     def generate_title(self, text):
-        if app_config.LANGUAGE == 'en':
-            inputs = self.title_tokenizer(text, padding="max_length", truncation=True, max_length=512, return_tensors="pt")
-            inputs = {'input_ids': inputs['input_ids'], 'attention_mask': inputs['attention_mask']}
-            outputs = self.title_model.generate(input_ids=inputs['input_ids'], attention_mask=inputs['attention_mask'], do_sample=True,
+        if app_config.language == 'es':
+            text = trans_large_to_en(text)
+
+        inputs = self.title_tokenizer(text, padding="max_length", truncation=True, max_length=100, return_tensors="pt")
+        inputs = {'input_ids': inputs['input_ids'], 'attention_mask': inputs['attention_mask']}
+        outputs = self.title_model.generate(input_ids=inputs['input_ids'], attention_mask=inputs['attention_mask'], do_sample=True,
                                                 max_length=120,
                                                 top_p=0.95,
                                                 top_k=60,
                                                 early_stopping=True,
                                                 num_return_sequences=1)
-            answer = self.title_tokenizer.decode(outputs[0], skip_special_tokens=True)
-            return answer
-        else:
-            return text
+        answer = self.title_tokenizer.decode(outputs[0], skip_special_tokens=True)
+        return answer
 
     def summarize_text(self, text, max_length=None):
+        if app_config.language == 'es':
+            text = trans_large_to_en(text)
+
         if max_length is None:
             max_length = self.max_length
 
-        if app_config.LANGUAGE == 'es':
-            inputs = self.tokenizer([text], padding="max_length", truncation=True, max_length=max_length, return_tensors="pt")
-            input_ids = inputs.input_ids.to(self.device)
-            attention_mask = inputs.attention_mask.to(self.device)
-            output = self.model.generate(input_ids, attention_mask=attention_mask)
-            return self.tokenizer.decode(output[0], skip_special_tokens=True)
-        if app_config.LANGUAGE == 'en':
-            summary = self.model(text, max_length=max_length, min_length=5)
-            return summary[0]['summary_text']
+
+        summary = self.model(text, max_length=max_length, min_length=5)
+        return summary[0]['summary_text']
 
 
 class ImageGeneratorClass(TransformerClass):
     def __init__(self):
         super().__init__()
         Logger.debug('Resbailing: Initializing image generator')
-        self.model_id = app_config.IMAGE_GENERATION_MODEL
+        self.model_id = app_config.image_generation_model
         # Use the DPMSolverMultistepScheduler (DPM-Solver++) scheduler here instead
         self.pipe = StableDiffusionPipeline.from_pretrained(self.model_id, torch_dtype=torch.float32)
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(self.pipe.scheduler.config)
@@ -82,10 +76,7 @@ class ImageGeneratorClass(TransformerClass):
 
 
     def generate_image(self, text):
-        extra_attrs = "amazing, astonishing, wonderful, beautiful, highly detailed, centered, trending on artstation"  # TODO: Make this configurable
-        if app_config.LANGUAGE != 'en':
-            translator = Translator(to_lang="en", from_lang=app_config.LANGUAGE)
-            text = translator.translate(text)
+        extra_attrs = "amazing, astonishing, wonderful, beautiful, highly detailed, centered, trending on artstation"
         full_text = f"{text},{extra_attrs}"
         return self.pipe(full_text).images[0]
 
@@ -103,6 +94,23 @@ class ImageGeneratorClass(TransformerClass):
         image = self.generate_image(text)
         image.save(image_path)
         md_file.new_line("\n![](" + image_path.replace(session_path, '') + ")")
+
+
+
+    def generate_background_image(self, text, session_path, default = True):
+        if not default:
+            extra_attrs = "cool geometric white background, minimalistic shapes, professional slideshow, wallpaper"
+            full_text = f"{extra_attrs},{text}"
+            background = self.pipe(full_text).images[0]
+            background_path = session_path + "/images/background.png"
+            background.save(background_path)
+        else:
+            with open(app_config.base_path + '/src/export/media/background.png', 'rb') as f:
+                background = f.read()
+            background_path = session_path + "/images/background.png"
+
+            with open(background_path, 'wb') as f:
+                f.write(background)
 
 
     @staticmethod

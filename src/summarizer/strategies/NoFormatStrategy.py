@@ -22,8 +22,8 @@ class NoFormatStrategy(TitleOnlyStrategy):
     def extract_sentences(self, full_text):
         # This is the only difference between this class and TitleOnlyStrategy
         cleaned_text = self.cleaner.clean_text(full_text.__str__(), CleanerMethod.ALL)
-        title = self.summarizer.generate_title(cleaned_text)
-        self.writer.write_header(title, 1)
+        self.title = self.summarizer.generate_title(cleaned_text)
+        self.writer.write_header(self.title, 1)
         # End of difference
         lines = full_text.splitlines()
         lines = [line.strip() for line in lines]

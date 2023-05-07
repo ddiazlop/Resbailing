@@ -1,0 +1,4 @@
+language: 'Idioma:'
+apply: 'Aplicar'
+cancel: 'Cancelar'
+restart: 'Recuerde que la aplicación debe reiniciarse para que los cambios surtan efecto. Al hacer click en "Aplicar", la aplicación se reiniciará.'

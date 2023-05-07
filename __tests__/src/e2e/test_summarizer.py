@@ -1,9 +1,7 @@
-from asyncio import sleep
-
 import pytest
 
+from __tests__.mocks.views.LoadingScreenMock import LoadingScreenMock
 from src.summarizer.strategies.utils import StrategyGuesser
-from tests.mocks.views.LoadingScreenMock import LoadingScreenMock
 
 class TestSummarizer:
     """

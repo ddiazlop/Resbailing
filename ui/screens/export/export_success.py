@@ -1,4 +1,4 @@
-from ui.utils.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
+from ui.screens.__superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
 
 class ExportSuccessScreen(RelativeLayoutScreen):

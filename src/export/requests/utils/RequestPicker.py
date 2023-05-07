@@ -1,12 +1,12 @@
 import random
 
-from src.export import RequestCreator
-from src.export.RequestCreator import RequestType
-from src.export.creator.BackGroundImageRequestCreator import BackGroundImageRequestCreator
-from src.export.creator.SideImageSlideRequestCreator import  RightImageSlideRequestCreator, \
+from src.export.requests import RequestCreator
+from src.export.requests.RequestCreator import RequestType
+from src.export.requests.creators.BackGroundImageRequestCreator import BackGroundImageRequestCreator
+from src.export.requests.creators.SideImageSlideRequestCreator import RightImageSlideRequestCreator, \
     LeftImageSlideRequestCreator
-from src.export.creator.TitleAndTextRequestCreator import TitleAndTextRequestCreator
-from src.export.creator.TitleRequestCreator import TitleRequestCreator
+from src.export.requests.creators.TitleAndTextRequestCreator import TitleAndTextRequestCreator
+from src.export.requests.creators.TitleRequestCreator import TitleRequestCreator
 
 
 def get_request_creator(request_type: RequestType, page_id: int, **kwargs) -> RequestCreator:

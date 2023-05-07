@@ -10,7 +10,7 @@
                 source: 'ui/media/images/tobofondo2_estrellas.png'
     GridLayout:
         cols: 1
-        rows: 3
+        rows: 4
         padding: 10
         spacing: 10
         size_hint_y: None
@@ -27,7 +27,13 @@
             size_hint_y: None
             height: 100
         Button:
-            text: 'Volver'
+            text: _('export.restart')
             size_hint_y: None
             height: 100
-            on_press: root.change_screen('Main')
+            on_press: root.main_app.restart()
+
+        Button:
+            text: _('export.exit')
+            size_hint_y: None
+            height: 100
+            on_press: root.main_app.exit()
