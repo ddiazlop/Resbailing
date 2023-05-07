@@ -1,18 +1,21 @@
 import yaml
 
+from src.i18n import Translator
+
 
 class AppConfig:
     yaml_file = 'config.yaml'
     config = None
 
     def __init__(self):
-        self._load_config()
+        self.load_config()
 
-    def _load_config(self):
+    def load_config(self):
         with open(self.yaml_file, 'r') as f:
             self.config = yaml.load(f, Loader=yaml.FullLoader)
 
     def save_config(self):
+        Translator.change_language(self.language)
         with open(self.yaml_file, 'w') as f:
             yaml.dump(self.config, f)
 
@@ -23,6 +26,10 @@ class AppConfig:
     @language.setter
     def language(self, value:str):
         self.config['LANGUAGE'] = value
+
+    @property
+    def languages(self) -> list:
+        return self.config['LANGUAGES']
 
     @property
     def debug(self) -> bool:

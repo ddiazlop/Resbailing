@@ -11,8 +11,8 @@ from kivy.uix.screenmanager import FadeTransition
 from plyer import filechooser
 
 from ui.media.sound.utils import Soundmanager
-from ui.utils.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 from src.i18n.Translator import t as _
+from ui.screens.__superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
 
 class UploadScreen(RelativeLayoutScreen):

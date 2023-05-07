@@ -1,9 +1,7 @@
 from kivy.clock import Clock, mainthread
 from kivy.uix.screenmanager import FadeTransition
 
-from ui.utils.superclasses.RelativeLayoutScreen import RelativeLayoutScreen
-
-
+from ui.screens.__superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
 
 class LoadingScreen(RelativeLayoutScreen):

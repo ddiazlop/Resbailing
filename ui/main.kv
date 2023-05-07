@@ -23,3 +23,12 @@
             # Chamge the button text
             on_press: root.pressed_button(self)
             on_release: root.released_button(self)
+
+        Button:
+            size_hint: 0.1, 0.12
+            pos_hint: {'top': 1, 'right': 1}
+            valign: 'top'
+            halign: 'right'
+            ripple_scale: 0
+            background_normal: 'ui/media/images/settings/settings_icon.png'
+            on_press: root.show_settings()

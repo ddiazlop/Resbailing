@@ -1,10 +1,10 @@
+from __tests__.mocks.views.LoadingScreenMock import LoadingScreenMock
 from src.summarizer.strategies.AudioStrategy import AudioStrategy
 
 from src.summarizer.strategies.FormattedFileStrategy import FormattedFileStrategy
 from src.summarizer.strategies.NoFormatStrategy import NoFormatStrategy
 from src.summarizer.strategies.TitleOnlyStrategy import TitleOnlyStrategy
 from src.summarizer.strategies.utils.StrategyGuesser import guess_summarization_strategy2
-from tests.mocks.views.LoadingScreenMock import LoadingScreenMock
 
 
 class TestStrategyGuesser:

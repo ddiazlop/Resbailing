@@ -1,0 +1,4 @@
+language: 'Language:'
+apply: 'Apply'
+cancel: 'Cancel'
+restart: 'Remeber that the application must be restarted for the changes to take effect. By clicking "Apply" the application will be restarted.'

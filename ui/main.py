@@ -1,10 +1,15 @@
+import os
+import sys
+
 from kivy import Logger
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.clock import Clock
+from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, FadeTransition
+from kivy.uix.screenmanager import Screen, SlideTransition, FadeTransition, ScreenManager
 
 from AppConfig import app_config
 from src.i18n.Translator import t as _
@@ -13,6 +18,7 @@ from ui.screens.export.export import ExportScreen
 from ui.screens.export.export_success import ExportSuccessScreen
 from ui.screens.loading.loading import LoadingScreen
 from ui.media.sound.utils import Soundmanager
+from ui.screens.settings.settings import SettingsScreen
 from ui.screens.upload.upload import UploadScreen
 
 
@@ -61,8 +67,27 @@ class MainScreen(FloatLayout):
         self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
         self.main_app.screen_manager.current = screen_name
 
+    def show_settings(self):
+        Logger.debug('Resbailing: Showing settings')
+        self.main_app.screen_manager.transition = FadeTransition(duration=0.2)
+        self.main_app.screen_manager.current = 'Settings'
+
+    def unload(self):
+        self.main_app.screen_manager.remove_widget(self)
+        Builder.unload_file(self.kv_file_loc)
 
 class Main(App):
+    def __init__(self, **kwargs):
+        super(Main, self).__init__(**kwargs)
+        self.session_manager = None
+        self.screen_manager = None
+        self.main_screen = None
+        self.upload_screen = None
+        self.export_screen = None
+        self.export_success_screen = None
+        self.loading_screen = None
+        self.settings_screen = None
+
     def build(self):
         self.session_manager = SessionManager()
         self.screen_manager = ScreenManager()
@@ -92,4 +117,19 @@ class Main(App):
         screen.add_widget(self.loading_screen)
         self.screen_manager.add_widget(screen)
 
+        self.settings_screen = SettingsScreen(main_app=self)
+        screen = Screen(name='Settings')
+        screen.add_widget(self.settings_screen)
+        self.screen_manager.add_widget(screen)
+
         return self.screen_manager
+
+    @staticmethod
+    def restart():
+        Logger.debug('Resbailing: Restarting app')
+        os.execl(sys.executable, 'index.py', *sys.argv)
+
+    @staticmethod
+    def exit():
+        Logger.debug('Resbailing: Exiting app')
+        sys.exit()

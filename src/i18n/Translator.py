@@ -13,15 +13,23 @@ def init_translator(language:str, languages_dir:str) -> None:
     lang = language
     lang_dir = languages_dir
 
+def change_language(language:str) -> None:
+    global lang
+    lang = language
+
 def t(code : str) -> str:
     """
     Translate a text code to the current language
     :param code: String formatted as "subfolder.text_code"
     :return:
     """
-    regex = r'^\w+\.\w+$'  # Regex to check if the code is valid
-    if not re.match(regex, code):
-        raise ValueError("Invalid code format. Expected format: '{subfolder}.text_code'")
+
+    try:
+        regex = r'^\w+\.\w+$'  # Regex to check if the code is valid
+        if not re.match(regex, code):
+            raise ValueError("Invalid code format. Expected format: '{subfolder}.text_code'")
+    except ValueError as e:
+        return str(e)
 
     code = code.split('.')
     subfolder = code[0]
