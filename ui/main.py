@@ -4,7 +4,6 @@ import sys
 from kivy import Logger
 from kivy.animation import Animation
 from kivy.app import App
-from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
@@ -17,7 +16,7 @@ from src.utils.Sessions import SessionManager
 from ui.screens.export.export import ExportScreen
 from ui.screens.export.export_success import ExportSuccessScreen
 from ui.screens.loading.loading import LoadingScreen
-from ui.media.sound.utils import Soundmanager
+from ui.utils import Soundmanager
 from ui.screens.settings.settings import SettingsScreen
 from ui.screens.upload.upload import UploadScreen
 

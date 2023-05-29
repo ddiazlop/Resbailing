@@ -10,7 +10,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import FadeTransition
 from plyer import filechooser
 
-from ui.media.sound.utils import Soundmanager
+from ui.utils import Soundmanager
 from src.i18n.Translator import t as _
 from ui.screens.__superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
