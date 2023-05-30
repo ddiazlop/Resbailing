@@ -7,7 +7,7 @@ from src.utils.Docmdutils import parse_text
 from src.content_generators import SummarizerClass
 from src.utils.text.TextAnalyzer import TextAnalyzer, ThresholdMode
 from src.utils.text.TextCleaner import TextCleaner
-from src.writers.MarkdownWriter import MarkdownWriter
+from src.utils.writers.MarkdownWriter import MarkdownWriter
 from src.i18n.Translator import t as _
 
 
@@ -76,7 +76,7 @@ class SummarizerStrategy:
         """
         Generates slides from a dictionary of headers and paragraphs and writes them to the md file
 
-        :param slides:  A dictionary of headers and paragraphs to bre written to the md file
+        :param slides:  A dictionary of headers and paragraphs to be written to the md file
         """
         for header, paras in slides.items():
             if not header.__contains__('CNN'):
