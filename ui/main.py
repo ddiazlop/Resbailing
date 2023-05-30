@@ -12,7 +12,7 @@ from kivy.uix.screenmanager import Screen, SlideTransition, FadeTransition, Scre
 
 from AppConfig import app_config
 from src.i18n.Translator import t as _
-from src.utils.Sessions import SessionManager
+from src.sessions.Sessions import SessionManager
 from ui.screens.export.export import ExportScreen
 from ui.screens.export.export_success import ExportSuccessScreen
 from ui.screens.loading.loading import LoadingScreen

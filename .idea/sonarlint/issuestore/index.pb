@@ -3,8 +3,6 @@ O
 .github/ISSUE_TEMPLATE/tarea.md,6\7\67f7d1aae29b2635d64f97173e76927df761ca85
 ?
 environment.yml,5\4\54c391de2500e0856c23737daf64f9d931569110
-P
- src/utils/loggers/ErrorLogger.py,0\d\0d3bbc55d05adf8c994d4903acb250e6a5a55e13
 M
 ui/screens/loading/loading.kv,9\8\980df25d039b162d837414fc5412d66cd46f8c42
 W

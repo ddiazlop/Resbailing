@@ -7,7 +7,7 @@ from src.utils.Docmdutils import parse_text
 from src.content_generators import SummarizerClass
 from src.utils.text.TextAnalyzer import TextAnalyzer, ThresholdMode
 from src.utils.text.TextCleaner import TextCleaner
-from src.utils.MarkdownWriter import MarkdownWriter
+from src.sessions.MarkdownWriter import MarkdownWriter
 from src.i18n.Translator import t as _
 
 
