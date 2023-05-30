@@ -18,7 +18,7 @@ from src.export.requests import CommonRequests
 from src.export.requests.creators.TitleRequestCreator import TitleRequestCreator
 
 from src.export.requests.utils import RequestPicker
-from src.utils.loggers import ErrorLogger
+from src.utils import ErrorLogger
 from src.utils.Docmdutils import parse_text
 from src.i18n.Translator import t as _
 
@@ -173,7 +173,7 @@ class GoogleSlides:
             Logger.info("Resbailing: Presentation created -> " + presentation.get('presentationId'))
             return presentation
         except HttpError as err:
-            ErrorLogger.log_error(err, "Presentation creation failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
+            ErrorLogger.log_error(err, "Presentation creation failed with error code -> " + str(err.resp.status) + " | " + err.resp.reason)
 
 
     def _set_title_slide(self, presentation_id):
@@ -197,7 +197,7 @@ class GoogleSlides:
             self.loading_screen.update_info(_('loading.creating_slide') + " " + str(self.page_id))
             self.page_id += 1
         except HttpError as err:
-            ErrorLogger.log_error(err, "Slide creation failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
+            ErrorLogger.log_error(err, "Slide creation failed with error code -> " + str(err.resp.status) + " | " + err.resp.reason)
 
     def upload_image(self, image_path):
         try:
@@ -224,7 +224,7 @@ class GoogleSlides:
                 self.send_batch_update(presentation_id, requests)
                 Logger.info("Resbailing: Inserted image -> " + image.url)
             except HttpError as err:
-                ErrorLogger.log_error(err, "Image insertion failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
+                ErrorLogger.log_error(err, "Image insertion failed with error code -> " + str(err.resp.status) + " | " + err.resp.reason)
 
     def insert_backgrounds(self, presentation_id):
         try:
@@ -236,7 +236,7 @@ class GoogleSlides:
                 self.send_batch_update(presentation_id, requests)
                 Logger.info("Resbailing: Inserted background -> " + str(index) + '/' + str(len(self.images)))
         except HttpError as err:
-            ErrorLogger.log_error(err, "Background insertion failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
+            ErrorLogger.log_error(err, "Background insertion failed with error code -> " + str(err.resp.status) + " | " + err.resp.reason)
 
     def send_batch_update(self, presentation_id, requests):
         try:
@@ -249,7 +249,7 @@ class GoogleSlides:
             return response
 
         except HttpError as err:
-            ErrorLogger.log_error(err, "Batch update failed with error code -> " + str(err.resp.status) + " | "+ err.resp.reason)
+            ErrorLogger.log_error(err, "Batch update failed with error code -> " + str(err.resp.status) + " | " + err.resp.reason)
 
     def _init_content(self):
         # Open the markdown file
