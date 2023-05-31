@@ -12,6 +12,8 @@ class TransformerClass:
     def __init__(self, **kwargs):
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         Logger.info('Resbailing: Using device: ' + self.device)
+        if self.device not in ['cuda']:
+            raise ValueError('Resbailing: Device not supported')
 
 
 class SummarizerClass(TransformerClass):
@@ -72,7 +74,9 @@ class ImageGeneratorClass(TransformerClass):
         self.pipe = StableDiffusionPipeline.from_pretrained(self.model_id, torch_dtype=torch.float32)
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.enable_sequential_cpu_offload()
-        self.pipe.enable_attention_slicing(2)
+        self.pipe.enable_attention_slicing()
+        self.pipe.to(self.device)
+
 
 
     def generate_image(self, text):
