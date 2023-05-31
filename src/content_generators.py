@@ -75,7 +75,6 @@ class ImageGeneratorClass(TransformerClass):
         self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.enable_sequential_cpu_offload()
         self.pipe.enable_attention_slicing()
-        self.pipe.to(self.device)
 
 
 
