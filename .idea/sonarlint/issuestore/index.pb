@@ -11,14 +11,8 @@ F
 ui/i18n/loading/en.yml,1\6\1690e66897268357b10beda7c66b80597647b178
 F
 ui/i18n/loading/es.yml,d\7\d7435c86c3f5bd2c7338ffb71d59db8db88f7161
-]
--src/summarizer/strategies/NoFormatStrategy.py,1\b\1b3db72ecf17aea8215d29a7f04a132b7bb410de
-r
-Bsrc/export/requests/creators/super_creators/BlankRequestCreator.py,c\b\cbec053b31b03f9d262e578e213304d12ec06a60
 c
 3src/export/requests/creators/TitleRequestCreator.py,2\a\2a911a5e1ff860a1a6263d45c526c299da414178
-m
-=src/export/requests/creators/BackGroundImageRequestCreator.py,8\d\8de6e3fba5a2cf82c6ebbea2d404ec9192f36c43
 j
 :src/export/requests/creators/TitleAndTextRequestCreator.py,7\e\7e7cf7f88eaf5c24101a11e51e9a0b2cf482c60b
 [
@@ -72,8 +66,6 @@ Z
 ui/main.kv,9\a\9ace8ef8615c59e64a6fadfeb9ad6358bd62ce9b
 q
 A__tests__/src/summarizer/strategies/utils/test_StrategyGuesser.py,2\d\2dd4236bfb094d0f5bb3e880a4a6592c5c6a9975
-K
-ui/screens/upload/upload.py,4\f\4f78036f134fcaef832ad97439ae41187e5c370d
 E
 ui/i18n/export/en.yml,7\a\7a2a81a11afe59fa9e5d38a5bbdb2db6e8266042
 E
@@ -92,8 +84,6 @@ K
 __init__.py,6\0\60ad4f3d2e9b04a9b0a0bb97ab6a8a4c018b785e
 I
 src/export/GoogleDrive.py,9\f\9fa79cf537a4cb69bd4c87ddb48dd2035f9bce6d
-G
-src/utils/Docmdutils.py,d\e\de04864c0814f986a1ca20a4bd9260e77682c304
 H
 src/utils/ErrorLogger.py,3\e\3e1e03d6bfd5ca4eb509b079d2fd01372f2b60cc
 G
@@ -105,7 +95,5 @@ H
 ui/main.py,3\2\320d47d88da44ad2bf30e7dce91aaa3ca1f90372
 <
 AppConfig.py,3\4\345397c00eced06aea6b9689b5cbe26c8078776f
-L
-src/summarizer/Summarizer.py,1\2\12bc11324cd67ff1c699937ec53a115c990a8e08
 N
 src/sessions/MarkdownWriter.py,8\a\8aba9a18084b05573ad7067e131bba6a1d69be5e

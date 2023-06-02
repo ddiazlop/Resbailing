@@ -16,7 +16,6 @@ class FormattedFileStrategy(SummarizerStrategy):
 
     def __init__(self, path, loading_screen, lazy = False, generate_image = True):
         super().__init__(path, loading_screen, generate_image=generate_image)
-        self.title = None
         self.lazy = lazy
         self.image_order = 0
         Logger.debug('Resbailing: Using FormattedFileStrategy')
@@ -61,7 +60,6 @@ class FormattedFileStrategy(SummarizerStrategy):
             elif isinstance(elem, panflute.Image):
                 image_path = elem.url
                 self.copy_image(image_path)
-                # Copy the image to the output folder TODO: Make this work.
         return paras
 
     def copy_image(self, image_path):

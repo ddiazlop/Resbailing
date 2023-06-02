@@ -89,7 +89,7 @@ class AudioStrategy(NoFormatStrategy):
 
             # Load audio
             Logger.debug('Resbailing: Loading audio ' + chunk_filename)
-            whole_text = self.get_native_transcription(chunk_filename, whole_text)
+            whole_text += self.get_native_transcription(chunk_filename, whole_text)
 
         return whole_text
 
