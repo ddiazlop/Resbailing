@@ -70,8 +70,6 @@ Z
 :
 
 ui/main.kv,9\a\9ace8ef8615c59e64a6fadfeb9ad6358bd62ce9b
-^
-.src/summarizer/strategies/TitleOnlyStrategy.py,6\2\628fc829ef894e570f88f16d18bf5f4ccbb5d99a
 q
 A__tests__/src/summarizer/strategies/utils/test_StrategyGuesser.py,2\d\2dd4236bfb094d0f5bb3e880a4a6592c5c6a9975
 K

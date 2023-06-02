@@ -112,16 +112,16 @@ class TextAnalyzer:
 
     def merge_similar_sentences(self, sentences : List[str], mode : ThresholdMode) -> (str, int):
         merged_sentence = sentences[0]
-        sentences_aux = sentences[1:].copy()
+        sentences_aux = sentences.copy()
         count = 1
         num_sentences = len(sentences_aux)
-        for i in range(num_sentences):
-            sentences_aux.insert(0, merged_sentence)
+        for i in range(num_sentences - 1):
+            sentences_aux[0] =  merged_sentence
             similarities = self.compare_sentences(sentences_aux)
             sim_threshold = self.get_sim_threshold(mode, similarities[1:])
             Logger.debug("Resbailing: Similarities: " + str(sim_threshold))
-            if similarities[i+1] > sim_threshold:
-                merged_sentence += ". " + sentences_aux[i + 1]
+            if similarities[1] > sim_threshold:
+                merged_sentence += ". " + sentences_aux[1]
                 count += 1
             else:
                 break
