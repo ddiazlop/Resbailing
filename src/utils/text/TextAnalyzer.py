@@ -91,7 +91,7 @@ class TextAnalyzer:
         similarities = self.get_similarities_with_first_sentence(sentence_embeddings)
         return similarities
 
-    def populate_slides(self, paras : Dict[str, list]) -> None:
+    def populate_slides(self, paras : Dict[str, list]) -> Dict[str, list]:
         """Populate the slides dictionary with the given paragraphs
 
         **Args:** Takes a dictionary with headers as keys and a list of paragraphs as values. That usually looks like this:
@@ -106,6 +106,8 @@ class TextAnalyzer:
             sentences = self.split_into_sentences(full_text)
             merged_sentences = self.get_merged_sentences(sentences)
             self.slides[header].extend(merged_sentences)
+
+        return self.slides
 
 
     def merge_similar_sentences(self, sentences : List[str], mode : ThresholdMode) -> (str, int):
@@ -170,7 +172,7 @@ class TextAnalyzer:
 
     @staticmethod
     def split_into_sentences(text : str) -> List[str]:
-        """Split text into sentences using the period as a delimiter"""
+        """Split text into sentences"""
         sentences = re.split(r' *[\.\?!][\'"\)\]]* *', text)
         sentences = [x.strip() for x in sentences]
         sentences = [x for x in sentences if x != '']

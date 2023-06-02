@@ -87,8 +87,7 @@ class FormattedFileStrategy(SummarizerStrategy):
     def smart_create_presentation(self, paras):
         self.update_loading_info(_('loading.encoding_text'))
         parsed_paras = parse_paras(paras)
-        self.text_analyzer.populate_slides(parsed_paras)
-        slides = self.text_analyzer.slides
+        slides =self.text_analyzer.populate_slides(parsed_paras)
         self.generate_slides(slides)
 
     def lazy_create_presentation(self, paras):

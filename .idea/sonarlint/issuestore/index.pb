@@ -13,10 +13,6 @@ F
 ui/i18n/loading/es.yml,d\7\d7435c86c3f5bd2c7338ffb71d59db8db88f7161
 ]
 -src/summarizer/strategies/NoFormatStrategy.py,1\b\1b3db72ecf17aea8215d29a7f04a132b7bb410de
-Z
-*src/summarizer/strategies/AudioStrategy.py,a\b\abd4a8f5f7cc94c7bee564c2a496bf0808f1fbe5
-b
-2src/summarizer/strategies/FormattedFileStrategy.py,7\9\7989df137e039c53ed2d99f6029de503fec707b4
 r
 Bsrc/export/requests/creators/super_creators/BlankRequestCreator.py,c\b\cbec053b31b03f9d262e578e213304d12ec06a60
 c
@@ -94,14 +90,6 @@ K
 ui/screens/export/export.kv,6\9\69065712a73645c24a9f3eca641669a1bb75370a
 K
 ui/screens/export/export.py,3\a\3a6c6d3cdc9d3796b006738ed65937c70b36aee7
-N
-src/utils/text/TextAnalyzer.py,6\2\62ff36ccae96d69c9a09f0e51ee225af96987a64
-M
-src/utils/text/TextCleaner.py,9\9\997075513eeece505fa6173c9ae2fd72e1e16ddb
-;
-config.yaml,b\5\b5106b5f3da7575c9a8cb306418c20825103a4fe
-<
-AppConfig.py,3\4\345397c00eced06aea6b9689b5cbe26c8078776f
 ;
 __init__.py,6\0\60ad4f3d2e9b04a9b0a0bb97ab6a8a4c018b785e
 I
@@ -117,3 +105,9 @@ H
 :
 
 ui/main.py,3\2\320d47d88da44ad2bf30e7dce91aaa3ca1f90372
+<
+AppConfig.py,3\4\345397c00eced06aea6b9689b5cbe26c8078776f
+L
+src/summarizer/Summarizer.py,1\2\12bc11324cd67ff1c699937ec53a115c990a8e08
+N
+src/sessions/MarkdownWriter.py,8\a\8aba9a18084b05573ad7067e131bba6a1d69be5e
