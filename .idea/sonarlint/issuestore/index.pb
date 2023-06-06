@@ -65,16 +65,12 @@ N
 src/sessions/MarkdownWriter.py,8\a\8aba9a18084b05573ad7067e131bba6a1d69be5e
 ;
 config.yaml,b\5\b5106b5f3da7575c9a8cb306418c20825103a4fe
-N
-src/utils/text/TextAnalyzer.py,6\2\62ff36ccae96d69c9a09f0e51ee225af96987a64
 G
 src/utils/Docmdutils.py,d\e\de04864c0814f986a1ca20a4bd9260e77682c304
 I
 src/content_generators.py,d\f\dfa87a3c9764175d3c58cc31f214d9e66ffeeaf5
 ]
 -src/summarizer/strategies/NoFormatStrategy.py,1\b\1b3db72ecf17aea8215d29a7f04a132b7bb410de
-S
-#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
 ^
 .src/summarizer/strategies/TitleOnlyStrategy.py,6\2\628fc829ef894e570f88f16d18bf5f4ccbb5d99a
 b
