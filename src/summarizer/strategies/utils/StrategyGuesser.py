@@ -41,7 +41,7 @@ def guess_summarization_strategy2(path, loading_screen, lazy = False, generate_i
 
     with open(path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
-        for line in lines: #TODO: This is a very naive approach, improve it
+        for line in lines: # This is a very naive approach, there's probably a better way to do this
             if line.startswith('##'):
                 values['section'] += 1
                 order.append(2)

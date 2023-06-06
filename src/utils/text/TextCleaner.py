@@ -28,7 +28,8 @@ class TextCleaner:
         """
         sentence = sentence.lower()
         sentence = sentence.strip()
-        sentence = sentence[0].upper() + sentence[1:]
+        if len(sentence) > 0:
+            sentence = sentence[0].upper() + sentence[1:]
         if not sentence.endswith('.'):
             sentence += '.'
         return sentence
