@@ -28,6 +28,7 @@ class SessionManager:
         self.current_session_md = get_session_md_path(session_name)
 
     def select_last_session(self):
+        self.session_names = get_session_names()
         self.set_current_session(self.get_last_session())
 
     def get_last_session(self):

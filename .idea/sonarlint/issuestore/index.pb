@@ -11,8 +11,6 @@ F
 ui/i18n/loading/es.yml,d\7\d7435c86c3f5bd2c7338ffb71d59db8db88f7161
 C
 ui/i18n/main/en.yml,c\2\c28b4b16098a56d5241425069e68910f9a7cb272
-Q
-!src/export/credentials/token.json,f\b\fba7da75e21e473e163c313e75e1b0a78ff73177
 R
 "__tests__/mocks/input/no_format.md,a\3\a3eec5f6ce86fe71c181b8e92734e074ed8e148d
 W
@@ -54,8 +52,6 @@ H
 src/utils/ErrorLogger.py,3\e\3e1e03d6bfd5ca4eb509b079d2fd01372f2b60cc
 G
 src/utils/Translator.py,3\1\3152b705bb2c7ccd5b4f5457ba4723f353784945
-H
-src/sessions/Sessions.py,8\6\8678e1d55ad881bd4596c9172fbfd88315f2f392
 :
 
 ui/main.py,3\2\320d47d88da44ad2bf30e7dce91aaa3ca1f90372
@@ -63,8 +59,6 @@ ui/main.py,3\2\320d47d88da44ad2bf30e7dce91aaa3ca1f90372
 AppConfig.py,3\4\345397c00eced06aea6b9689b5cbe26c8078776f
 N
 src/sessions/MarkdownWriter.py,8\a\8aba9a18084b05573ad7067e131bba6a1d69be5e
-;
-config.yaml,b\5\b5106b5f3da7575c9a8cb306418c20825103a4fe
 G
 src/utils/Docmdutils.py,d\e\de04864c0814f986a1ca20a4bd9260e77682c304
 I
@@ -101,3 +95,5 @@ K
 ui/screens/upload/upload.kv,3\6\365d4f792025c9300dc9bf5508ee324ab4d463d9
 Z
 *src/export/requests/utils/RequestPicker.py,f\5\f5cfbf0fd63f7db55db63152ef0f973330e7a4f4
+K
+ui/screens/export/export.py,3\a\3a6c6d3cdc9d3796b006738ed65937c70b36aee7
