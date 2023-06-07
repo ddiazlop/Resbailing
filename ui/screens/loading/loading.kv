@@ -7,10 +7,22 @@
                 pos: self.pos
                 size: self.size
                 source: 'ui/media/images/tobofondo2_estrellas.png'
+
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'top'
+
+        Image:
+            source: 'ui/media/images/upload/loading.gif'
+            size_hint: None, None
+            size: self.texture_size
+            pos_hint: {'center_x': 0.5, 'center_y': 1}
+
+
+
     GridLayout:
         cols: 1
         size_hint: 1, 1
-        pos_hint: {'center_x': .5, 'center_y': .5}
         padding: 0, 0
         spacing: 0
         canvas.before:
@@ -19,22 +31,27 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
-        Image:
-            source: 'ui/media/images/upload/loading.gif'
-            size_hint: 1, 1
-            pos_hint: {'center_x': .5, 'center_y': .5}
+
         Label:
             text: _('loading.loading')
             font_size: 30
             color: 1, 1, 1, 1
             size_hint: 1, 1
-            pos_hint: {'center_x': .5, 'center_y': .5}
+            size: self.texture_size
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            halign: 'center'
+            valign: 'middle'
+
         Label:
             id: info
             text: _('loading.please_wait')
             font_size: 20
             color: 1, 1, 1, 1
             size_hint_x: 0.8
-            size_hiny_y: None
-            height: '48dp'
+            size_hint_y: None
+            height: self.texture_size[1] + dp(20)  # Add 20dp padding below the text
+            text_size: self.width, None
+            halign: 'center'
+            valign: 'middle'
+            padding: 0, dp(10)  # Add 10dp padding at the top and bottom of the label
             pos_hint: {'center_x': .5, 'center_y': .5}
