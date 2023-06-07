@@ -40,8 +40,6 @@ H
 src/utils/ErrorLogger.py,3\e\3e1e03d6bfd5ca4eb509b079d2fd01372f2b60cc
 G
 src/utils/Translator.py,3\1\3152b705bb2c7ccd5b4f5457ba4723f353784945
-N
-src/sessions/MarkdownWriter.py,8\a\8aba9a18084b05573ad7067e131bba6a1d69be5e
 G
 src/utils/Docmdutils.py,d\e\de04864c0814f986a1ca20a4bd9260e77682c304
 b
@@ -66,8 +64,6 @@ U
 %src/export/requests/RequestCreator.py,6\2\62b83e7a64098f8c4b6323db7e7d6516fcc84458
 ?
 environment.yml,5\4\54c391de2500e0856c23737daf64f9d931569110
-K
-ui/screens/upload/upload.kv,3\6\365d4f792025c9300dc9bf5508ee324ab4d463d9
 Z
 *src/export/requests/utils/RequestPicker.py,f\5\f5cfbf0fd63f7db55db63152ef0f973330e7a4f4
 K

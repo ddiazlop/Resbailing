@@ -1,6 +1,7 @@
 import datetime
 import os
 import re
+import shutil
 
 from AppConfig import app_config
 
@@ -10,9 +11,17 @@ def get_session_md_path(session_name):
 
 
 def get_session_names():
-    date_regex = r'^\.\/sessions\/\d{4}-\d{2}-\d{2}(?:_\d+)?$'
-    sessions_list = [x[0].replace('./sessions/', '') for x in os.walk(app_config.sessions_path) if
-                     re.match(date_regex, x[0])]
+    date_regex = r'^\d{4}-\d{2}-\d{2}(?:_\d+)?$'
+    sessions_list = []
+    for session in os.listdir(app_config.sessions_path):
+        session = session.replace(app_config.sessions_path, '')
+        content = os.listdir(app_config.sessions_path + '/' + session)
+        if re.match(date_regex, session) and 'presentation.md' in content:
+            sessions_list.append(session)
+        else:
+            shutil.rmtree(app_config.sessions_path + '/' + session)
+
+
     sessions_list.sort()
     return sessions_list
 
