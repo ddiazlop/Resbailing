@@ -89,12 +89,15 @@ class UploadScreen(RelativeLayoutScreen):
         Logger.debug('Resbailing: Summarizing')
         loading_screen = self.main_app.loading_screen
 
-        summarizer = StrategyGuesser.guess_summarization_strategy2(path, loading_screen, generate_images=self.render_images)
-        summarizer.summarize()
-        self.main_app.session_manager.select_last_session()
-        # Redirect to export screen
-        loading_screen.next_redirect = 'Export'
-        loading_screen.redirect = True
+        try:
+            summarizer = StrategyGuesser.guess_summarization_strategy2(path, loading_screen, generate_images=self.render_images)
+            summarizer.summarize()
+            self.main_app.session_manager.select_last_session()
+            # Redirect to export screen
+            loading_screen.next_redirect = 'Export'
+            loading_screen.redirect = True
+        except Exception as e:
+            loading_screen.show_error_dialog(e)
 
     def loading_view(self, *args):
         Logger.debug('Resbailing: Loading view')

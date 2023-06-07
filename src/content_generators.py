@@ -42,10 +42,10 @@ class SummarizerClass(TransformerClass):
         if app_config.language == 'es':
             text = trans_large_to_en(text)
 
-        inputs = self.title_tokenizer(text, padding="max_length", truncation=True, max_length=100, return_tensors="pt")
+        inputs = self.title_tokenizer(text, padding="max_length", truncation=True, max_length=512, return_tensors="pt")
         inputs = {'input_ids': inputs['input_ids'], 'attention_mask': inputs['attention_mask']}
         outputs = self.title_model.generate(input_ids=inputs['input_ids'], attention_mask=inputs['attention_mask'], do_sample=True,
-                                                max_length=120,
+                                                max_length=40,
                                                 top_p=0.95,
                                                 top_k=60,
                                                 early_stopping=True,

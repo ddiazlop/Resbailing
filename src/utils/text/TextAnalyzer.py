@@ -162,6 +162,10 @@ class TextAnalyzer:
         sentences2 = sentences.copy()
         if app_config.language == "es":
             sentences2 = [trans_large_to_en(x) for x in sentences]
+            if sentences2[0].__contains__('MYMEMORY WARNING'):
+                time = sentences2[0].split('MYMEMORY WARNING')[1].split('NEXT AVAILABLE IN')[1].split('SECONDS')[0]
+                Logger.error("Resbailing: Translation failed")
+                raise PermissionError("Translation failed, mymerory limit reached, next available in " + time + " SECONDS")
         elif app_config.language != "en":
             Logger.error("Resbailing: Language not supported")
             raise NotImplementedError("Language not supported")

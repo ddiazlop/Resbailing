@@ -1,30 +1,22 @@
 
 O
 .github/ISSUE_TEMPLATE/tarea.md,6\7\67f7d1aae29b2635d64f97173e76927df761ca85
-M
-ui/screens/loading/loading.kv,9\8\980df25d039b162d837414fc5412d66cd46f8c42
 W
 'src/export/credentials/credentials.json,a\0\a0d4714e29b1b14673882f7b71d764a8c10b7f5d
 F
 ui/i18n/loading/en.yml,1\6\1690e66897268357b10beda7c66b80597647b178
 F
 ui/i18n/loading/es.yml,d\7\d7435c86c3f5bd2c7338ffb71d59db8db88f7161
-C
-ui/i18n/main/en.yml,c\2\c28b4b16098a56d5241425069e68910f9a7cb272
 R
 "__tests__/mocks/input/no_format.md,a\3\a3eec5f6ce86fe71c181b8e92734e074ed8e148d
 W
 '__tests__/mocks/input/formatted_file.md,9\c\9cc5f5fd3c62f5d8808b2e925d99130236e184af
 S
 #__tests__/mocks/input/title_only.md,c\e\ce20ad3cf5ef2f40afb08ea8c3c8e32f4841c4ae
-a
-1ui/screens/__superclasses/RelativeLayoutScreen.py,0\2\0210f37d957a59f53ff670c55302eb5f279eb145
 G
 ui/i18n/settings/en.yml,4\5\45fdefe9f5aa6a12930b40657cc52d4cf66f90f8
 O
 ui/screens/settings/settings.py,f\5\f5c082fba5a3258ba1eb577f559ab56b3718793d
-O
-ui/screens/settings/settings.kv,3\4\3431c364ba752335d10e84a0bc573e5e68605e69
 E
 ui/i18n/export/es.yml,5\2\522eb4149c5be283bb02db935146d0b99fd68611
 H
@@ -37,8 +29,6 @@ E
 
 ui/main.kv,9\a\9ace8ef8615c59e64a6fadfeb9ad6358bd62ce9b
 E
-ui/i18n/export/en.yml,7\a\7a2a81a11afe59fa9e5d38a5bbdb2db6e8266042
-E
 ui/i18n/upload/en.yml,e\7\e74e04b922be001d44dc3e3301a4462999963ccd
 S
 #ui/screens/export/export_success.kv,9\a\9a7917464e0cacf16a488210a2ed47e3d27fa435
@@ -46,29 +36,14 @@ F
 src/i18n/Translator.py,3\6\366403b0d2da93cfae6d3f2cd819bc76a59d3d15
 K
 ui/screens/export/export.kv,6\9\69065712a73645c24a9f3eca641669a1bb75370a
-;
-__init__.py,6\0\60ad4f3d2e9b04a9b0a0bb97ab6a8a4c018b785e
 H
 src/utils/ErrorLogger.py,3\e\3e1e03d6bfd5ca4eb509b079d2fd01372f2b60cc
 G
 src/utils/Translator.py,3\1\3152b705bb2c7ccd5b4f5457ba4723f353784945
-:
-
-ui/main.py,3\2\320d47d88da44ad2bf30e7dce91aaa3ca1f90372
-<
-AppConfig.py,3\4\345397c00eced06aea6b9689b5cbe26c8078776f
 N
 src/sessions/MarkdownWriter.py,8\a\8aba9a18084b05573ad7067e131bba6a1d69be5e
 G
 src/utils/Docmdutils.py,d\e\de04864c0814f986a1ca20a4bd9260e77682c304
-I
-src/content_generators.py,d\f\dfa87a3c9764175d3c58cc31f214d9e66ffeeaf5
-]
--src/summarizer/strategies/NoFormatStrategy.py,1\b\1b3db72ecf17aea8215d29a7f04a132b7bb410de
-^
-.src/summarizer/strategies/TitleOnlyStrategy.py,6\2\628fc829ef894e570f88f16d18bf5f4ccbb5d99a
-b
-2src/summarizer/strategies/FormattedFileStrategy.py,7\9\7989df137e039c53ed2d99f6029de503fec707b4
 b
 2src/summarizer/strategies/utils/StrategyGuesser.py,7\9\79990cff49d1602979b309d293cbddfbc8207219
 [
