@@ -88,6 +88,9 @@ class Main(App):
         self.settings_screen = None
 
     def build(self):
+        self.icon = 'ui/media/icons/resbanoback.png'
+        self.title = 'Resbailing'
+
         self.session_manager = SessionManager()
         self.screen_manager = ScreenManager()
 
