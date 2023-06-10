@@ -31,7 +31,7 @@ def guess_summarization_strategy2(path, loading_screen, lazy = False, generate_i
     :return:
     """
 
-    values = {'title': 0, 'section': 0, 'images': 0}
+    values = {'title': 0, 'section': 0, 'images': 0, 'bodies': 0}
     order = []
 
     # AudioStrategy
@@ -41,7 +41,7 @@ def guess_summarization_strategy2(path, loading_screen, lazy = False, generate_i
 
     with open(path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
-        for line in lines: #TODO: This is a very naive approach, improve it
+        for line in lines: # This is a very naive approach, there's probably a better way to do this
             if line.startswith('##'):
                 values['section'] += 1
                 order.append(2)
@@ -51,7 +51,12 @@ def guess_summarization_strategy2(path, loading_screen, lazy = False, generate_i
             elif line.startswith('!['):
                 values['images'] += 1
                 order.append('Image')
+            elif not line.isspace():
+                values['bodies'] += 1
+                order.append('Body')
 
+        if values['bodies'] != values['section'] and values['section'] > 0:
+            raise ValueError('The number of bodies and sections do not match')
 
         # FormattedFileStrategy
         if FormattedFileStrategy.check_input(values, order = order):

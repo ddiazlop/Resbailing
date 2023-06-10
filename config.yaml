@@ -5,8 +5,7 @@ GOOGLE_SCOPES:
 - https://www.googleapis.com/auth/drive.file
 IMAGE_GENERATION_MODEL: stabilityai/stable-diffusion-2-1
 IMAGE_STORAGE_SERVICE: GoogleDrive
-IMGUR_CLIENT_ID: d50cc113493324b
-LANGUAGE: es
+LANGUAGE: en
 LANGUAGES:
 - en
 - es

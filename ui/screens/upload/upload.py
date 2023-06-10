@@ -1,6 +1,8 @@
 import os
 from threading import Thread
 
+from kivy.uix.scrollview import ScrollView
+
 import src.summarizer.strategies.utils.StrategyGuesser as StrategyGuesser
 
 from kivy import Logger
@@ -10,7 +12,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import FadeTransition
 from plyer import filechooser
 
-from ui.media.sound.utils import Soundmanager
+from ui.utils import Soundmanager
 from src.i18n.Translator import t as _
 from ui.screens.__superclasses.RelativeLayoutScreen import RelativeLayoutScreen
 
@@ -32,6 +34,7 @@ class UploadScreen(RelativeLayoutScreen):
         curr_dir = os.getcwd()
         path = filechooser.open_file(title='Selecciona tu documento .md', filters=[('md, mp3, wav', '*.md', '*.mp3', '*.wav')])
         os.chdir(curr_dir)
+
         if path:
             self.load(path)
 
@@ -68,15 +71,18 @@ class UploadScreen(RelativeLayoutScreen):
 
     def show_select_session_popup(self, *args):
         Logger.debug('Resbailing: Prompting the user to select a session')
-        content = GridLayout(cols=1, spacing=10, size_hint_y=None)
+        content = GridLayout(cols=1, spacing=10, size_hint_y=None, padding=(0, 20))
         content.bind(minimum_height=content.setter('height'))
+
         for session in self.main_app.session_manager.session_names:
             btn = Button(text=session, size_hint_y=None, height=40)
             btn.bind(on_release=lambda button: self.select_session(button.text))
             content.add_widget(btn)
 
-        self._popup = Popup(title=_('upload.select_session'), content=content,
-                            size_hint=(0.9, 0.9))
+        scrollview = ScrollView(size_hint=(1, 1), do_scroll_y=True)
+        scrollview.add_widget(content)
+
+        self._popup = Popup(title=_('upload.select_session'), content=scrollview, size_hint=(0.9, 0.9))
         self._popup.open()
 
 
@@ -89,12 +95,15 @@ class UploadScreen(RelativeLayoutScreen):
         Logger.debug('Resbailing: Summarizing')
         loading_screen = self.main_app.loading_screen
 
-        summarizer = StrategyGuesser.guess_summarization_strategy2(path, loading_screen, generate_images=self.render_images)
-        summarizer.summarize()
-        self.main_app.session_manager.select_last_session()
-        # Redirect to export screen
-        loading_screen.next_redirect = 'Export'
-        loading_screen.redirect = True
+        try:
+            summarizer = StrategyGuesser.guess_summarization_strategy2(path, loading_screen, generate_images=self.render_images)
+            summarizer.summarize()
+            self.main_app.session_manager.select_last_session()
+            # Redirect to export screen
+            loading_screen.next_redirect = 'Export'
+            loading_screen.redirect = True
+        except Exception as e:
+            loading_screen.show_error_dialog(e)
 
     def loading_view(self, *args):
         Logger.debug('Resbailing: Loading view')

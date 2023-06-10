@@ -16,7 +16,6 @@ class FormattedFileStrategy(SummarizerStrategy):
 
     def __init__(self, path, loading_screen, lazy = False, generate_image = True):
         super().__init__(path, loading_screen, generate_image=generate_image)
-        self.title = None
         self.lazy = lazy
         self.image_order = 0
         Logger.debug('Resbailing: Using FormattedFileStrategy')
@@ -30,8 +29,15 @@ class FormattedFileStrategy(SummarizerStrategy):
         if len(order) < 2:
             return False
 
-        if order[0] != 1 or order[1] != 2:
+        if order[0] != 1:
             return False
+
+        for i, item in enumerate(order[1:]):
+            if i % 2 == 0 and item != 2:
+                return False
+
+            if i % 2 == 1 and item != 'body':
+                return False
 
         return values['title'] == 1 and values['section'] > 0
 
@@ -61,7 +67,6 @@ class FormattedFileStrategy(SummarizerStrategy):
             elif isinstance(elem, panflute.Image):
                 image_path = elem.url
                 self.copy_image(image_path)
-                # Copy the image to the output folder TODO: Make this work.
         return paras
 
     def copy_image(self, image_path):
@@ -87,8 +92,7 @@ class FormattedFileStrategy(SummarizerStrategy):
     def smart_create_presentation(self, paras):
         self.update_loading_info(_('loading.encoding_text'))
         parsed_paras = parse_paras(paras)
-        self.text_analyzer.populate_slides(parsed_paras)
-        slides = self.text_analyzer.slides
+        slides =self.text_analyzer.populate_slides(parsed_paras)
         self.generate_slides(slides)
 
     def lazy_create_presentation(self, paras):

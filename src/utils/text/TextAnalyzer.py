@@ -91,7 +91,7 @@ class TextAnalyzer:
         similarities = self.get_similarities_with_first_sentence(sentence_embeddings)
         return similarities
 
-    def populate_slides(self, paras : Dict[str, list]) -> None:
+    def populate_slides(self, paras : Dict[str, list]) -> Dict[str, list]:
         """Populate the slides dictionary with the given paragraphs
 
         **Args:** Takes a dictionary with headers as keys and a list of paragraphs as values. That usually looks like this:
@@ -107,23 +107,25 @@ class TextAnalyzer:
             merged_sentences = self.get_merged_sentences(sentences)
             self.slides[header].extend(merged_sentences)
 
+        return self.slides
+
 
     def merge_similar_sentences(self, sentences : List[str], mode : ThresholdMode) -> (str, int):
         merged_sentence = sentences[0]
-        sentences_aux = sentences[1:].copy()
+        sentences_aux = sentences.copy()
         count = 1
-        num_sentences = len(sentences_aux)
-        for i in range(num_sentences):
-            sentences_aux.insert(0, merged_sentence)
-            similarities = self.compare_sentences(sentences_aux)
-            sim_threshold = self.get_sim_threshold(mode, similarities[1:])
+
+        similarities = self.compare_sentences(sentences_aux)
+        sim_threshold = self.get_sim_threshold(mode, similarities[1:])
+
+        for sim in similarities[1:]:
             Logger.debug("Resbailing: Similarities: " + str(sim_threshold))
-            if similarities[i+1] > sim_threshold:
-                merged_sentence += ". " + sentences_aux[i + 1]
+            if sim > sim_threshold:
+                merged_sentence += ". " + sentences_aux[1]
                 count += 1
             else:
                 break
-            sentences_aux.pop(0)
+            sentences_aux.pop(1)
         return merged_sentence, count
 
     def get_sim_threshold(self, mode, similarities):
@@ -160,6 +162,10 @@ class TextAnalyzer:
         sentences2 = sentences.copy()
         if app_config.language == "es":
             sentences2 = [trans_large_to_en(x) for x in sentences]
+            if sentences2[0].__contains__('MYMEMORY WARNING'):
+                time = sentences2[0].split('MYMEMORY WARNING')[1].split('NEXT AVAILABLE IN')[1].split('SECONDS')[0]
+                Logger.error("Resbailing: Translation failed")
+                raise PermissionError("Translation failed, mymerory limit reached, next available in " + time + " SECONDS")
         elif app_config.language != "en":
             Logger.error("Resbailing: Language not supported")
             raise NotImplementedError("Language not supported")
@@ -170,7 +176,7 @@ class TextAnalyzer:
 
     @staticmethod
     def split_into_sentences(text : str) -> List[str]:
-        """Split text into sentences using the period as a delimiter"""
+        """Split text into sentences"""
         sentences = re.split(r' *[\.\?!][\'"\)\]]* *', text)
         sentences = [x.strip() for x in sentences]
         sentences = [x for x in sentences if x != '']

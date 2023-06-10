@@ -4,7 +4,6 @@ import sys
 from kivy import Logger
 from kivy.animation import Animation
 from kivy.app import App
-from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
@@ -13,11 +12,11 @@ from kivy.uix.screenmanager import Screen, SlideTransition, FadeTransition, Scre
 
 from AppConfig import app_config
 from src.i18n.Translator import t as _
-from src.utils.Sessions import SessionManager
+from src.sessions.Sessions import SessionManager
 from ui.screens.export.export import ExportScreen
 from ui.screens.export.export_success import ExportSuccessScreen
 from ui.screens.loading.loading import LoadingScreen
-from ui.media.sound.utils import Soundmanager
+from ui.utils import Soundmanager
 from ui.screens.settings.settings import SettingsScreen
 from ui.screens.upload.upload import UploadScreen
 
@@ -89,6 +88,9 @@ class Main(App):
         self.settings_screen = None
 
     def build(self):
+        self.icon = 'ui/media/icons/resbanoback.png'
+        self.title = 'Resbailing'
+
         self.session_manager = SessionManager()
         self.screen_manager = ScreenManager()
 

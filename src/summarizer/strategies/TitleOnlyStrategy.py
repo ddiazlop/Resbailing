@@ -7,6 +7,9 @@ from src.i18n.Translator import t as _
 
 
 class TitleOnlyStrategy(SummarizerStrategy):
+    def __init__(self, path, loading_screen, generate_image=True):
+        super().__init__(path, loading_screen, generate_image=generate_image)
+        Logger.debug('Resbailing: Using TitleOnlyStrategy')
 
     @staticmethod
     def check_input(values, **kwargs):
@@ -18,9 +21,7 @@ class TitleOnlyStrategy(SummarizerStrategy):
 
         return values['title'] == 1 and values['section'] == 0 and values['images'] == 0
 
-    def __init__(self, path, loading_screen, generate_image=True):
-        super().__init__(path, loading_screen, generate_image=generate_image)
-        Logger.debug('Resbailing: Using TitleOnlyStrategy')
+
 
     def read_lines(self):
         with open(self.path, 'r', encoding='utf-8') as f:

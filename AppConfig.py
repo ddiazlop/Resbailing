@@ -75,5 +75,4 @@ class AppConfig:
     def title_generation_model(self) -> str:
         return self.config['TITLE_GENERATION_MODEL']
 
-
 app_config = AppConfig()
