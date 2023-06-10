@@ -42,8 +42,6 @@ G
 src/utils/Translator.py,3\1\3152b705bb2c7ccd5b4f5457ba4723f353784945
 G
 src/utils/Docmdutils.py,d\e\de04864c0814f986a1ca20a4bd9260e77682c304
-b
-2src/summarizer/strategies/utils/StrategyGuesser.py,7\9\79990cff49d1602979b309d293cbddfbc8207219
 [
 +src/export/requests/utils/UnitTranslator.py,c\8\c8ab7cef2f2207765bc1ca2c2bec3f157ca23620
 U

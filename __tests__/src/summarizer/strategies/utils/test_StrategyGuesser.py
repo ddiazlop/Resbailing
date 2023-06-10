@@ -13,7 +13,7 @@ class TestStrategyGuesser:
     """
     loading_screen = LoadingScreenMock()
 
-    def test_formattedfilestrategy(self):
+    def test_formatted_file_strategy(self):
         """
         Tests that the FormattedFileStrategy is correctly guessed.
         :return:
@@ -22,7 +22,7 @@ class TestStrategyGuesser:
         guessed_strategy.delete_output()
         assert guessed_strategy.strategy.__class__ == FormattedFileStrategy
 
-    def test_titleonlystrategy(self):
+    def test_title_only_strategy(self):
         """
         Tests that the TitleOnlyStrategy is correctly guessed.
         :return:
@@ -31,7 +31,7 @@ class TestStrategyGuesser:
         guessed_strategy.delete_output()
         assert guessed_strategy.strategy.__class__ == TitleOnlyStrategy
 
-    def test_noformatstrategy(self):
+    def test_no_format_strategy(self):
         """
         Tests that the NoFormatStrategy is correctly guessed.
         :return:
@@ -40,7 +40,7 @@ class TestStrategyGuesser:
         guessed_strategy.delete_output()
         assert guessed_strategy.strategy.__class__ == NoFormatStrategy
 
-    def test_audiostrategy(self):
+    def test_audio_strategy(self):
         """
         Tests that the AudioStrategy is correctly guessed.
         :return:

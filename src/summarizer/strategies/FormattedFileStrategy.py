@@ -29,8 +29,15 @@ class FormattedFileStrategy(SummarizerStrategy):
         if len(order) < 2:
             return False
 
-        if order[0] != 1 or order[1] != 2:
+        if order[0] != 1:
             return False
+
+        for i, item in enumerate(order[1:]):
+            if i % 2 == 0 and item != 2:
+                return False
+
+            if i % 2 == 1 and item != 'body':
+                return False
 
         return values['title'] == 1 and values['section'] > 0
 
