@@ -55,7 +55,7 @@ def guess_summarization_strategy2(path, loading_screen, lazy = False, generate_i
                 values['bodies'] += 1
                 order.append('Body')
 
-        if values['bodies'] != values['section']:
+        if values['bodies'] != values['section'] and values['section'] > 0:
             raise ValueError('The number of bodies and sections do not match')
 
         # FormattedFileStrategy

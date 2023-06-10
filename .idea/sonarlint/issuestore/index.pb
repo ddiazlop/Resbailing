@@ -60,8 +60,6 @@ I
 src/export/GoogleDrive.py,9\f\9fa79cf537a4cb69bd4c87ddb48dd2035f9bce6d
 U
 %src/export/requests/RequestCreator.py,6\2\62b83e7a64098f8c4b6323db7e7d6516fcc84458
-?
-environment.yml,5\4\54c391de2500e0856c23737daf64f9d931569110
 Z
 *src/export/requests/utils/RequestPicker.py,f\5\f5cfbf0fd63f7db55db63152ef0f973330e7a4f4
 K
