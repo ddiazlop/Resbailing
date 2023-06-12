@@ -13,6 +13,10 @@ def get_session_md_path(session_name):
 def get_session_names():
     date_regex = r'^\d{4}-\d{2}-\d{2}(?:_\d+)?$'
     sessions_list = []
+
+    if not os.path.exists(app_config.sessions_path):
+        os.mkdir(app_config.sessions_path)
+
     for session in os.listdir(app_config.sessions_path):
         session = session.replace(app_config.sessions_path, '')
         content = os.listdir(app_config.sessions_path + '/' + session)
